@@ -1,0 +1,531 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Appendix A: ths CLI - Thus Spoke Zakura</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-d4af569c.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-9bfa7156.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Thus Spoke Zakura</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="appendix-a-ths-cli-reference"><a class="header" href="#appendix-a-ths-cli-reference">Appendix A: <code>ths</code> CLI reference</a></h1>
+<p><code>ths</code> is the Thus Spoke Zakura launcher. It manages the Docker-based Regtest
+environment and, once an environment is running, talks to its dashboard API on
+your behalf. This page documents every command in detail, with examples.</p>
+<p>Read <a href="getting-started.html">Chapter 1</a> for an instance’s lifecycle, <a href="accounts-and-balances.html">Chapter
+3</a> for accounts and pools, and <a href="architecture/operations.html">Chapter
+6</a> before retrying a payment or mine request.
+The examples below demonstrate individual commands; they are not one script
+to run in order. For a worked dashboard flow, see <a href="using-the-dashboard.html">Chapter
+4</a>.</p>
+<h2 id="conventions-used-below"><a class="header" href="#conventions-used-below">Conventions used below</a></h2>
+<ul>
+<li>All commands accept two <strong>global options</strong>, which can be placed before or
+after the subcommand:
+<ul>
+<li><code>--name &lt;NAME&gt;</code> — target a named, isolated environment instead of the
+default one (default: <code>default</code>).</li>
+<li><code>--json</code> — print machine-readable JSON instead of human-readable text,
+where the command supports it.</li>
+</ul>
+</li>
+<li>Accounts are referred to by <strong>index</strong>, <code>1</code> through <code>5</code>. Every environment
+starts with five disposable development accounts; there is no need to copy
+full Regtest addresses to use the commands on this page. (A hidden sixth
+account acts as the mining/faucet treasury and is not addressable from the
+CLI.)</li>
+<li>Amounts are ZEC decimal strings with up to 8 decimal places, e.g. <code>1</code>,
+<code>0.5</code>, <code>2.25000001</code>. These are disposable Regtest coins with no value.</li>
+<li>Commands that call the app (<code>mine</code>, <code>faucet</code>, and <code>wallet</code> subcommands) require
+a running environment. Start one first with <code>ths</code> (or <code>ths --name &lt;NAME&gt;</code>).
+<code>stop</code> and <code>reset --force</code> can remove resources left by an interrupted run.</li>
+</ul>
+<hr>
+<h2 id="environment-lifecycle"><a class="header" href="#environment-lifecycle">Environment lifecycle</a></h2>
+<h3 id="ths--ths-start"><a class="header" href="#ths--ths-start"><code>ths</code> / <code>ths start</code></a></h3>
+<p>Starts a fresh environment in the foreground and opens the dashboard in your
+browser. Interrupting with Ctrl+C stops the environment and deletes its chain,
+wallet, keys, and Docker volumes.</p>
+<pre><code class="language-console">ths
+ths start --no-open      # don't open a browser tab
+ths --name alice         # start a second, independent environment named "alice"
+</code></pre>
+<h3 id="ths-build---dev"><a class="header" href="#ths-build---dev"><code>ths build [--dev]</code></a></h3>
+<p>Builds the runtime Docker images from the current source checkout (for
+development from a clone, not needed for the installed release).</p>
+<pre><code class="language-console">ths build             # release-optimized images
+ths build --dev       # keep workspace Rust code unoptimized for faster rebuilds
+</code></pre>
+<h3 id="ths-pull"><a class="header" href="#ths-pull"><code>ths pull</code></a></h3>
+<p>Pulls the exact runtime images that match this launcher’s version, instead of
+building them locally.</p>
+<pre><code class="language-console">ths pull
+</code></pre>
+<h3 id="ths-status---json"><a class="header" href="#ths-status---json"><code>ths status [--json]</code></a></h3>
+<p>Shows whether the named environment is running and prints its endpoints.</p>
+<pre><code class="language-console">ths status
+ths status --name alice --json
+</code></pre>
+<h3 id="ths-open"><a class="header" href="#ths-open"><code>ths open</code></a></h3>
+<p>Opens the running dashboard in your default browser.</p>
+<pre><code class="language-console">ths open
+</code></pre>
+<h3 id="ths-endpoints---json"><a class="header" href="#ths-endpoints---json"><code>ths endpoints [--json]</code></a></h3>
+<p>Prints the dashboard, Zakura RPC, lightwalletd, and P2P endpoints, useful for
+scripts and other developer tooling.</p>
+<pre><code class="language-console">ths endpoints
+ths endpoints --json
+</code></pre>
+<h3 id="ths-logs-appzakuralightwalletd--f--follow"><a class="header" href="#ths-logs-appzakuralightwalletd--f--follow"><code>ths logs [app|zakura|lightwalletd] [-f|--follow]</code></a></h3>
+<p>Prints or streams logs for a service in the named environment. Defaults to the
+<code>app</code> (dashboard/server) service.</p>
+<pre><code class="language-console">ths logs                       # last logs from the app service
+ths logs zakura -f             # follow node logs
+ths logs lightwalletd --follow # follow lightwalletd logs
+</code></pre>
+<h3 id="ths-stop"><a class="header" href="#ths-stop"><code>ths stop</code></a></h3>
+<p>Stops the named environment and deletes its containers, volumes, and network.</p>
+<pre><code class="language-console">ths stop
+</code></pre>
+<h3 id="ths-reset---force"><a class="header" href="#ths-reset---force"><code>ths reset --force</code></a></h3>
+<p>Same as <code>stop</code>, but named explicitly as a destructive action; requires
+<code>--force</code> since it permanently deletes chain, wallet, and seed data.</p>
+<pre><code class="language-console">ths reset --force
+</code></pre>
+<h3 id="ths-list---json"><a class="header" href="#ths-list---json"><code>ths list [--json]</code></a></h3>
+<p>Lists every known environment and its dashboard URL.</p>
+<pre><code class="language-console">ths list
+</code></pre>
+<h3 id="ths-doctor---json"><a class="header" href="#ths-doctor---json"><code>ths doctor [--json]</code></a></h3>
+<p>Checks that Docker is reachable and prints the launcher’s configuration
+directory.</p>
+<pre><code class="language-console">ths doctor
+</code></pre>
+<h3 id="ths-update-version---check--ths-uninstall"><a class="header" href="#ths-update-version---check--ths-uninstall"><code>ths update [VERSION] [--check]</code> / <code>ths uninstall</code></a></h3>
+<p>Checks for, installs, or rolls back a released launcher version, or removes
+the installed <code>ths</code> executable.</p>
+<pre><code class="language-console">ths update --check     # only report whether a newer release exists
+ths update              # install the latest verified release
+ths update v0.2.0       # install (or roll back to) an exact version
+ths uninstall
+</code></pre>
+<h3 id="ths-mine-blocks"><a class="header" href="#ths-mine-blocks"><code>ths mine &lt;BLOCKS&gt;</code></a></h3>
+<p>Mines blocks on the running environment and synchronizes its wallet — useful
+for testing confirmations, expiry, or coinbase maturity.</p>
+<pre><code class="language-console">ths mine 1
+ths mine 10 --json
+</code></pre>
+<hr>
+<h2 id="funding-an-address-ths-faucet-address---amount-zec"><a class="header" href="#funding-an-address-ths-faucet-address---amount-zec">Funding an address: <code>ths faucet &lt;ADDRESS&gt; [--amount &lt;ZEC&gt;]</code></a></h2>
+<p>Sends disposable Regtest ZEC from the treasury directly to any Regtest unified
+or transparent address, not necessarily one of the five development accounts.
+Limited to 5 ZEC per request; defaults to 1 ZEC. It does not move funds between
+accounts and takes no memo. For the development accounts, use
+<a href="#ths-wallet-the-development-wallet"><code>ths wallet</code></a>.</p>
+<pre><code class="language-console">ths faucet uregtest1exampleaddress...
+ths faucet tmExampleTransparentAddress... --amount 2.5
+</code></pre>
+<h2 id="ths-wallet-the-development-wallet"><a class="header" href="#ths-wallet-the-development-wallet"><code>ths wallet</code>: the development wallet</a></h2>
+<p>Everything under <code>ths wallet</code> acts on the wallet held by the running <code>ths</code>
+server: the five development accounts (index <code>1</code>-<code>5</code>) and the hidden treasury
+that funds them. Its subcommands do the same things as the dashboard’s Faucet
+and Send dialogs, from a script or terminal:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Subcommand</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>ths wallet faucet</code></td><td>Fund one or more accounts from the treasury</td></tr>
+<tr><td><code>ths wallet send</code></td><td>Send funds from one account to another, with an optional memo</td></tr>
+<tr><td><code>ths wallet shield</code></td><td>Spend one account’s transparent funds into another account’s Orchard balance</td></tr>
+<tr><td><code>ths wallet unshield</code></td><td>Spend one account’s Orchard funds into another account’s transparent balance</td></tr>
+</tbody>
+</table>
+</div>
+<p>Every subcommand attempts to mine a confirming block and prints the resulting
+transaction ID. If auto-mining fails, activity may remain in <code>broadcast</code>
+state; <code>send</code>, <code>shield</code>, and <code>unshield</code> print a confirming block hash when one
+is available. Pass <code>--json</code> for machine-readable output.</p>
+<h3 id="ths-wallet-faucet---accounts-list---amount-zec---pool-pool"><a class="header" href="#ths-wallet-faucet---accounts-list---amount-zec---pool-pool"><code>ths wallet faucet --accounts &lt;LIST&gt; [--amount &lt;ZEC&gt;] [--pool &lt;POOL&gt;]</code></a></h3>
+<p>Funds one or more accounts from the treasury faucet in a single command.</p>
+<ul>
+<li><code>--accounts &lt;LIST&gt;</code> (required): comma-separated account indices, e.g.
+<code>1,2,3,5</code>. Each listed account receives its own independent faucet
+transaction for the full <code>--amount</code>.</li>
+<li><code>--amount &lt;ZEC&gt;</code>: amount to send to <strong>each</strong> account (default <code>1</code>, maximum
+<code>5</code>, matching the dashboard faucet’s per-request limit).</li>
+<li><code>--pool &lt;orchard|transparent&gt;</code>: which balance to fund (default <code>orchard</code>).</li>
+</ul>
+<pre><code class="language-console"># Fund accounts 1, 2, 3, and 5 with 3 ZEC each (shielded)
+ths wallet faucet --accounts 1,2,3,5 --amount 3
+
+# Fund a single account's transparent balance
+ths wallet faucet --accounts 4 --amount 1 --pool transparent
+
+# Machine-readable output, e.g. for a setup script
+ths --json wallet faucet --accounts 1,2,3,4,5 --amount 5
+</code></pre>
+<p>If some accounts fail (for example, a treasury shortfall) the command still
+funds the rest, prints a <code>Failed to fund ...</code> line per failure, and exits with
+a non-zero status summarizing how many of the requests failed.</p>
+<h3 id="ths-wallet-send---from-n---to-n---amount-zec---source-pool-pool---destination-pool-pool---memo-text"><a class="header" href="#ths-wallet-send---from-n---to-n---amount-zec---source-pool-pool---destination-pool-pool---memo-text"><code>ths wallet send --from &lt;N&gt; --to &lt;N&gt; --amount &lt;ZEC&gt; [--source-pool &lt;POOL&gt;] [--destination-pool &lt;POOL&gt;] [--memo &lt;TEXT&gt;]</code></a></h3>
+<p>Sends funds from one development account to another. It does the same thing as
+the dashboard’s <strong>Send ZEC</strong> dialog and uses the same endpoint
+(<code>POST /api/v1/send</code>).</p>
+<ul>
+<li><code>--from &lt;N&gt;</code> / <code>--to &lt;N&gt;</code> (required): two different account indices,
+<code>1</code>-<code>5</code>. The treasury account can’t be used.</li>
+<li><code>--amount &lt;ZEC&gt;</code> (required): limited only by the sending account’s balance.</li>
+<li><code>--source-pool &lt;orchard|transparent&gt;</code>: pool to spend from (default
+<code>orchard</code>).</li>
+<li><code>--destination-pool &lt;orchard|transparent&gt;</code>: pool the destination account
+receives into (default <code>orchard</code>).</li>
+<li><code>--memo &lt;TEXT&gt;</code>: optional memo for the recipient. See <a href="#memos">Memos</a>.</li>
+</ul>
+<pre><code class="language-console"># Move 1 ZEC from account 2's Orchard balance to account 3's Orchard balance
+ths wallet send --from 2 --to 3 --amount 1
+
+# Spend account 1's transparent balance into account 4's Orchard balance
+ths wallet send --from 1 --to 4 --amount 0.5 --source-pool transparent
+
+# Attach a memo for the recipient
+ths wallet send --from 2 --to 3 --amount 1 --memo "rent for October"
+
+# Rejected: transparent outputs cannot carry a memo
+ths wallet send --from 2 --to 3 --amount 1 --destination-pool transparent --memo "hi"
+</code></pre>
+<h3 id="ths-wallet-shield---from-n---to-n---amount-zec---memo-text"><a class="header" href="#ths-wallet-shield---from-n---to-n---amount-zec---memo-text"><code>ths wallet shield --from &lt;N&gt; --to &lt;N&gt; --amount &lt;ZEC&gt; [--memo &lt;TEXT&gt;]</code></a></h3>
+<p>Shorthand for <code>ths wallet send</code> with <code>--source-pool transparent --destination-pool orchard</code>: spends one account’s transparent balance into
+another account’s Orchard balance.</p>
+<ul>
+<li><code>--from &lt;N&gt;</code> (required): account to spend transparent funds from.</li>
+<li><code>--to &lt;N&gt;</code> (required): a different account to receive them as Orchard
+funds. Sends between the same account are rejected.</li>
+<li><code>--amount &lt;ZEC&gt;</code> (required).</li>
+<li><code>--memo &lt;TEXT&gt;</code>: optional memo on the Orchard output (up to 512 bytes).</li>
+</ul>
+<pre><code class="language-console"># Shield 0.5 ZEC of account 4's transparent balance into account 2's Orchard balance
+ths wallet shield --from 4 --to 2 --amount 0.5
+
+# The same, with a memo
+ths wallet shield --from 4 --to 2 --amount 0.5 --memo "welcome to the shielded pool"
+</code></pre>
+<blockquote>
+<p>Note: because transparent notes must be fully spent, the wallet may route
+any leftover change from a transparent source into the shielded pool as
+well. Shielding “0.5 ZEC” from an account holding 1 transparent ZEC can
+leave that account with its change in Orchard rather than transparent.</p>
+</blockquote>
+<h3 id="ths-wallet-unshield---from-n---to-n---amount-zec"><a class="header" href="#ths-wallet-unshield---from-n---to-n---amount-zec"><code>ths wallet unshield --from &lt;N&gt; --to &lt;N&gt; --amount &lt;ZEC&gt;</code></a></h3>
+<p>Shorthand for <code>ths wallet send</code> with <code>--source-pool orchard --destination-pool transparent</code>: spends one account’s Orchard balance into
+another account’s transparent balance. It takes no memo, because transparent
+outputs cannot carry one.</p>
+<ul>
+<li><code>--from &lt;N&gt;</code> (required): account to spend Orchard funds from.</li>
+<li><code>--to &lt;N&gt;</code> (required): a different account to receive them as transparent
+funds.</li>
+<li><code>--amount &lt;ZEC&gt;</code> (required).</li>
+</ul>
+<pre><code class="language-console"># Unshield 0.2 ZEC from account 1's Orchard balance into account 3's transparent balance
+ths wallet unshield --from 1 --to 3 --amount 0.2
+</code></pre>
+<h3 id="memos"><a class="header" href="#memos">Memos</a></h3>
+<p>Zcash lets the sender attach a memo of up to 512 bytes to an Orchard output
+(ZIP 302). The memo is encrypted to the recipient. Only holders of that
+account’s keys can read it.</p>
+<ul>
+<li>A memo is only allowed when the destination pool is <code>orchard</code>. With a
+<code>transparent</code> destination, <code>ths</code>, the dashboard, and the API all reject it.
+Transparent outputs have no memo field, and none is invented.</li>
+<li><code>ths wallet send</code>, <code>ths wallet shield</code>, and the dashboard’s <strong>Send ZEC</strong>
+dialog accept a memo. <code>ths faucet</code>, <code>ths wallet faucet</code>, and
+<code>ths wallet unshield</code> do not.</li>
+<li>The limit is 512 <strong>bytes</strong>, not characters. Non-ASCII text, such as emoji or
+CJK characters, takes several bytes per character.</li>
+<li>Leaving out <code>--memo</code> sends no memo. <code>--memo ""</code> sends an explicit empty
+text memo.</li>
+<li>A memo can’t end with a NUL (U+0000) character. Memos are padded with zero
+bytes, so a trailing NUL would be lost when the memo is read.</li>
+<li>The memo is attached to the recipient’s output only. Change returned to the
+sender has no memo.</li>
+<li>The block explorer shows public transaction data only. It never shows memo
+plaintext.</li>
+<li>All five accounts and the treasury come from one seed as separate ZIP-32
+accounts. A viewing-only wallet imported with one account’s viewing key can
+decrypt only the memos sent to that account.</li>
+</ul>
+<h3 id="putting-it-together-seeding-a-fresh-environment"><a class="header" href="#putting-it-together-seeding-a-fresh-environment">Putting it together: seeding a fresh environment</a></h3>
+<p>A typical setup starts the environment in one terminal:</p>
+<pre><code class="language-console">ths --name demo start --no-open
+</code></pre>
+<p>Wait for <code>demo is ready</code>, then run these commands in a second terminal:</p>
+<pre><code class="language-console">ths --name demo wallet faucet --accounts 1,2,3,4,5 --amount 5
+ths --name demo wallet faucet --accounts 2 --amount 1 --pool transparent
+ths --name demo wallet shield --from 2 --to 4 --amount 0.5
+ths --name demo wallet send --from 1 --to 3 --amount 1 --memo "welcome"
+</code></pre>
+<p>This funds all five accounts, gives account 2 some transparent balance,
+shields part of it into account 4, and sends shielded funds with a memo from
+account 1 to account 3, all without opening the dashboard.</p>
+<hr>
+<h2 id="command-summary"><a class="header" href="#command-summary">Command summary</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Command</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>ths</code></td><td>Start a fresh environment and open the dashboard</td></tr>
+<tr><td><code>ths start --no-open</code></td><td>Start without opening a browser</td></tr>
+<tr><td><code>ths build [--dev]</code></td><td>Build runtime images from source</td></tr>
+<tr><td><code>ths pull</code></td><td>Pull the exact images for this launcher version</td></tr>
+<tr><td><code>ths status [--json]</code></td><td>Show health and endpoint information</td></tr>
+<tr><td><code>ths open</code></td><td>Open the running dashboard</td></tr>
+<tr><td><code>ths endpoints [--json]</code></td><td>Print endpoints for scripts and developer tools</td></tr>
+<tr><td><code>ths mine &lt;N&gt;</code></td><td>Mine blocks and synchronize the wallet</td></tr>
+<tr><td><code>ths faucet &lt;ADDRESS&gt; [--amount]</code></td><td>Send disposable ZEC to any Regtest address</td></tr>
+<tr><td><code>ths wallet faucet --accounts &lt;LIST&gt; [--amount] [--pool]</code></td><td>Fund one or more of the five accounts by index</td></tr>
+<tr><td><code>ths wallet send --from --to --amount [--source-pool] [--destination-pool] [--memo]</code></td><td>Send between accounts by index, optionally with an Orchard memo</td></tr>
+<tr><td><code>ths wallet shield --from --to --amount [--memo]</code></td><td>Spend transparent funds into another account’s Orchard balance</td></tr>
+<tr><td><code>ths wallet unshield --from --to --amount</code></td><td>Spend Orchard funds into another account’s transparent balance</td></tr>
+<tr><td><code>ths logs [service] [-f]</code></td><td>Stream or print service logs</td></tr>
+<tr><td><code>ths list</code></td><td>List known environments</td></tr>
+<tr><td><code>ths stop</code></td><td>Stop and delete the environment</td></tr>
+<tr><td><code>ths reset --force</code></td><td>Force-delete one environment and all its data</td></tr>
+<tr><td><code>ths doctor</code></td><td>Check Docker and local configuration</td></tr>
+<tr><td><code>ths update [--check]</code></td><td>Check for or install a newer release</td></tr>
+<tr><td><code>ths uninstall</code></td><td>Remove the installed launcher executable</td></tr>
+</tbody>
+</table>
+</div>
+<p>Every command accepts <code>--name</code> for isolated environments. For more on running
+them side by side, see <a href="getting-started.html#give-another-experiment-its-own-name">Chapter
+1</a>.</p>
+<p>The <a href="troubleshooting.html">troubleshooting appendix</a> starts from observable
+symptoms; <a href="connect-an-app.html">Chapter 7</a> shows how to use the same live
+endpoints from your own code.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="connect-an-app.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="development.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="connect-an-app.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="development.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

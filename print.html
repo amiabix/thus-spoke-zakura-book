@@ -1,0 +1,1429 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Thus Spoke Zakura</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-d4af569c.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-9bfa7156.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Thus Spoke Zakura</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="thus-spoke-zakura"><a class="header" href="#thus-spoke-zakura">Thus Spoke Zakura</a></h1>
+<p>Thus Spoke Zakura (<code>ths</code>) gives you a disposable Zcash <strong>Regtest</strong> network on
+your own machine. You can mine blocks, fund development accounts, send test ZEC,
+inspect transactions, and connect another application. The launcher runs
+Zakura, lightwalletd, and a wallet-backed dashboard in Docker. Every
+host-published endpoint stays on <code>127.0.0.1</code>.</p>
+<p>This book teaches <strong>why each part exists and what happens when you use it</strong>.
+The chapters build on one another. The <a href="#appendix-a-ths-cli-reference"><code>ths</code> CLI reference</a>,
+<a href="#appendix-b-develop-from-source">development guide</a>, and <a href="#appendix-c-troubleshooting">troubleshooting guide</a>
+are there when you need a particular command or diagnosis.</p>
+<h2 id="who-this-book-is-for"><a class="header" href="#who-this-book-is-for">Who this book is for</a></h2>
+<p>You should be comfortable running terminal commands and reading a small HTTP
+example. You do not need prior Zcash knowledge. We define Regtest, blocks,
+accounts, pools, notes, and wallet synchronization before relying on them.</p>
+<p>Everything here is local development infrastructure. Regtest coins and keys
+have no value on mainnet or testnet. Never send real ZEC to an address shown by
+this environment.</p>
+<h2 id="one-experiment-several-chapters"><a class="header" href="#one-experiment-several-chapters">One experiment, several chapters</a></h2>
+<p>We will start the default instance, look at its five user accounts, fund
+Account 2, send from Account 1 to Account 2, mine another block, and read the
+result through the API. Along the way, we will answer three questions:</p>
+<ol>
+<li><strong>Who owns this fact?</strong> Zakura owns the chain, lightwalletd indexes it,
+the wallet owns spendable balances, and SQLite records development activity.</li>
+<li><strong>When is it true?</strong> A block can exist before lightwalletd indexes it, and
+the index can advance before the wallet publishes a fresh balance snapshot.</li>
+<li><strong>What can be retried?</strong> A recorded payment key can resume confirmation;
+a lost response before the key is recorded is ambiguous, and mining has no
+retry key.</li>
+</ol>
+<p>Those distinctions explain most surprising behavior in the dashboard.</p>
+<h2 id="how-to-read"><a class="header" href="#how-to-read">How to read</a></h2>
+<p>Read <a href="#1-your-first-instance">Chapter 1: Your first instance</a> if you want to work
+along. <a href="#2-components-and-state">Chapter 2</a> defines the components;
+<a href="#3-accounts-and-balances">Chapter 3</a> defines wallet state; <a href="#4-fund-and-send">Chapter
+4</a> moves funds; <a href="#5-mining-and-wallet-sync">Chapter 5</a> follows
+a block into the wallet; <a href="#6-uncertain-operations">Chapter 6</a> deals with
+uncertain responses; and <a href="#7-connect-your-application">Chapter 7</a> connects your code.</p>
+<p>A chapter starts with the idea, traces the flow, then gives a concrete action
+and what you should observe. Diagrams have text explanations beside them so
+the sequence still works without images.</p>
+<h2 id="four-terms-to-keep-separate"><a class="header" href="#four-terms-to-keep-separate">Four terms to keep separate</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Term</th><th>In this book</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Instance</strong></td><td>One named set of Regtest containers, network, volumes, ports, and disposable data controlled by <code>ths</code>.</td></tr>
+<tr><td><strong>Node tip</strong></td><td>Zakura’s latest block height <strong>and hash</strong>. A height alone does not identify a block after a reorganization.</td></tr>
+<tr><td><strong>Wallet snapshot</strong></td><td>The server’s last reconciled view of user-account balances. The dashboard reads this through the accounts API.</td></tr>
+<tr><td><strong>Activity</strong></td><td>A SQLite record of a faucet or send request, its transaction ID, and its confirmation status. It is not a balance ledger.</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>Next:</strong> <a href="#1-your-first-instance">start a fresh instance</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="1-your-first-instance"><a class="header" href="#1-your-first-instance">1. Your first instance</a></h1>
+<p>In this chapter you will start one private chain, identify its live endpoints,
+and stop it. The next chapter will explain what the three services behind those
+endpoints do.</p>
+<p>An <strong>instance</strong> is one named set of Docker containers, a private Docker
+network, volumes, and host ports. The default name is <code>default</code>. Starting it
+again creates a <strong>fresh</strong> chain and wallet; stopping it removes its data.
+An <strong>image</strong> is the built template from which Docker starts a container;
+changing source files does not alter an image that already exists.</p>
+<p><img src="images/instance-lifecycle.svg" alt="Instance lifecycle: ths checks Docker and images, removes only the selected instance’s old resources, creates its volumes and services, waits for initial wallet funding and health, then removes that instance on shutdown or startup failure."></p>
+<ol>
+<li><code>ths</code> checks Docker and the required images.</li>
+<li>It removes leftovers for the selected instance name, then creates its
+network, volumes, and containers. Other names are untouched.</li>
+<li>An init container creates the seed, account records, wallet database, and
+Zakura Regtest configuration. Zakura starts, then lightwalletd, then the
+app.</li>
+<li>The app synchronizes its wallet and provisions Account 1. The launcher
+prints endpoints only when the app is ready.</li>
+<li>Ctrl+C, a normal shutdown, or a partial startup failure removes that
+instance’s resources and endpoint record.</li>
+</ol>
+<h2 id="prepare-docker"><a class="header" href="#prepare-docker">Prepare Docker</a></h2>
+<p>Install Docker Desktop on macOS or Docker Engine/Desktop on Linux. Start it
+and confirm that both the client and daemon respond:</p>
+<pre><code class="language-console">docker version
+</code></pre>
+<p>The server section must respond without <code>sudo</code>. If it does not, fix Docker
+access before continuing. <code>ths doctor</code> performs the same basic Docker
+reachability check after installation.</p>
+<h2 id="install-the-launcher"><a class="header" href="#install-the-launcher">Install the launcher</a></h2>
+<p>The installer supports Intel and ARM macOS and Linux. It verifies the
+release archive’s SHA-256 digest, installs <code>ths</code> in <code>~/.local/bin</code> by default,
+and pulls matching runtime images:</p>
+<pre><code class="language-console">curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/zcashlabs/thus-spoke-zakura/main/install.sh | sh
+ths doctor
+</code></pre>
+<p>If your shell says <code>ths: command not found</code>, put <code>~/.local/bin</code> on <code>PATH</code> or
+set <code>TSZ_INSTALL_DIR</code> to a directory already on <code>PATH</code> when installing. See
+<a href="#appendix-c-troubleshooting">troubleshooting</a> for the exact checks.</p>
+<p>If you are working from a clone, use the <a href="#appendix-b-develop-from-source">source build
+instructions</a> instead. The launcher uses Docker images, so a
+source edit does not automatically change a running app.</p>
+<h2 id="start-the-running-example"><a class="header" href="#start-the-running-example">Start the running example</a></h2>
+<p>Open a terminal and run:</p>
+<pre><code class="language-console">ths start --no-open
+</code></pre>
+<p>Keep that terminal open. <code>--no-open</code> only skips opening the browser; the
+dashboard still runs. Startup can take time because the server prepares the
+chain, scans the wallet, and gives Account 1 <strong>5 Orchard ZEC</strong>. Wait for the
+line <code>default is ready</code> and the four printed endpoints. There is no fixed
+<code>sleep</code> interval that means the wallet is ready.</p>
+<p>In a <strong>second terminal</strong>, inspect the same instance:</p>
+<pre><code class="language-console">ths status
+ths endpoints --json
+ths open
+</code></pre>
+<p><code>ths status</code> reports whether the app container is running and prints
+endpoints. It does <strong>not</strong> report the node height or wallet scan status.
+<code>ths endpoints --json</code> reports these keys:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Key</th><th>Owner and purpose</th></tr>
+</thead>
+<tbody>
+<tr><td><code>dashboard</code></td><td>HTTP URL for the React UI and <code>/api/v1/</code> server API.</td></tr>
+<tr><td><code>rpc</code></td><td>Zakura’s local JSON-RPC URL.</td></tr>
+<tr><td><code>lightwalletd</code></td><td>Plaintext lightwalletd gRPC endpoint for local clients.</td></tr>
+<tr><td><code>p2p</code></td><td>Zakura’s local peer address.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Host ports are chosen at runtime and published on <code>127.0.0.1</code>. Copy values
+from <strong>this run</strong>. The dashboard’s Network page or <code>GET /api/v1/status</code>
+shows node height and wallet sync state if you need more than process status.</p>
+<h2 id="give-another-experiment-its-own-name"><a class="header" href="#give-another-experiment-its-own-name">Give another experiment its own name</a></h2>
+<p>You can run another instance in a different terminal:</p>
+<pre><code class="language-console">ths --name alice start --no-open
+</code></pre>
+<p>Address that instance with the same global option:</p>
+<pre><code class="language-console">ths --name alice status
+ths --name alice endpoints --json
+</code></pre>
+<p>Names contain 1–40 lowercase letters, digits, or internal hyphens. Each name
+gets its own chain, wallet, ports, and cleanup. Commands without <code>--name</code>
+target <code>default</code>.</p>
+<h2 id="stop-deliberately"><a class="header" href="#stop-deliberately">Stop deliberately</a></h2>
+<p>Return to the terminal running <code>ths</code> and press <strong>Ctrl+C</strong>. The launcher
+deletes that instance’s containers, volumes, chain, seed, keys, and test
+funds. This is normal: the environment is disposable. If you need a result,
+copy it out before stopping.</p>
+<p>If an interrupted process left resources behind, <code>ths --name alice reset --force</code> deletes only <code>alice</code> and its volumes. This is irreversible. Never
+use Regtest addresses or keys for real ZEC, and never publish these local
+services beyond loopback.</p>
+<p><strong>What you learned:</strong> <code>ths</code> controls an instance, not a persistent wallet.
+Endpoints and data belong to a particular run. <strong>Next:</strong> <a href="#2-components-and-state">meet the services
+inside the instance</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="2-components-and-state"><a class="header" href="#2-components-and-state">2. Components and state</a></h1>
+<p>Chapter 1 started an instance and printed four endpoints. Now we will
+follow those endpoints inward. The important question is not merely which
+container handles a request, but <strong>which component owns the answer</strong>.</p>
+<p>A <strong>block</strong> is a unit of chain history. The <strong>node tip</strong> is Zakura’s latest
+block height and hash. The <strong>mempool</strong> holds transactions the node knows
+about before they are included in a block. A <strong>wallet</strong> scans chain data for
+funds it can spend. A wallet can lag the node even when both services are
+healthy.</p>
+<p><img src="images/architecture-topology.svg" alt="Component topology: the host reaches loopback ports for the app, Zakura, and lightwalletd; the app serves the API and React UI, uses lightwalletd for compact blocks and broadcast, and each service owns separate data volumes."></p>
+<ol>
+<li><code>ths</code> supervises a Zakura container, a lightwalletd container, and an app
+container on an instance-specific Docker network.</li>
+<li>Zakura owns Regtest blocks, mempool, and JSON-RPC. lightwalletd follows
+Zakura and serves compact blocks to wallet clients over gRPC.</li>
+<li>The app runs <code>tsz-server</code>. It serves both <code>/api/v1/</code> and the built React
+dashboard, owns the wallet databases, and uses lightwalletd to scan and
+broadcast.</li>
+<li>A browser or local program reaches only the loopback-published ports.
+Internal container listeners can use <code>0.0.0.0</code> inside the private network;
+every host-published service binds to <code>127.0.0.1</code>.</li>
+</ol>
+<h2 id="the-five-owners-of-information"><a class="header" href="#the-five-owners-of-information">The five owners of information</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Component</th><th>Owns</th><th>Read it through</th></tr>
+</thead>
+<tbody>
+<tr><td>Zakura</td><td>Canonical chain, block height and hash, mempool, transaction lookup</td><td>JSON-RPC or the server’s explorer API</td></tr>
+<tr><td>lightwalletd</td><td>Compact-block index and gRPC stream over the node’s chain</td><td>A lightwalletd-compatible wallet client</td></tr>
+<tr><td>Wallet SDK in <code>tsz-server</code></td><td>Scanned notes, transparent outputs, and spendable balances in <code>wallet.db</code></td><td>The server’s wallet snapshot and accounts API</td></tr>
+<tr><td>Server SQLite store</td><td>Seed, derived account records, activity, and idempotency keys in <code>tsz.db</code></td><td>Server API and local development commands</td></tr>
+<tr><td>Browser</td><td>UI state and a query cache of server responses</td><td>Wallet, Explorer, and Network pages</td></tr>
+</tbody>
+</table>
+</div>
+<p>The app’s wallet and SQLite files share the instance’s <code>wallet</code> volume, but
+they answer different questions. <code>wallet.db</code> tells the wallet what it has
+scanned and can spend. <code>tsz.db</code> records which development request produced a
+transaction ID. Activity cannot reconstruct a balance.</p>
+<p><img src="images/state-ownership.svg" alt="State flow: Zakura’s chain is indexed by lightwalletd, scanned and checked against the canonical tip by the server wallet, published as an account snapshot, and fetched by dashboard query hooks; SQLite activity follows a separate path."></p>
+<ol>
+<li>Zakura advances the node tip. lightwalletd indexes compact blocks from
+that chain.</li>
+<li>The server wallet scans through lightwalletd and compares its checkpoint
+height <strong>and hash</strong> with Zakura before publishing a fresh account snapshot.
+If the chain reorganizes, it rewinds to a common block and scans again.</li>
+<li><code>GET /api/v1/accounts</code> reads the server snapshot. The dashboard’s query
+hooks fetch that endpoint. Server-sent <code>wallet</code>, <code>chain</code>, and <code>sync</code> events
+tell the hooks to refetch, rather than carrying balances themselves.</li>
+<li>SQLite activity records a send or faucet request’s transaction ID and
+confirmation status. <code>GET /api/v1/activity</code> reads it separately.</li>
+</ol>
+<p>This ordering explains a common observation: the Network page may show a new
+node height while Wallet still shows the last known balances. The wallet must
+wait for indexing and scanning, and the server must validate the chain
+checkpoint. <code>GET /api/v1/status</code> reports <code>wallet_sync.state</code> as <code>syncing</code>,
+<code>ready</code>, or <code>error</code>, along with observed and scanned heights and hashes.
+When synchronization fails, the last snapshot may remain visible. Treat it as
+stale until the server reaches <code>ready</code>.</p>
+<h2 id="startup-and-data-ownership"><a class="header" href="#startup-and-data-ownership">Startup and data ownership</a></h2>
+<p>The app image first runs <code>init</code>. It creates <code>tsz.db</code>, <code>wallet.db</code>, the seed,
+six derived account records, and a Regtest Zakura configuration. Account 6 is
+the hidden mining and faucet treasury; only Accounts 1–5 are exposed as user
+accounts. The node mines to the treasury’s transparent address. Normal
+transparent-output queries cover user accounts; treasury rewards are
+discovered when a faucet payment needs replenishment.</p>
+<p>The instance also has separate <code>chain</code>, <code>lightwalletd</code>, and <code>config</code>
+volumes. <code>ths</code> removes volumes belonging to the selected instance on
+shutdown, interruption, or startup failure. Other named instances survive.</p>
+<p>For the exact container and endpoint lifecycle, revisit <a href="#1-your-first-instance">Chapter
+1</a>. For the meaning of an account
+balance, continue to <a href="#3-accounts-and-balances">Chapter 3</a>.</p>
+<p><strong>Source map:</strong> <a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/crates/tsz-cli/src/runtime.rs">launcher runtime</a>,
+<a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/crates/tsz-server/src/main.rs">server startup</a>,
+<a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/crates/tsz-server/src/api.rs">API snapshot</a>,
+<a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/crates/tsz-server/src/reconcile.rs">reconciliation</a>,
+and <a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/web/src/hooks/queries.ts">dashboard queries</a>.</p>
+<p><strong>Next:</strong> <a href="#3-accounts-and-balances">accounts, pools, and balances</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="3-accounts-and-balances"><a class="header" href="#3-accounts-and-balances">3. Accounts and balances</a></h1>
+<p>The previous chapter separated chain state from wallet state. This chapter
+explains what the wallet is counting. When you later send 1 ZEC, you should be
+able to predict <strong>which account and pool</strong> will change, and why a displayed
+total is not always spendable.</p>
+<h2 id="an-account-is-a-wallet-identity"><a class="header" href="#an-account-is-a-wallet-identity">An account is a wallet identity</a></h2>
+<p>The app initializes six deterministic wallet accounts from one disposable
+seed. Accounts <strong>1–5</strong> are development accounts. Account <strong>6</strong> is a hidden
+treasury used for mining rewards and faucet payments. The accounts API, Wallet
+page, account selector, and user-facing balances expose only 1–5.</p>
+<p>Each user account has a transparent address and a unified address. For the
+flows in this book, selecting the <strong>Transparent</strong> destination pool uses the
+transparent address; selecting <strong>Orchard</strong> uses the unified address for a
+shielded output. The server derives the addresses and holds the spending keys
+in the disposable instance. A different instance name has different data and
+keys.</p>
+<p>A <strong>pool</strong> is a way value is represented and spent, not a separate wallet.
+Transparent value lives in unspent transaction outputs, or <strong>UTXOs</strong>; their
+addresses and amounts are public chain data. Orchard value lives in shielded
+<strong>notes</strong>. The wallet learns which notes belong to it by scanning compact
+blocks; the public explorer cannot identify their recipient or read a memo.</p>
+<p><img src="images/account-pools.svg" alt="Five user accounts each have a transparent and Orchard balance in the server wallet snapshot; Account 6 is a separate hidden treasury whose transparent mining rewards can fund shielded faucet payments."></p>
+<ol>
+<li>Each user account can hold a transparent balance and an Orchard balance.
+These are separate sources of funds, even though the dashboard also shows
+their sum.</li>
+<li>The miner sends block rewards to Account 6’s transparent address. Account
+6 never appears in a user account list or balance total.</li>
+<li>The faucet can spend from Account 6 to a chosen user account and pool.
+A send between users spends the selected <strong>source</strong> account and pool and
+pays to the selected <strong>destination</strong> account and pool.</li>
+</ol>
+<h2 id="zec-zatoshi-and-spendability"><a class="header" href="#zec-zatoshi-and-spendability">ZEC, zatoshi, and spendability</a></h2>
+<p><strong>ZEC</strong> is the amount unit you enter in the UI and CLI. <strong>Zatoshi</strong> is the
+integer unit used by the API: <strong>1 ZEC = 100,000,000 zatoshi</strong>. For example,
+<code>0.5</code> ZEC is <code>50000000</code> zatoshi. Use integer zatoshi in JSON requests so a
+decimal floating-point calculation does not choose the wrong amount.</p>
+<p>The accounts API returns <code>transparent_zatoshi</code> and <code>orchard_zatoshi</code> for
+each user account. These are the server’s last reconciled <strong>wallet
+snapshot</strong>, not numbers reconstructed from the block explorer. The dashboard
+derives its displayed total from those fields.</p>
+<p>A balance is not a promise that the next transaction can spend every zatoshi.
+The wallet SDK selects actual outputs or notes, requires a sufficient scan,
+and accounts for the transaction fee. Pending change and immature mining
+rewards can also affect spendability. <strong>Change</strong> is the unspent remainder of a
+selected input returned to the wallet; it may not be ready to spend
+immediately. When a send fails, check the <strong>source pool</strong>, leave room for the
+fee, and inspect wallet sync status before trying again.</p>
+<p>At the end of startup, Account 1 has <strong>5 Orchard ZEC</strong>. Account 2 starts
+empty. In the next chapter, we will give Account 2 transparent funds and
+then send it Orchard funds from Account 1. That will make the two balances
+visibly different.</p>
+<h2 id="where-faucet-funds-come-from"><a class="header" href="#where-faucet-funds-come-from">Where faucet funds come from</a></h2>
+<p>A faucet request does not mint coins directly into the destination. The
+miner first pays rewards to the hidden treasury’s transparent address. The
+reward created by mining a block is called <strong>coinbase</strong>; it must mature
+before it can be spent. When the treasury’s spendable Orchard funds are
+insufficient, the server discovers needed mature rewards, shields them into
+the treasury’s Orchard pool, confirms that shielding transaction, and retries
+the faucet payment. This can move the node height by more than the one block
+used to confirm the final faucet payment.</p>
+<p><img src="images/treasury-funding.svg" alt="Treasury funding flow: the wallet first tries a faucet payment from hidden Account 6; insufficient spendable Orchard funds trigger on-demand discovery of mature transparent mining rewards, shielding, and a payment retry before recording and confirmation."></p>
+<ol>
+<li>Zakura mines to Account 6’s transparent address. The rewards are not
+user-account balances.</li>
+<li>The wallet SDK first tries the treasury payment. On insufficient
+spendable Orchard funds, the server advances the chain as needed for reward
+maturity, discovers the required reward output, and shields it to Account
+6’s Orchard funds. It retries the payment proposal.</li>
+<li>The server broadcasts the faucet transaction to the chosen user account and
+destination pool, records activity, and normally mines a
+confirming block. Each account faucet request is limited to <strong>5 ZEC</strong>.</li>
+</ol>
+<p>Routine user wallet synchronization does not query all treasury transparent
+outputs. Treasury discovery runs when replenishment needs it. The private
+details stay out of the user account list, but the public chain may still
+show transparent mining rewards and shielding value movement.</p>
+<h2 id="three-views-of-the-same-experiment"><a class="header" href="#three-views-of-the-same-experiment">Three views of the same experiment</a></h2>
+<p>After a payment, these views can temporarily disagree without being
+contradictory:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>View</th><th>What it can establish</th></tr>
+</thead>
+<tbody>
+<tr><td>Network or Zakura RPC</td><td>Which block is the current node tip.</td></tr>
+<tr><td>Recent activity</td><td>Which request and transaction ID the server recorded, and whether it has a confirming block hash.</td></tr>
+<tr><td>Wallet account balance</td><td>What the server’s reconciled wallet scan says the user account holds.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Read <a href="#5-mining-and-wallet-sync">Chapter 5</a> for the precise order in which those
+views catch up. The <a href="#the-five-owners-of-information">architecture chapter</a>
+maps each view to its owner.</p>
+<p><strong>Next:</strong> <a href="#4-fund-and-send">fund Account 2 and send between pools</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="4-fund-and-send"><a class="header" href="#4-fund-and-send">4. Fund and send</a></h1>
+<p>You now know that an account has two pool balances and that the treasury
+funds faucet requests. We will use the instance from Chapter 1 to make those
+ideas visible. Keep <code>ths start --no-open</code> running in its first terminal;
+run commands below in a second terminal.</p>
+<p>The dashboard has <strong>Wallet</strong>, <strong>Explorer</strong>, and <strong>Network</strong> pages. Use <code>ths open</code> to bring it up. On desktop, the <strong>Mine</strong> button sits at the top of
+each page; on a narrow screen you can always use <code>ths mine</code>.</p>
+<h2 id="first-observe-the-starting-state"><a class="header" href="#first-observe-the-starting-state">First, observe the starting state</a></h2>
+<p>Open <strong>Wallet</strong>. Account 1 should show <strong>5 Orchard ZEC</strong> after startup;
+Account 2 should have no funds. If balances have not appeared, inspect
+<code>GET /api/v1/status</code> or follow <a href="#appendix-c-troubleshooting">troubleshooting</a> before
+sending. The server wallet snapshot, not a browser calculation from chain
+history, supplies these balances.</p>
+<h2 id="fund-account-2s-transparent-pool"><a class="header" href="#fund-account-2s-transparent-pool">Fund Account 2’s transparent pool</a></h2>
+<ol>
+<li>Select <strong>Faucet</strong> on Wallet or the faucet button on Account 2.</li>
+<li>Choose destination account <strong>2</strong>, destination pool <strong>Transparent</strong>, and
+amount <strong>1 ZEC</strong>. Select <strong>Add funds</strong>.</li>
+<li>Look at <strong>Recent activity</strong> for the transaction ID (<code>txid</code>), the unique
+identifier of the broadcast transaction, and its status. When
+confirmed, Account 2’s transparent balance should rise by 1 ZEC; its
+Orchard balance is still separate.</li>
+</ol>
+<p>The same operation from the second terminal is:</p>
+<pre><code class="language-console">ths wallet faucet --accounts 2 --amount 1 --pool transparent
+</code></pre>
+<p>Choose <strong>either</strong> the UI action or the CLI command if you want exactly one
+faucet payment. Running both makes two payments. The faucet may mine extra
+blocks first to mature and shield treasury rewards, then normally mines one
+block to confirm the account payment. It accepts at most 5 ZEC <strong>per account
+per request</strong>. If auto-mining fails, the recorded activity may remain
+<code>broadcast</code>; <a href="#6-uncertain-operations">Chapter 6</a> explains that state.</p>
+<h2 id="send-orchard-funds-from-account-1-to-account-2"><a class="header" href="#send-orchard-funds-from-account-1-to-account-2">Send Orchard funds from Account 1 to Account 2</a></h2>
+<p>This is a <strong>different</strong> pool movement from the transparent faucet payment.</p>
+<ol>
+<li>On Wallet, select <strong>Send ZEC</strong>.</li>
+<li>Set <strong>From account</strong> to 1 and <strong>Source pool</strong> to Orchard. Set <strong>To
+account</strong> to 2 and <strong>Destination pool</strong> to Orchard.</li>
+<li>Enter <strong>1 ZEC</strong>. Optionally enter <code>hello from Regtest</code> as a memo, then
+select <strong>Send ZEC</strong>.</li>
+<li>Check Recent activity for the transaction ID and actual status. After
+confirmation, Account 2 has 1 Orchard ZEC <strong>and</strong> its earlier 1
+transparent ZEC. Account 1’s Orchard balance falls by 1 ZEC <strong>plus the
+fee</strong>; do not expect it to be exactly 4 ZEC.</li>
+</ol>
+<p>CLI equivalent:</p>
+<pre><code class="language-console">ths wallet send --from 1 --to 2 --amount 1 --memo "hello from Regtest"
+</code></pre>
+<p>Again, run the UI action <strong>or</strong> the command, not both, for one transaction.
+The UI and CLI create a fresh idempotency key for each new submission. A
+second click or command is a second attempt, not a replay of the first.</p>
+<p><img src="images/payment-flow.svg" alt="Send flow: select source account and pool, destination account and pool, amount and optional Orchard memo; the wallet chooses spendable inputs and fee, broadcasts through lightwalletd, records activity, and seeks confirmation."></p>
+<ol>
+<li>The source account and <strong>source pool</strong> determine which wallet funds the
+SDK tries to spend. It chooses actual notes or outputs and a fee.</li>
+<li>The destination account and <strong>destination pool</strong> determine the receiver.
+The two account IDs must differ and be in 1–5.</li>
+<li>The wallet builds and broadcasts through lightwalletd. The server
+records a transaction ID and activity, then checks or mines for
+confirmation. A successful API response can still carry <code>broadcast</code>
+status if auto-mining failed; inspect the status field.</li>
+</ol>
+<p>The optional memo is encrypted to an Orchard recipient and limited to <strong>512
+UTF-8 bytes</strong>, not 512 characters. A transparent output cannot carry a memo.
+The UI disables the memo field for Transparent destinations; the server also
+rejects a present memo there. The public Explorer does not reveal Orchard
+memo plaintext or recipient addresses.</p>
+<h2 id="a-pool-conversion-to-try-next"><a class="header" href="#a-pool-conversion-to-try-next">A pool conversion to try next</a></h2>
+<p>If you want to see a transparent source fund an Orchard destination, use the
+transparent funds in Account 2:</p>
+<pre><code class="language-console">ths wallet shield --from 2 --to 3 --amount 0.5
+</code></pre>
+<p>This sends 0.5 ZEC to Account 3’s Orchard pool. The SDK selects
+transparent inputs and pays a fee. Its change strategy can return any
+remaining value to the <strong>source account’s Orchard pool</strong>, so Account 2’s
+transparent balance need not simply drop by 0.5 ZEC. Inspect both pools
+afterward. The reverse operation is <code>ths wallet unshield --from 3 --to 2 --amount 0.2</code>. See the <a href="#ths-wallet-the-development-wallet">CLI reference</a>
+for all pool options.</p>
+<h2 id="look-at-the-chain-without-confusing-it-with-the-wallet"><a class="header" href="#look-at-the-chain-without-confusing-it-with-the-wallet">Look at the chain without confusing it with the wallet</a></h2>
+<p><strong>Explorer</strong> lists blocks and can search a height, block hash, transaction
+ID, or transparent address. Open your transaction ID from Recent activity.
+Transparent inputs and outputs are public chain data; Orchard details are
+not exposed as the user-account transfer shown by Recent activity. The
+server’s activity record knows the development account IDs, while the
+Explorer follows the public chain.</p>
+<p><strong>Network</strong> shows the node height, tip hash, account count, and published
+endpoints. If a transaction is recorded but the wallet balance has not
+caught up, follow the next chapter rather than computing a balance from
+Explorer.</p>
+<p><strong>What you learned:</strong> a payment chooses <strong>two account/pool pairs</strong>, and
+confirmation, activity, and wallet balance are related but separate
+observations. <strong>Next:</strong> <a href="#5-mining-and-wallet-sync">mine a block and trace wallet
+synchronization</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="5-mining-and-wallet-sync"><a class="header" href="#5-mining-and-wallet-sync">5. Mining and wallet sync</a></h1>
+<p>You have funded Account 2 and sent a payment. Both operations normally mine
+a confirming block for you. This chapter mines explicitly and follows a
+block from the node to the wallet and browser.</p>
+<p><strong>Mining</strong> asks Zakura to generate Regtest blocks on demand. A transaction is
+<strong>confirmed</strong> when the node reports it in a block on its current chain with
+a block hash. That does not instantly make every wallet view current:
+lightwalletd still has
+to index the block, and the wallet still has to scan and reconcile it.</p>
+<p><img src="images/mining-flow.svg" alt="Explicit mining flow: validate a block count, ask Zakura to generate, read the new tip, wait for lightwalletd, scan and validate the wallet checkpoint, publish the snapshot and chain event, then return hashes; a later failure can leave generated blocks behind."></p>
+<ol>
+<li><code>ths mine N</code> or the dashboard Mine dialog calls <code>POST /api/v1/mine</code> with
+<code>{"blocks":N}</code>. The server accepts <strong>1–10,000</strong> blocks.</li>
+<li>Zakura generates blocks and returns their hashes. The server asks Zakura
+for the last returned block’s height.</li>
+<li>The wallet waits for lightwalletd to index that height, scans compact
+blocks, reconciles against Zakura’s canonical block hashes, and publishes
+a fresh user-account snapshot at a matching checkpoint.</li>
+<li>The server notifies dashboard clients of a <code>chain</code> update and returns
+<code>blocks</code> and <code>hashes</code>. If a step after generation fails, the API returns
+an error even though blocks may already exist.</li>
+</ol>
+<h2 id="mine-and-inspect-one-result"><a class="header" href="#mine-and-inspect-one-result">Mine and inspect one result</a></h2>
+<p>In the second terminal from Chapter 1, mine two blocks:</p>
+<pre><code class="language-console">ths mine 2
+</code></pre>
+<p>A successful CLI response reports the count and the new tip hash. The
+dashboard’s <strong>Mine</strong> dialog performs the same API operation. Do not run both
+if you intend to add only two blocks.</p>
+<p>Read the node and wallet view through the running instance’s API:</p>
+<pre><code class="language-console">DASHBOARD_URL="$(ths endpoints --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["dashboard"])')"
+curl -fsS "$DASHBOARD_URL/api/v1/status"
+curl -fsS "$DASHBOARD_URL/api/v1/accounts"
+</code></pre>
+<p><code>ths status</code> reports container status and endpoints, not chain height. In
+<code>GET /api/v1/status</code>, <code>node.blocks</code> is the node height and
+<code>node.bestblockhash</code> is the tip hash. The wallet fields mean:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Field</th><th>Meaning</th></tr>
+</thead>
+<tbody>
+<tr><td><code>wallet_sync.state</code></td><td><code>ready</code>, <code>syncing</code>, or <code>error</code> for the server’s last synchronization attempt.</td></tr>
+<tr><td><code>observed_height</code> and <code>observed_hash</code></td><td>The node checkpoint the server most recently observed.</td></tr>
+<tr><td><code>fully_scanned_height</code> and <code>fully_scanned_hash</code></td><td>The wallet checkpoint it has scanned and validated; these can be null below the wallet birthday.</td></tr>
+<tr><td><code>error</code></td><td>Why the last attempt failed, if it did.</td></tr>
+<tr><td><code>last_success_at</code></td><td>Unix time of the last successful snapshot publication.</td></tr>
+</tbody>
+</table>
+</div>
+<p>After a successful explicit mine on the normal running example, the wallet
+has reconciled through the mined tip before the response. An independent
+chain change can happen later, so use the current status fields when making
+a decision. <code>GET /api/v1/accounts</code> serves the <strong>last wallet snapshot</strong>; it
+does not calculate balances from <code>node.blocks</code>.</p>
+<h2 id="a-same-height-chain-change-still-matters"><a class="header" href="#a-same-height-chain-change-still-matters">A same-height chain change still matters</a></h2>
+<p>A block height is a position; a <strong>block hash</strong> identifies the block at that
+position. A <strong>reorganization</strong> replaces one branch of recent blocks with
+another. A local chain can reorganize and replace a block with another at
+the same height: height <code>H</code> may have hash <code>A</code>, then hash <code>B</code>. The server
+compares hashes, finds a common checkpoint,
+rewinds its wallet scan when necessary, and scans the canonical chain again.
+It publishes balances only after reconciliation succeeds.</p>
+<p><img src="images/wallet-sync.svg" alt="Wallet sync flow: compare Zakura’s height and hash with the wallet checkpoint, wait for lightwalletd, rewind on a mismatch, rescan, then publish a validated snapshot; errors keep the previous snapshot and report error state."></p>
+<ol>
+<li>About every two seconds, the background loop asks Zakura for the current
+checkpoint. A changed height <strong>or hash</strong> starts reconciliation.</li>
+<li>The wallet checks its scanned chain against Zakura and uses
+lightwalletd’s compact blocks to catch up. A mismatch can require a
+rewind and rescan.</li>
+<li>On success, the server refreshes account balances, marks sync <code>ready</code>,
+and notifies dashboard query hooks. On failure it reports <code>error</code>;
+the last known balances can remain visible and may be stale.</li>
+</ol>
+<p>This is why the Network page, Explorer, Recent activity, and Wallet page can
+show different stages of one event. They are observations of different
+owners, not four copies of one database. Revisit <a href="#the-five-owners-of-information">the state ownership
+diagram</a> if that
+distinction is unclear.</p>
+<p><strong>Next:</strong> <a href="#6-uncertain-operations">learn what to do when a payment or mining response is
+uncertain</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="6-uncertain-operations"><a class="header" href="#6-uncertain-operations">6. Uncertain operations</a></h1>
+<p>The previous chapter showed that a block can be generated before the wallet
+publishes a new snapshot. A payment has a similar boundary: it can be
+broadcast before the server records the request. This chapter names each
+state and tells you what an HTTP response can and cannot prove.</p>
+<p>The terms are deliberately narrow:</p>
+<ul>
+<li><strong>Broadcast</strong> means lightwalletd accepted the transaction for submission.
+It does not mean the transaction is in a block.</li>
+<li><strong>Activity</strong> is the server’s SQLite record of a development payment. It
+includes a transaction ID (<code>txid</code>), <code>status</code>, and optional <code>block_hash</code>.</li>
+<li><strong>Confirmed activity</strong> means Zakura reported the transaction in a block
+when the server last checked it, and SQLite stored that block hash. The
+status is a record of that check, not a live proof of canonical inclusion.</li>
+<li>An <strong>idempotency key</strong> is a caller-chosen string used to look up an
+already-recorded payment. It is not an end-to-end exactly-once guarantee.</li>
+</ul>
+<h2 id="payment-submission-and-confirmation"><a class="header" href="#payment-submission-and-confirmation">Payment submission and confirmation</a></h2>
+<p><img src="images/payment-flow.svg" alt="Payment flow: validate a send or account faucet request, check an existing idempotency key, build and broadcast through the wallet and lightwalletd, record the transaction, check or mine confirmation, and return confirmed or broadcast activity; the gap before recording remains ambiguous."></p>
+<ol>
+<li><code>POST /api/v1/send</code> validates different user account IDs (1–5), source
+and destination pools, amount, memo rules, and an <code>idempotency_key</code> of
+<strong>8–128 visible ASCII characters</strong>. <code>POST /api/v1/faucet</code> validates
+its user account, pool, amount greater than zero and at most 5 ZEC,
+and key. Validation happens before the recorded-key lookup.</li>
+<li>If SQLite already has activity for the key, the server tries to finish
+confirmation of <strong>that recorded transaction</strong>. It does not construct a
+second payment. The server does <strong>not</strong> compare the replay’s valid
+payload with the original payload, so a key must belong to one intent.</li>
+<li>With a new key, the server synchronizes its wallet. The SDK chooses
+spendable funds and a fee, constructs the transaction, and broadcasts it
+through lightwalletd. For faucet payments, the source is hidden treasury
+Account 6; it may replenish itself first.</li>
+<li><strong>After</strong> broadcast, the server inserts the activity and key in SQLite.
+The initial activity status is <code>broadcast</code> and carries a transaction ID.</li>
+<li>The server asks Zakura whether the transaction is confirmed. If needed,
+it mines one block, waits for wallet reconciliation, and asks again. It
+returns <code>confirmed</code> activity with a block hash if successful. If
+auto-mining fails, it can return <code>broadcast</code> activity with the txid
+and no block hash. Background sync can later confirm recorded activity.</li>
+</ol>
+<p>The important ordering is <strong>broadcast → SQLite record</strong>. A timeout or
+process failure in that gap can leave a transaction on the chain with no
+recorded key. A second request with the same key may then build another
+transaction. Two concurrent requests with one new key can also both pass
+the initial lookup. This version does not promise exactly-once submission.</p>
+<h2 id="call-the-api-with-a-deliberate-key"><a class="header" href="#call-the-api-with-a-deliberate-key">Call the API with a deliberate key</a></h2>
+<p>This example uses integer zatoshi. Run it against the live dashboard URL of
+the <strong>same instance</strong> you used in earlier chapters:</p>
+<pre><code class="language-console">DASHBOARD_URL="$(ths endpoints --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["dashboard"])')"
+curl -fsS "$DASHBOARD_URL/api/v1/send" \
+  -H 'content-type: application/json' \
+  --data '{"from_account":1,"to_account":2,"source_pool":"orchard","destination_pool":"orchard","amount_zatoshi":100000000,"idempotency_key":"book-account-1-to-2-v1"}'
+</code></pre>
+<p>The response is an activity object. Read <code>txid</code>, <code>status</code>, and
+<code>block_hash</code>; do not infer confirmation merely because HTTP returned 200.
+Keep this key only for this intended payment. If the server has recorded it,
+repeating the <strong>same direct API request</strong> with the same key retrieves or
+finishes that activity. The dashboard and CLI generate a <strong>fresh</strong> key for
+each submission, so clicking Send or running <code>ths wallet send</code> again is a
+new attempt.</p>
+<h2 id="decide-what-to-do-after-a-lost-response"><a class="header" href="#decide-what-to-do-after-a-lost-response">Decide what to do after a lost response</a></h2>
+<p><img src="images/retry-decisions.svg" alt="Retry decision flow: after an uncertain response, inspect activity and chain state; recorded activity can be revisited with the same direct API key, while an absent record may still hide a broadcast and must not be blindly resubmitted; mining has no retry key and requires checking the node tip."></p>
+<ol>
+<li>Save any transaction ID or response you did receive. Query Recent
+activity or <code>GET /api/v1/activity</code>, then inspect Zakura’s transaction
+and chain state if you have a txid.</li>
+<li>If the matching activity is recorded, use its status. A direct API caller
+may repeat the same validated request with its <strong>same key</strong> to finish
+confirmation. A <code>broadcast</code> activity may also become <code>confirmed</code> after
+another block and background synchronization.</li>
+<li>If no matching activity appears, you cannot conclude that nothing was
+broadcast. The gap before SQLite recording has no safe automatic
+deduplication. Investigate the chain or mempool and the intended
+account balances before deciding whether to create a new payment.</li>
+<li><code>ths faucet &lt;ADDRESS&gt;</code> calls <code>POST /api/v1/faucet/address</code>. It has
+<strong>no idempotency key or activity record</strong>. Treat a lost response as
+ambiguous and inspect the destination/chain before repeating it.</li>
+</ol>
+<p>The server validates key syntax and deduplicates <strong>recorded</strong> activity;
+those checks are useful, but their boundary matters. Never reuse a key for
+a different amount or recipient. Do not reconstruct a balance by summing
+activity records; use <code>GET /api/v1/accounts</code> after wallet sync.</p>
+<p>A chain reorganization can replace the block named by a previously confirmed
+activity. The server reconciles wallet balances against the new canonical
+chain, but it does not recheck activity already marked <code>confirmed</code>. If
+current inclusion matters, query Zakura for the transaction and compare its
+block hash with the current chain. Treat the stored activity status as the
+result of its earlier confirmation check.</p>
+<h2 id="mining-has-a-different-retry-boundary"><a class="header" href="#mining-has-a-different-retry-boundary">Mining has a different retry boundary</a></h2>
+<p><code>POST /api/v1/mine</code> validates a count of 1–10,000 and calls Zakura
+<code>generate</code>. It then reads the mined tip, reconciles the wallet, notifies
+dashboards, and returns <code>blocks</code> plus <code>hashes</code>. If a later step errors,
+blocks may already exist, even though the request has no success response.
+Mining has <strong>no retry key</strong> in this version.</p>
+<p>After a timeout, compare the current <strong>node height and tip hash</strong> with
+what you observed before the request. Use Network, <code>GET /api/v1/status</code>,
+or Zakura RPC. Another process can also mine or reorganize a local chain,
+so that observation guides a human decision but is not an exactly-once
+receipt. <a href="#5-mining-and-wallet-sync">Chapter 5</a> traces the full wallet catch-up.</p>
+<p><strong>Source map:</strong> <a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/crates/tsz-server/src/api.rs">API handlers</a>,
+<a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/crates/tsz-server/src/db.rs">SQLite activity and keys</a>,
+<a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/crates/tsz-server/src/wallet.rs">wallet payments</a>,
+and <a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/crates/tsz-server/src/reconcile.rs">chain reconciliation</a>.</p>
+<p><strong>Next:</strong> <a href="#7-connect-your-application">choose an interface for your own application</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="7-connect-your-application"><a class="header" href="#7-connect-your-application">7. Connect your application</a></h1>
+<p>By now you have seen one payment from the dashboard down to Zakura and back
+to the wallet snapshot. An integration needs to choose the <strong>owner of the
+data it wants</strong>, then connect to that owner’s local interface.</p>
+<p><img src="images/interface-selection.svg" alt="Interface selection: use the dashboard HTTP API for reconciled user balances and activity, Zakura JSON-RPC for raw node and chain state, or plaintext lightwalletd gRPC for compact blocks; all host endpoints come from the running ths instance."></p>
+<ol>
+<li>Use the <strong>dashboard HTTP API</strong> when your program needs user accounts,
+reconciled balances, activity, or the server’s wallet sync status.</li>
+<li>Use <strong>Zakura JSON-RPC</strong> for the node tip, blocks, raw transactions, and
+mempool state. Those facts do not tell you which Orchard notes your
+development wallet can spend.</li>
+<li>Use <strong>lightwalletd gRPC</strong> when building a compatible light client that
+scans compact blocks itself. The local service uses plaintext transport.</li>
+<li>Use <code>ths endpoints --json</code> each run to discover host ports. All
+published addresses are on <code>127.0.0.1</code>; the instance’s Docker-internal
+names are a different network.</li>
+</ol>
+<h2 id="discover-the-current-instance"><a class="header" href="#discover-the-current-instance">Discover the current instance</a></h2>
+<p>Keep <code>ths</code> running in one terminal. In another:</p>
+<pre><code class="language-console">ths endpoints --json
+</code></pre>
+<p>For a named instance, use <code>ths --name alice endpoints --json</code>. The JSON
+fields are <code>dashboard</code>, <code>rpc</code>, <code>lightwalletd</code>, and <code>p2p</code>. The dashboard
+Network page shows the same addresses, while <code>GET /api/v1/status</code> calls
+the RPC field <code>zakura_rpc</code>. That naming difference is a property of the
+two current responses, not two different nodes.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Endpoint field</th><th>Example use</th></tr>
+</thead>
+<tbody>
+<tr><td><code>dashboard</code></td><td>Base URL for <code>/api/v1/status</code>, <code>/api/v1/accounts</code>, <code>/api/v1/activity</code>, and the UI.</td></tr>
+<tr><td><code>rpc</code></td><td>Zakura JSON-RPC, such as <code>getblockchaininfo</code>.</td></tr>
+<tr><td><code>lightwalletd</code></td><td>Compact-block gRPC client connection.</td></tr>
+<tr><td><code>p2p</code></td><td>Local Zakura peer connection address.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Never hard-code the example port from another run. The launcher selects
+published ports dynamically.</p>
+<h2 id="build-a-small-read-client"><a class="header" href="#build-a-small-read-client">Build a small read client</a></h2>
+<p>Save the following as <code>read_tsz.py</code> and run <code>python3 read_tsz.py</code> while the
+default instance is alive. It uses only Python’s standard library:</p>
+<pre><code class="language-python">import json
+import subprocess
+import urllib.request
+
+endpoints = json.loads(
+    subprocess.check_output(["ths", "endpoints", "--json"], text=True)
+)
+dashboard = endpoints["dashboard"]
+
+
+def get_json(path):
+    with urllib.request.urlopen(dashboard + path, timeout=10) as response:
+        return json.load(response)
+
+
+status = get_json("/api/v1/status")
+if status["wallet_sync"]["state"] != "ready":
+    raise SystemExit("Wallet is not ready; inspect /api/v1/status before using balances")
+if status["node"] is None:
+    raise SystemExit("Zakura did not answer the status query")
+
+print("Node height:", status["node"]["blocks"])
+print("Node tip:", status["node"]["bestblockhash"])
+for account in get_json("/api/v1/accounts"):
+    print(
+        f'Account {account["id"]}: '
+        f'{account["orchard_zatoshi"]} Orchard zatoshi, '
+        f'{account["transparent_zatoshi"]} transparent zatoshi'
+    )
+</code></pre>
+<p>For a named instance, insert <code>"--name", "alice"</code> before <code>"endpoints"</code>
+in the subprocess argument list. If Zakura does not answer the status query,
+check the Network page and logs. In a healthy ready instance, the example
+prints only user Accounts 1–5. <code>100000000</code> zatoshi is 1 ZEC.</p>
+<p>The explicit <code>ready</code> check matters. <code>GET /api/v1/accounts</code> returns the
+last wallet snapshot even while a new scan is in progress or has failed.
+Use <code>wallet_sync.observed_height</code>, <code>observed_hash</code>,
+<code>fully_scanned_height</code>, and <code>fully_scanned_hash</code> if your application
+needs to explain why the node and wallet differ. A same-height
+reorganization can change a hash without changing a height.</p>
+<h2 id="listen-for-changes-then-fetch-state"><a class="header" href="#listen-for-changes-then-fetch-state">Listen for changes, then fetch state</a></h2>
+<p><code>GET /api/v1/events</code> is a server-sent event stream. Each <code>update</code> event
+contains one topic: <code>wallet</code>, <code>chain</code>, or <code>sync</code>. The event is a <strong>hint
+to refetch</strong>, not a balance or block payload. The dashboard’s query hooks
+invalidate the relevant queries when one arrives. A simple terminal view
+is:</p>
+<pre><code class="language-console">DASHBOARD_URL="$(ths endpoints --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["dashboard"])')"
+curl -N "$DASHBOARD_URL/api/v1/events"
+</code></pre>
+<p>Leave it running, perform a faucet or mine in another terminal, and watch
+for <code>update</code> events. Press Ctrl+C to stop the stream. Your client should
+read the relevant HTTP endpoint after an event; it should also fetch
+initial state when it connects, since a stream starts with no full
+snapshot.</p>
+<h2 id="read-chain-state-directly"><a class="header" href="#read-chain-state-directly">Read chain state directly</a></h2>
+<p>This read-only JSON-RPC call asks Zakura for its chain view:</p>
+<pre><code class="language-python">import json
+import subprocess
+import urllib.request
+
+rpc = json.loads(
+    subprocess.check_output(["ths", "endpoints", "--json"], text=True)
+)["rpc"]
+body = json.dumps(
+    {"jsonrpc": "2.0", "id": 1, "method": "getblockchaininfo", "params": []}
+).encode()
+request = urllib.request.Request(
+    rpc, data=body, headers={"Content-Type": "application/json"}
+)
+with urllib.request.urlopen(request, timeout=10) as response:
+    print(json.load(response)["result"])
+</code></pre>
+<p>Save this as <code>chain_info.py</code> and run <code>python3 chain_info.py</code>. The result
+describes the node. Use the accounts API for the development wallet’s
+balances and the activity API for recorded requests. Do not try to infer
+private Orchard recipients or memo plaintext from raw chain data.</p>
+<h2 id="connect-a-light-client"><a class="header" href="#connect-a-light-client">Connect a light client</a></h2>
+<p>Pass the current <code>lightwalletd</code> endpoint to a lightwalletd-compatible
+gRPC client configured for <strong>plaintext</strong>, since this Regtest listener
+does not use TLS. Some clients expect <code>host:port</code> rather than an
+<code>http://</code> URL; use the form your client library requires. The endpoint
+changes with each instance run.</p>
+<p>The dashboard also exposes read-only block, transaction, mempool, address,
+and search routes; <code>web/src/lib/api/endpoints.ts</code> lists the current
+paths. For writes, <a href="#6-uncertain-operations">Chapter 6</a> explains
+<code>POST /api/v1/send</code>, <code>POST /api/v1/faucet</code>, <code>POST /api/v1/mine</code>, and their
+retry boundaries. These interfaces are for local Regtest experiments;
+keep them on loopback and verify the current source before building a
+long-lived integration.</p>
+<p><strong>What you learned:</strong> choose an endpoint by state ownership, then check
+wallet readiness before using a balance. <strong>Next:</strong> use the <a href="#appendix-a-ths-cli-reference">CLI
+reference</a>, <a href="#appendix-b-develop-from-source">source development guide</a>, or
+<a href="#appendix-c-troubleshooting">troubleshooting guide</a> as your experiment needs.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="appendix-a-ths-cli-reference"><a class="header" href="#appendix-a-ths-cli-reference">Appendix A: <code>ths</code> CLI reference</a></h1>
+<p><code>ths</code> is the Thus Spoke Zakura launcher. It manages the Docker-based Regtest
+environment and, once an environment is running, talks to its dashboard API on
+your behalf. This page documents every command in detail, with examples.</p>
+<p>Read <a href="#1-your-first-instance">Chapter 1</a> for an instance’s lifecycle, <a href="#3-accounts-and-balances">Chapter
+3</a> for accounts and pools, and <a href="#6-uncertain-operations">Chapter
+6</a> before retrying a payment or mine request.
+The examples below demonstrate individual commands; they are not one script
+to run in order. For a worked dashboard flow, see <a href="#4-fund-and-send">Chapter
+4</a>.</p>
+<h2 id="conventions-used-below"><a class="header" href="#conventions-used-below">Conventions used below</a></h2>
+<ul>
+<li>All commands accept two <strong>global options</strong>, which can be placed before or
+after the subcommand:
+<ul>
+<li><code>--name &lt;NAME&gt;</code> — target a named, isolated environment instead of the
+default one (default: <code>default</code>).</li>
+<li><code>--json</code> — print machine-readable JSON instead of human-readable text,
+where the command supports it.</li>
+</ul>
+</li>
+<li>Accounts are referred to by <strong>index</strong>, <code>1</code> through <code>5</code>. Every environment
+starts with five disposable development accounts; there is no need to copy
+full Regtest addresses to use the commands on this page. (A hidden sixth
+account acts as the mining/faucet treasury and is not addressable from the
+CLI.)</li>
+<li>Amounts are ZEC decimal strings with up to 8 decimal places, e.g. <code>1</code>,
+<code>0.5</code>, <code>2.25000001</code>. These are disposable Regtest coins with no value.</li>
+<li>Commands that call the app (<code>mine</code>, <code>faucet</code>, and <code>wallet</code> subcommands) require
+a running environment. Start one first with <code>ths</code> (or <code>ths --name &lt;NAME&gt;</code>).
+<code>stop</code> and <code>reset --force</code> can remove resources left by an interrupted run.</li>
+</ul>
+<hr>
+<h2 id="environment-lifecycle"><a class="header" href="#environment-lifecycle">Environment lifecycle</a></h2>
+<h3 id="ths--ths-start"><a class="header" href="#ths--ths-start"><code>ths</code> / <code>ths start</code></a></h3>
+<p>Starts a fresh environment in the foreground and opens the dashboard in your
+browser. Interrupting with Ctrl+C stops the environment and deletes its chain,
+wallet, keys, and Docker volumes.</p>
+<pre><code class="language-console">ths
+ths start --no-open      # don't open a browser tab
+ths --name alice         # start a second, independent environment named "alice"
+</code></pre>
+<h3 id="ths-build---dev"><a class="header" href="#ths-build---dev"><code>ths build [--dev]</code></a></h3>
+<p>Builds the runtime Docker images from the current source checkout (for
+development from a clone, not needed for the installed release).</p>
+<pre><code class="language-console">ths build             # release-optimized images
+ths build --dev       # keep workspace Rust code unoptimized for faster rebuilds
+</code></pre>
+<h3 id="ths-pull"><a class="header" href="#ths-pull"><code>ths pull</code></a></h3>
+<p>Pulls the exact runtime images that match this launcher’s version, instead of
+building them locally.</p>
+<pre><code class="language-console">ths pull
+</code></pre>
+<h3 id="ths-status---json"><a class="header" href="#ths-status---json"><code>ths status [--json]</code></a></h3>
+<p>Shows whether the named environment is running and prints its endpoints.</p>
+<pre><code class="language-console">ths status
+ths status --name alice --json
+</code></pre>
+<h3 id="ths-open"><a class="header" href="#ths-open"><code>ths open</code></a></h3>
+<p>Opens the running dashboard in your default browser.</p>
+<pre><code class="language-console">ths open
+</code></pre>
+<h3 id="ths-endpoints---json"><a class="header" href="#ths-endpoints---json"><code>ths endpoints [--json]</code></a></h3>
+<p>Prints the dashboard, Zakura RPC, lightwalletd, and P2P endpoints, useful for
+scripts and other developer tooling.</p>
+<pre><code class="language-console">ths endpoints
+ths endpoints --json
+</code></pre>
+<h3 id="ths-logs-appzakuralightwalletd--f--follow"><a class="header" href="#ths-logs-appzakuralightwalletd--f--follow"><code>ths logs [app|zakura|lightwalletd] [-f|--follow]</code></a></h3>
+<p>Prints or streams logs for a service in the named environment. Defaults to the
+<code>app</code> (dashboard/server) service.</p>
+<pre><code class="language-console">ths logs                       # last logs from the app service
+ths logs zakura -f             # follow node logs
+ths logs lightwalletd --follow # follow lightwalletd logs
+</code></pre>
+<h3 id="ths-stop"><a class="header" href="#ths-stop"><code>ths stop</code></a></h3>
+<p>Stops the named environment and deletes its containers, volumes, and network.</p>
+<pre><code class="language-console">ths stop
+</code></pre>
+<h3 id="ths-reset---force"><a class="header" href="#ths-reset---force"><code>ths reset --force</code></a></h3>
+<p>Same as <code>stop</code>, but named explicitly as a destructive action; requires
+<code>--force</code> since it permanently deletes chain, wallet, and seed data.</p>
+<pre><code class="language-console">ths reset --force
+</code></pre>
+<h3 id="ths-list---json"><a class="header" href="#ths-list---json"><code>ths list [--json]</code></a></h3>
+<p>Lists every known environment and its dashboard URL.</p>
+<pre><code class="language-console">ths list
+</code></pre>
+<h3 id="ths-doctor---json"><a class="header" href="#ths-doctor---json"><code>ths doctor [--json]</code></a></h3>
+<p>Checks that Docker is reachable and prints the launcher’s configuration
+directory.</p>
+<pre><code class="language-console">ths doctor
+</code></pre>
+<h3 id="ths-update-version---check--ths-uninstall"><a class="header" href="#ths-update-version---check--ths-uninstall"><code>ths update [VERSION] [--check]</code> / <code>ths uninstall</code></a></h3>
+<p>Checks for, installs, or rolls back a released launcher version, or removes
+the installed <code>ths</code> executable.</p>
+<pre><code class="language-console">ths update --check     # only report whether a newer release exists
+ths update              # install the latest verified release
+ths update v0.2.0       # install (or roll back to) an exact version
+ths uninstall
+</code></pre>
+<h3 id="ths-mine-blocks"><a class="header" href="#ths-mine-blocks"><code>ths mine &lt;BLOCKS&gt;</code></a></h3>
+<p>Mines blocks on the running environment and synchronizes its wallet — useful
+for testing confirmations, expiry, or coinbase maturity.</p>
+<pre><code class="language-console">ths mine 1
+ths mine 10 --json
+</code></pre>
+<hr>
+<h2 id="funding-an-address-ths-faucet-address---amount-zec"><a class="header" href="#funding-an-address-ths-faucet-address---amount-zec">Funding an address: <code>ths faucet &lt;ADDRESS&gt; [--amount &lt;ZEC&gt;]</code></a></h2>
+<p>Sends disposable Regtest ZEC from the treasury directly to any Regtest unified
+or transparent address, not necessarily one of the five development accounts.
+Limited to 5 ZEC per request; defaults to 1 ZEC. It does not move funds between
+accounts and takes no memo. For the development accounts, use
+<a href="#ths-wallet-the-development-wallet"><code>ths wallet</code></a>.</p>
+<pre><code class="language-console">ths faucet uregtest1exampleaddress...
+ths faucet tmExampleTransparentAddress... --amount 2.5
+</code></pre>
+<h2 id="ths-wallet-the-development-wallet"><a class="header" href="#ths-wallet-the-development-wallet"><code>ths wallet</code>: the development wallet</a></h2>
+<p>Everything under <code>ths wallet</code> acts on the wallet held by the running <code>ths</code>
+server: the five development accounts (index <code>1</code>-<code>5</code>) and the hidden treasury
+that funds them. Its subcommands do the same things as the dashboard’s Faucet
+and Send dialogs, from a script or terminal:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Subcommand</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>ths wallet faucet</code></td><td>Fund one or more accounts from the treasury</td></tr>
+<tr><td><code>ths wallet send</code></td><td>Send funds from one account to another, with an optional memo</td></tr>
+<tr><td><code>ths wallet shield</code></td><td>Spend one account’s transparent funds into another account’s Orchard balance</td></tr>
+<tr><td><code>ths wallet unshield</code></td><td>Spend one account’s Orchard funds into another account’s transparent balance</td></tr>
+</tbody>
+</table>
+</div>
+<p>Every subcommand attempts to mine a confirming block and prints the resulting
+transaction ID. If auto-mining fails, activity may remain in <code>broadcast</code>
+state; <code>send</code>, <code>shield</code>, and <code>unshield</code> print a confirming block hash when one
+is available. Pass <code>--json</code> for machine-readable output.</p>
+<h3 id="ths-wallet-faucet---accounts-list---amount-zec---pool-pool"><a class="header" href="#ths-wallet-faucet---accounts-list---amount-zec---pool-pool"><code>ths wallet faucet --accounts &lt;LIST&gt; [--amount &lt;ZEC&gt;] [--pool &lt;POOL&gt;]</code></a></h3>
+<p>Funds one or more accounts from the treasury faucet in a single command.</p>
+<ul>
+<li><code>--accounts &lt;LIST&gt;</code> (required): comma-separated account indices, e.g.
+<code>1,2,3,5</code>. Each listed account receives its own independent faucet
+transaction for the full <code>--amount</code>.</li>
+<li><code>--amount &lt;ZEC&gt;</code>: amount to send to <strong>each</strong> account (default <code>1</code>, maximum
+<code>5</code>, matching the dashboard faucet’s per-request limit).</li>
+<li><code>--pool &lt;orchard|transparent&gt;</code>: which balance to fund (default <code>orchard</code>).</li>
+</ul>
+<pre><code class="language-console"># Fund accounts 1, 2, 3, and 5 with 3 ZEC each (shielded)
+ths wallet faucet --accounts 1,2,3,5 --amount 3
+
+# Fund a single account's transparent balance
+ths wallet faucet --accounts 4 --amount 1 --pool transparent
+
+# Machine-readable output, e.g. for a setup script
+ths --json wallet faucet --accounts 1,2,3,4,5 --amount 5
+</code></pre>
+<p>If some accounts fail (for example, a treasury shortfall) the command still
+funds the rest, prints a <code>Failed to fund ...</code> line per failure, and exits with
+a non-zero status summarizing how many of the requests failed.</p>
+<h3 id="ths-wallet-send---from-n---to-n---amount-zec---source-pool-pool---destination-pool-pool---memo-text"><a class="header" href="#ths-wallet-send---from-n---to-n---amount-zec---source-pool-pool---destination-pool-pool---memo-text"><code>ths wallet send --from &lt;N&gt; --to &lt;N&gt; --amount &lt;ZEC&gt; [--source-pool &lt;POOL&gt;] [--destination-pool &lt;POOL&gt;] [--memo &lt;TEXT&gt;]</code></a></h3>
+<p>Sends funds from one development account to another. It does the same thing as
+the dashboard’s <strong>Send ZEC</strong> dialog and uses the same endpoint
+(<code>POST /api/v1/send</code>).</p>
+<ul>
+<li><code>--from &lt;N&gt;</code> / <code>--to &lt;N&gt;</code> (required): two different account indices,
+<code>1</code>-<code>5</code>. The treasury account can’t be used.</li>
+<li><code>--amount &lt;ZEC&gt;</code> (required): limited only by the sending account’s balance.</li>
+<li><code>--source-pool &lt;orchard|transparent&gt;</code>: pool to spend from (default
+<code>orchard</code>).</li>
+<li><code>--destination-pool &lt;orchard|transparent&gt;</code>: pool the destination account
+receives into (default <code>orchard</code>).</li>
+<li><code>--memo &lt;TEXT&gt;</code>: optional memo for the recipient. See <a href="#memos">Memos</a>.</li>
+</ul>
+<pre><code class="language-console"># Move 1 ZEC from account 2's Orchard balance to account 3's Orchard balance
+ths wallet send --from 2 --to 3 --amount 1
+
+# Spend account 1's transparent balance into account 4's Orchard balance
+ths wallet send --from 1 --to 4 --amount 0.5 --source-pool transparent
+
+# Attach a memo for the recipient
+ths wallet send --from 2 --to 3 --amount 1 --memo "rent for October"
+
+# Rejected: transparent outputs cannot carry a memo
+ths wallet send --from 2 --to 3 --amount 1 --destination-pool transparent --memo "hi"
+</code></pre>
+<h3 id="ths-wallet-shield---from-n---to-n---amount-zec---memo-text"><a class="header" href="#ths-wallet-shield---from-n---to-n---amount-zec---memo-text"><code>ths wallet shield --from &lt;N&gt; --to &lt;N&gt; --amount &lt;ZEC&gt; [--memo &lt;TEXT&gt;]</code></a></h3>
+<p>Shorthand for <code>ths wallet send</code> with <code>--source-pool transparent --destination-pool orchard</code>: spends one account’s transparent balance into
+another account’s Orchard balance.</p>
+<ul>
+<li><code>--from &lt;N&gt;</code> (required): account to spend transparent funds from.</li>
+<li><code>--to &lt;N&gt;</code> (required): a different account to receive them as Orchard
+funds. Sends between the same account are rejected.</li>
+<li><code>--amount &lt;ZEC&gt;</code> (required).</li>
+<li><code>--memo &lt;TEXT&gt;</code>: optional memo on the Orchard output (up to 512 bytes).</li>
+</ul>
+<pre><code class="language-console"># Shield 0.5 ZEC of account 4's transparent balance into account 2's Orchard balance
+ths wallet shield --from 4 --to 2 --amount 0.5
+
+# The same, with a memo
+ths wallet shield --from 4 --to 2 --amount 0.5 --memo "welcome to the shielded pool"
+</code></pre>
+<blockquote>
+<p>Note: because transparent notes must be fully spent, the wallet may route
+any leftover change from a transparent source into the shielded pool as
+well. Shielding “0.5 ZEC” from an account holding 1 transparent ZEC can
+leave that account with its change in Orchard rather than transparent.</p>
+</blockquote>
+<h3 id="ths-wallet-unshield---from-n---to-n---amount-zec"><a class="header" href="#ths-wallet-unshield---from-n---to-n---amount-zec"><code>ths wallet unshield --from &lt;N&gt; --to &lt;N&gt; --amount &lt;ZEC&gt;</code></a></h3>
+<p>Shorthand for <code>ths wallet send</code> with <code>--source-pool orchard --destination-pool transparent</code>: spends one account’s Orchard balance into
+another account’s transparent balance. It takes no memo, because transparent
+outputs cannot carry one.</p>
+<ul>
+<li><code>--from &lt;N&gt;</code> (required): account to spend Orchard funds from.</li>
+<li><code>--to &lt;N&gt;</code> (required): a different account to receive them as transparent
+funds.</li>
+<li><code>--amount &lt;ZEC&gt;</code> (required).</li>
+</ul>
+<pre><code class="language-console"># Unshield 0.2 ZEC from account 1's Orchard balance into account 3's transparent balance
+ths wallet unshield --from 1 --to 3 --amount 0.2
+</code></pre>
+<h3 id="memos"><a class="header" href="#memos">Memos</a></h3>
+<p>Zcash lets the sender attach a memo of up to 512 bytes to an Orchard output
+(ZIP 302). The memo is encrypted to the recipient. Only holders of that
+account’s keys can read it.</p>
+<ul>
+<li>A memo is only allowed when the destination pool is <code>orchard</code>. With a
+<code>transparent</code> destination, <code>ths</code>, the dashboard, and the API all reject it.
+Transparent outputs have no memo field, and none is invented.</li>
+<li><code>ths wallet send</code>, <code>ths wallet shield</code>, and the dashboard’s <strong>Send ZEC</strong>
+dialog accept a memo. <code>ths faucet</code>, <code>ths wallet faucet</code>, and
+<code>ths wallet unshield</code> do not.</li>
+<li>The limit is 512 <strong>bytes</strong>, not characters. Non-ASCII text, such as emoji or
+CJK characters, takes several bytes per character.</li>
+<li>Leaving out <code>--memo</code> sends no memo. <code>--memo ""</code> sends an explicit empty
+text memo.</li>
+<li>A memo can’t end with a NUL (U+0000) character. Memos are padded with zero
+bytes, so a trailing NUL would be lost when the memo is read.</li>
+<li>The memo is attached to the recipient’s output only. Change returned to the
+sender has no memo.</li>
+<li>The block explorer shows public transaction data only. It never shows memo
+plaintext.</li>
+<li>All five accounts and the treasury come from one seed as separate ZIP-32
+accounts. A viewing-only wallet imported with one account’s viewing key can
+decrypt only the memos sent to that account.</li>
+</ul>
+<h3 id="putting-it-together-seeding-a-fresh-environment"><a class="header" href="#putting-it-together-seeding-a-fresh-environment">Putting it together: seeding a fresh environment</a></h3>
+<p>A typical setup starts the environment in one terminal:</p>
+<pre><code class="language-console">ths --name demo start --no-open
+</code></pre>
+<p>Wait for <code>demo is ready</code>, then run these commands in a second terminal:</p>
+<pre><code class="language-console">ths --name demo wallet faucet --accounts 1,2,3,4,5 --amount 5
+ths --name demo wallet faucet --accounts 2 --amount 1 --pool transparent
+ths --name demo wallet shield --from 2 --to 4 --amount 0.5
+ths --name demo wallet send --from 1 --to 3 --amount 1 --memo "welcome"
+</code></pre>
+<p>This funds all five accounts, gives account 2 some transparent balance,
+shields part of it into account 4, and sends shielded funds with a memo from
+account 1 to account 3, all without opening the dashboard.</p>
+<hr>
+<h2 id="command-summary"><a class="header" href="#command-summary">Command summary</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Command</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>ths</code></td><td>Start a fresh environment and open the dashboard</td></tr>
+<tr><td><code>ths start --no-open</code></td><td>Start without opening a browser</td></tr>
+<tr><td><code>ths build [--dev]</code></td><td>Build runtime images from source</td></tr>
+<tr><td><code>ths pull</code></td><td>Pull the exact images for this launcher version</td></tr>
+<tr><td><code>ths status [--json]</code></td><td>Show health and endpoint information</td></tr>
+<tr><td><code>ths open</code></td><td>Open the running dashboard</td></tr>
+<tr><td><code>ths endpoints [--json]</code></td><td>Print endpoints for scripts and developer tools</td></tr>
+<tr><td><code>ths mine &lt;N&gt;</code></td><td>Mine blocks and synchronize the wallet</td></tr>
+<tr><td><code>ths faucet &lt;ADDRESS&gt; [--amount]</code></td><td>Send disposable ZEC to any Regtest address</td></tr>
+<tr><td><code>ths wallet faucet --accounts &lt;LIST&gt; [--amount] [--pool]</code></td><td>Fund one or more of the five accounts by index</td></tr>
+<tr><td><code>ths wallet send --from --to --amount [--source-pool] [--destination-pool] [--memo]</code></td><td>Send between accounts by index, optionally with an Orchard memo</td></tr>
+<tr><td><code>ths wallet shield --from --to --amount [--memo]</code></td><td>Spend transparent funds into another account’s Orchard balance</td></tr>
+<tr><td><code>ths wallet unshield --from --to --amount</code></td><td>Spend Orchard funds into another account’s transparent balance</td></tr>
+<tr><td><code>ths logs [service] [-f]</code></td><td>Stream or print service logs</td></tr>
+<tr><td><code>ths list</code></td><td>List known environments</td></tr>
+<tr><td><code>ths stop</code></td><td>Stop and delete the environment</td></tr>
+<tr><td><code>ths reset --force</code></td><td>Force-delete one environment and all its data</td></tr>
+<tr><td><code>ths doctor</code></td><td>Check Docker and local configuration</td></tr>
+<tr><td><code>ths update [--check]</code></td><td>Check for or install a newer release</td></tr>
+<tr><td><code>ths uninstall</code></td><td>Remove the installed launcher executable</td></tr>
+</tbody>
+</table>
+</div>
+<p>Every command accepts <code>--name</code> for isolated environments. For more on running
+them side by side, see <a href="#give-another-experiment-its-own-name">Chapter
+1</a>.</p>
+<p>The <a href="#appendix-c-troubleshooting">troubleshooting appendix</a> starts from observable
+symptoms; <a href="#7-connect-your-application">Chapter 7</a> shows how to use the same live
+endpoints from your own code.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="appendix-b-develop-from-source"><a class="header" href="#appendix-b-develop-from-source">Appendix B: Develop from source</a></h1>
+<p>The teaching chapters use an installed <code>ths</code> launcher. For changes to this
+repository, the crucial rule is that <code>ths</code> starts <strong>Docker images</strong>. Editing
+Rust or React source does not change a running container or an already-built
+image.</p>
+<p><img src="images/source-to-runtime.svg" alt="Source-to-runtime flow: web and server source are built into the app Docker image, lightwalletd has a separate image, Zakura uses a pinned image, and ths start creates a fresh instance from those images; editing source requires rebuilding before the next start."></p>
+<ol>
+<li><code>web/</code> and <code>crates/tsz-server/</code> go into the app image. The app serves
+both the built React dashboard and HTTP API.</li>
+<li>The build command also prepares the lightwalletd runtime image and ensures
+the pinned Zakura image is present.</li>
+<li><code>start</code> creates a fresh instance from those images. A source edit needs
+another image build and a new instance before the normal dashboard shows it.</li>
+</ol>
+<h2 id="build-and-start"><a class="header" href="#build-and-start">Build and start</a></h2>
+<p>Use <strong>Rust 1.98</strong>, <strong>Node 24</strong>, and a running Docker daemon. Run these from
+the repository root:</p>
+<pre><code class="language-console">npm ci --prefix web
+cargo run -p thus-spoke-zakura -- build --dev
+cargo run -p thus-spoke-zakura -- start
+</code></pre>
+<p>The Cargo package is <code>thus-spoke-zakura</code>; <code>ths</code> is its binary name. The
+first command installs the dashboard’s locked dependencies. The second
+builds runtime images, keeping workspace Rust code unoptimized for faster
+development builds. The last launches the default instance in the
+foreground. With no subcommand, the source launcher starts the same
+environment.</p>
+<p>Keep the launch terminal open. Ctrl+C removes that instance and its data,
+as explained in <a href="#1-your-first-instance">Chapter 1</a>. After changing
+<code>crates/tsz-server</code> or <code>web/</code>, rerun:</p>
+<pre><code class="language-console">cargo run -p thus-spoke-zakura -- build --dev
+</code></pre>
+<p>Then start a new instance. <code>build</code> without <code>--dev</code> produces
+release-optimized images. <code>start</code> requires the matching images already
+present; it does not fetch or rebuild them.</p>
+<h2 id="find-the-part-you-need-to-change"><a class="header" href="#find-the-part-you-need-to-change">Find the part you need to change</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Need</th><th>Start reading</th></tr>
+</thead>
+<tbody>
+<tr><td>Launcher commands, Docker ports, instance cleanup</td><td><code>crates/tsz-cli/src/main.rs</code> and <code>runtime.rs</code></td></tr>
+<tr><td>Server routes, payment and mine handlers, wallet snapshot</td><td><code>crates/tsz-server/src/api.rs</code></td></tr>
+<tr><td>User accounts, treasury boundary, activity and keys</td><td><code>crates/tsz-server/src/db.rs</code></td></tr>
+<tr><td>Wallet scan, transaction construction, spendability</td><td><code>crates/tsz-server/src/wallet.rs</code></td></tr>
+<tr><td>Canonical checkpoint and reorganization handling</td><td><code>crates/tsz-server/src/reconcile.rs</code></td></tr>
+<tr><td>Dashboard requests, schemas, and query invalidation</td><td><code>web/src/lib/api/</code> and <code>web/src/hooks/</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>Follow one request across boundaries before changing behavior: a
+dashboard action calls an API route, the server may change wallet or
+chain state, then events trigger query refetches. <a href="#2-components-and-state">Chapters 2–6</a>
+explain why these owners are separate. Keep host-published ports on
+<code>127.0.0.1</code> and Account 6 out of user-facing lists.</p>
+<h2 id="iterate-on-the-frontend"><a class="header" href="#iterate-on-the-frontend">Iterate on the frontend</a></h2>
+<p>For a React-only change, build and start the runtime once. In a second
+terminal, get its live dashboard URL with the source launcher and pass it
+to Vite:</p>
+<pre><code class="language-console">TSZ_DEV_API="$(cargo run -q -p thus-spoke-zakura -- endpoints --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["dashboard"])')" npm run dev --prefix web
+</code></pre>
+<p>Vite proxies API calls to that running app. A frontend edit appears in
+the Vite page immediately. Rebuild the app image before checking it in
+the normal <code>ths</code> dashboard.</p>
+<h2 id="run-the-relevant-checks"><a class="header" href="#run-the-relevant-checks">Run the relevant checks</a></h2>
+<p>After changing <code>crates/</code>:</p>
+<pre><code class="language-console">cargo fmt --all -- --check
+cargo clippy --workspace --all-targets --all-features -- -D warnings
+cargo test --workspace
+cargo test -p thus-spoke-zakura --features release-distribution
+</code></pre>
+<p>After changing <code>web/</code> (with Node 24):</p>
+<pre><code class="language-console">npm run lint --prefix web
+npm run format:check --prefix web
+npm test --prefix web
+npm run build --prefix web
+</code></pre>
+<p>The normal <code>cargo test --workspace</code> run needs no Docker. The live
+<code>activity_recovery</code> regression is ignored there and has a separate
+Docker setup; read the <a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/README.md#activity-recovery-integration-test">README’s integration-test
+instructions</a>
+before running it.</p>
+<p>For contribution and pull-request policy, see
+<a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/CONTRIBUTING.md"><code>CONTRIBUTING.md</code></a>.
+For release images and publication, see
+<a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/RELEASING.md"><code>RELEASING.md</code></a>.
+For operational symptoms, turn to <a href="#appendix-c-troubleshooting">Appendix C:
+Troubleshooting</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="appendix-c-troubleshooting"><a class="header" href="#appendix-c-troubleshooting">Appendix C: Troubleshooting</a></h1>
+<p>Start by locating the layer that failed. A launcher can be stopped while
+Docker is healthy; Zakura can have a new block while the wallet is still
+scanning; and an activity row can exist before its transaction confirms.
+The <a href="#2-components-and-state">state ownership chapter</a> explains those
+layers, and <a href="#6-uncertain-operations">Chapter 6</a> explains uncertain
+payment responses.</p>
+<p><img src="images/diagnose-state.svg" alt="Diagnosis flow: if ths cannot start, check Docker and images; if it starts, check the named instance and endpoint; if the node is healthy but balances lag, inspect wallet sync; if a payment is uncertain, inspect activity and chain before retrying."></p>
+<ol>
+<li>If <code>ths</code> cannot prepare an instance, start with Docker access and
+required images.</li>
+<li>If the instance is running, get <strong>its</strong> current endpoints and node
+status. Do not reuse an old port or another name.</li>
+<li>If the node is healthy but Wallet looks stale, inspect wallet
+reconciliation state and logs, not the chain height alone.</li>
+<li>If a request timed out, inspect the operation’s recorded activity or
+node tip before deciding whether another write is safe.</li>
+</ol>
+<h2 id="establish-which-instance-you-are-using"><a class="header" href="#establish-which-instance-you-are-using">Establish which instance you are using</a></h2>
+<p>In a second terminal, replace <code>alice</code> with your instance name:</p>
+<pre><code class="language-console">ths --name alice status
+ths --name alice endpoints --json
+ths --name alice logs app
+</code></pre>
+<p>Omit <code>--name alice</code> for <code>default</code>. <code>ths status</code> reports whether the app
+container is running; it does <strong>not</strong> show the node height. The Network
+page and <code>GET /api/v1/status</code> show node height and wallet sync status.
+Ports change between runs.</p>
+<h2 id="match-the-symptom-to-the-next-observation"><a class="header" href="#match-the-symptom-to-the-next-observation">Match the symptom to the next observation</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>What you see</th><th>What it means and what to do</th></tr>
+</thead>
+<tbody>
+<tr><td><code>Docker is not reachable</code></td><td>Run <code>docker version</code>. Its server section must respond without <code>sudo</code>. Start Docker Desktop or the daemon, then run <code>ths doctor</code>.</td></tr>
+<tr><td><code>ths: command not found</code> after installation</td><td>The installer defaults to <code>~/.local/bin</code>. Add it to <code>PATH</code> or install with <code>TSZ_INSTALL_DIR</code> set to a directory already on <code>PATH</code>.</td></tr>
+<tr><td><code>required image ... is unavailable</code></td><td>An installed launcher can run <code>ths pull</code>. From source, run <code>cargo run -p thus-spoke-zakura -- build --dev</code>. Start again after the images are present.</td></tr>
+<tr><td>A source edit does not appear in the normal dashboard</td><td>The launcher runs an image, not live source. Rebuild with <code>cargo run -p thus-spoke-zakura -- build --dev</code> and start a fresh instance. Vite iteration has its own <a href="#iterate-on-the-frontend">source workflow</a>.</td></tr>
+<tr><td><code>instance alice does not exist</code> or an endpoint is wrong</td><td>Run <code>ths list</code>, use the same <code>--name</code> for every command, and fetch new <code>ths --name alice endpoints --json</code>. Do not reuse ports from an earlier run.</td></tr>
+<tr><td>Startup never reaches <code>alice is ready</code></td><td>Read the launcher’s printed error first. While the relevant container still exists, use <code>ths --name alice logs zakura -f</code>, <code>ths --name alice logs lightwalletd -f</code>, or <code>ths --name alice logs app -f</code>. Startup waits for the node, index, wallet sync, and Account 1 funding; a failed start cleans up its containers.</td></tr>
+<tr><td>Wallet says data may be stale</td><td>Read <code>GET /api/v1/status</code>: <code>wallet_sync.state</code>, <code>wallet_sync.error</code>, observed and fully scanned heights <strong>and hashes</strong>. Check <code>ths logs lightwalletd -f</code> and <code>ths logs app -f</code>. Wait for <code>ready</code> before relying on balances; the server retries background reconciliation.</td></tr>
+<tr><td>A send reports insufficient spendable funds</td><td>Check the source account <strong>and source pool</strong>, leave room for the fee, and confirm wallet sync is ready. A displayed account total may include a different pool, pending change, or funds not yet spendable.</td></tr>
+<tr><td>Faucet or send returned <code>broadcast</code> activity</td><td>Save the txid, inspect Recent activity and chain state, and mine if the transaction remains unconfirmed. Read <a href="#decide-what-to-do-after-a-lost-response">Chapter 6</a> before resubmitting.</td></tr>
+<tr><td>A mine request timed out or errored</td><td>Compare node height <strong>and tip hash</strong> via Network or <code>GET /api/v1/status</code> before trying again. Blocks may have been generated before wallet reconciliation failed; mining has no retry key.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Use <code>ths logs app</code>, <code>ths logs zakura</code>, or <code>ths logs lightwalletd</code>
+for recent output; add <code>-f</code> to follow. <code>ths doctor</code> checks Docker
+connectivity, not wallet health.</p>
+<h2 id="reset-only-when-you-mean-to-lose-this-instance"><a class="header" href="#reset-only-when-you-mean-to-lose-this-instance">Reset only when you mean to lose this instance</a></h2>
+<p>If an interrupted run left this instance’s resources, <code>ths --name alice reset --force</code> removes its containers and volumes. That permanently
+deletes its chain, wallet, seed, keys, and test funds. It does not remove
+another named instance. A normal foreground run cleans itself up on
+Ctrl+C.</p>
+<p>This environment is Regtest only. Never use these addresses for real
+ZEC or expose its local services beyond <code>127.0.0.1</code>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>
