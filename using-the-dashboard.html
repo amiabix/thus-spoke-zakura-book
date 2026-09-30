@@ -8,7 +8,7 @@
 
         <!-- Custom HTML head -->
 
-        <meta name="description" content="">
+        <meta name="description" content="A disposable Zcash Regtest network for local development.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
@@ -28,6 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/figures-85d4c665.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -35,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-d4af569c.js";
+            window.path_to_searchindex_js = "searchindex-b780ff3d.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9bfa7156.js"></script>
@@ -143,6 +144,12 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
+                        <a href="https://github.com/zcashlabs/thus-spoke-zakura" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/zcashlabs/thus-spoke-zakura/edit/main/docs/using-the-dashboard.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
 
                     </div>
                 </div>
@@ -176,9 +183,11 @@
                     <main>
                         <h1 id="4-fund-and-send"><a class="header" href="#4-fund-and-send">4. Fund and send</a></h1>
 <p>You now know that an account has two pool balances and that the treasury
-funds faucet requests. We will use the instance from Chapter 1 to make those
-ideas visible. Keep <code>ths start --no-open</code> running in its first terminal;
-run commands below in a second terminal.</p>
+funds faucet requests. We will use the <code>default</code> instance from Chapter 1 to
+make those ideas visible. Keep <code>ths start --no-open</code> running in its first
+terminal; run commands below in a second terminal. If you stopped it, run
+<code>ths start --no-open</code> again — you get the same five accounts on a fresh
+chain at height 103, which is all this chapter needs.</p>
 <p>The dashboard has <strong>Wallet</strong>, <strong>Explorer</strong>, and <strong>Network</strong> pages. Use <code>ths open</code> to bring it up. On desktop, the <strong>Mine</strong> button sits at the top of
 each page; on a narrow screen you can always use <code>ths mine</code>.</p>
 <h2 id="first-observe-the-starting-state"><a class="header" href="#first-observe-the-starting-state">First, observe the starting state</a></h2>
@@ -187,19 +196,30 @@ Account 2 should have no funds. If balances have not appeared, inspect
 <code>GET /api/v1/status</code> or follow <a href="troubleshooting.html">troubleshooting</a> before
 sending. The server wallet snapshot, not a browser calculation from chain
 history, supplies these balances.</p>
+<p><img src="images/wallet.png" alt="The Wallet page: a total balance banner over five account cards, each showing an Orchard and a transparent balance, a truncated unified address, and Fund and Send buttons; a Faucet button sits in the header beside Mine, and a Recent activity table is below."></p>
+<p>Two buttons open the faucet, and they are labelled differently. <strong>Faucet</strong>
+in the page header is the general one, and it only appears on Wallet — the
+Explorer and Network pages show just <strong>Mine</strong>. On each account card,
+<strong>Fund</strong> opens the same dialog with that account preselected.</p>
 <h2 id="fund-account-2s-transparent-pool"><a class="header" href="#fund-account-2s-transparent-pool">Fund Account 2’s transparent pool</a></h2>
 <ol>
-<li>Select <strong>Faucet</strong> on Wallet or the faucet button on Account 2.</li>
-<li>Choose destination account <strong>2</strong>, destination pool <strong>Transparent</strong>, and
-amount <strong>1 ZEC</strong>. Select <strong>Add funds</strong>.</li>
+<li>Select <strong>Fund</strong> on Account 2’s card, or <strong>Faucet</strong> in the header.</li>
+<li>In the <strong>Fund an account</strong> dialog, choose <strong>Destination account</strong> 2,
+<strong>Destination pool</strong> Transparent, and <strong>Amount (ZEC)</strong> 1. Select
+<strong>Add funds</strong>.</li>
 <li>Look at <strong>Recent activity</strong> for the transaction ID (<code>txid</code>), the unique
 identifier of the broadcast transaction, and its status. When
 confirmed, Account 2’s transparent balance should rise by 1 ZEC; its
 Orchard balance is still separate.</li>
 </ol>
-<p>The same operation from the second terminal is:</p>
-<pre><code class="language-console">ths wallet faucet --accounts 2 --amount 1 --pool transparent
+<p><img src="images/faucet.png" alt="The Fund an account dialog over the Wallet page, with a Destination account selector, a Destination pool selector set to Orchard (shielded), an Amount (ZEC) field noting a maximum of 5 ZEC per request, and an Add funds button."></p>
+<p>The same operation from the second terminal takes about a second:</p>
+<pre><code class="language-console">$ ths wallet faucet --accounts 2 --amount 1 --pool transparent
+Funded account 2 with 1 ZEC (transparent pool) on default.
+  Transaction: effa7550e63fe84593d1436c27ba0d5079a819fa12311f4dd5c72e4535e39a75
 </code></pre>
+<p>Every transaction and block hash in this book came from one particular run.
+Yours will differ; only the shape of the output is the same.</p>
 <p>Choose <strong>either</strong> the UI action or the CLI command if you want exactly one
 faucet payment. Running both makes two payments. The faucet may mine extra
 blocks first to mature and shield treasury rewards, then normally mines one
@@ -210,37 +230,62 @@ per request</strong>. If auto-mining fails, the recorded activity may remain
 <p>This is a <strong>different</strong> pool movement from the transparent faucet payment.</p>
 <ol>
 <li>On Wallet, select <strong>Send ZEC</strong>.</li>
-<li>Set <strong>From account</strong> to 1 and <strong>Source pool</strong> to Orchard. Set <strong>To
-account</strong> to 2 and <strong>Destination pool</strong> to Orchard.</li>
-<li>Enter <strong>1 ZEC</strong>. Optionally enter <code>hello from Regtest</code> as a memo, then
-select <strong>Send ZEC</strong>.</li>
+<li>Set <strong>From account</strong> to 1 and <strong>Source pool</strong> to Orchard. Set
+<strong>Destination account</strong> to 2 and <strong>Destination pool</strong> to Orchard.</li>
+<li>Enter <strong>1</strong> in <strong>Amount (ZEC)</strong>. Optionally enter <code>hello from Regtest</code>
+in <strong>Memo (optional)</strong>, then select <strong>Send ZEC</strong>.</li>
 <li>Check Recent activity for the transaction ID and actual status. After
 confirmation, Account 2 has 1 Orchard ZEC <strong>and</strong> its earlier 1
 transparent ZEC. Account 1’s Orchard balance falls by 1 ZEC <strong>plus the
 fee</strong>; do not expect it to be exactly 4 ZEC.</li>
 </ol>
-<p>CLI equivalent:</p>
-<pre><code class="language-console">ths wallet send --from 1 --to 2 --amount 1 --memo "hello from Regtest"
+<p>The dialog does the fee arithmetic for you. As soon as it has an account and
+a pool it asks <code>POST /api/v1/send/quote</code>, and the hint under the amount field
+reads “<em>N</em> ZEC spendable after a 0.0001 ZEC network fee” with the real
+numbers for that account and pool. The <strong>Max</strong> button fills in that spendable
+figure. An amount above it is rejected before anything is built.</p>
+<p><img src="images/send.png" alt="The Send ZEC dialog over the Wallet page: From account and Source pool on one row, Destination account and Destination pool on the next, an Amount (ZEC) field with a Max button beside it, the quote hint “3.9998 ZEC spendable after a 0.0001 ZEC network fee”, and a Memo (optional) box counting 0/512 bytes encrypted to the recipient."></p>
+<p>CLI equivalent, also about a second:</p>
+<pre><code class="language-console">$ ths wallet send --from 1 --to 2 --amount 1 --memo "hello from Regtest"
+Sent 1 ZEC from account 1 (orchard pool) to account 2 (orchard pool) on default.
+Memo: hello from Regtest
+Transaction: 68eff90854875decad05e9821f05ff3267a8d7c140b87b24edd9e32231e477d4
+Confirmed in: df2f5b28f8500c437901f9cc371827fa5c1af0af86247b88b8a481c52b36f919
 </code></pre>
-<p>Again, run the UI action <strong>or</strong> the command, not both, for one transaction.
+<p>After that faucet payment and this send, the accounts API reported Account 1
+at <code>399990000</code> Orchard zatoshi and Account 2 at <code>100000000</code> transparent plus
+<code>100000000</code> Orchard. Account 1 is down 1 ZEC <strong>and</strong> a 10,000 zatoshi fee,
+exactly as the quote predicted — 3.9999 ZEC, not 4.</p>
+<p>Run the UI action <strong>or</strong> the command, not both, for one transaction.
 The UI and CLI create a fresh idempotency key for each new submission. A
 second click or command is a second attempt, not a replay of the first.</p>
-<p><img src="images/payment-flow.svg" alt="Send flow: select source account and pool, destination account and pool, amount and optional Orchard memo; the wallet chooses spendable inputs and fee, broadcasts through lightwalletd, records activity, and seeks confirmation."></p>
+<p><img src="images/send-choices.svg" alt="A send picks a source account and pool on the left and a destination account and pool on the right, with the amount flowing between the pools. Three notes: transparent change returns as an Orchard note, the fee leaves the source on top of the amount, and a memo needs an Orchard destination."></p>
 <ol>
-<li>The source account and <strong>source pool</strong> determine which wallet funds the
-SDK tries to spend. It chooses actual notes or outputs and a fee.</li>
-<li>The destination account and <strong>destination pool</strong> determine the receiver.
-The two account IDs must differ and be in 1–5.</li>
-<li>The wallet builds and broadcasts through lightwalletd. The server
-records a transaction ID and activity, then checks or mines for
-confirmation. A successful API response can still carry <code>broadcast</code>
-status if auto-mining failed; inspect the status field.</li>
+<li><strong>Pair 1 — where the money comes from.</strong> The source account is one of
+1–5, and the source pool decides what is spent: <code>transparent</code> spends
+that account’s UTXOs, <code>orchard</code> spends its shielded notes.</li>
+<li><strong>Pair 2 — what the receiver gets.</strong> The destination account is one of
+1–5 and must differ from the source. <code>orchard</code> pays its unified address;
+<code>transparent</code> pays its t-address.</li>
+<li><strong>The fee is on top of the amount</strong>, taken from the source account. That
+is why <code>max_zatoshi</code> from the quote, not the balance, is the ceiling.</li>
+<li><strong>A transparent source rarely spends exactly.</strong> Transparent inputs must
+be spent whole, so the change comes back as an Orchard note in the source
+account rather than as transparent change.</li>
+<li><strong>Only an Orchard destination carries a memo.</strong> A transparent output has
+no memo field at all, and a memo sent with one is rejected.</li>
 </ol>
-<p>The optional memo is encrypted to an Orchard recipient and limited to <strong>512
-UTF-8 bytes</strong>, not 512 characters. A transparent output cannot carry a memo.
-The UI disables the memo field for Transparent destinations; the server also
-rejects a present memo there. The public Explorer does not reveal Orchard
-memo plaintext or recipient addresses.</p>
+<p>The memo is encrypted to the recipient and limited to <strong>512 UTF-8 bytes</strong>,
+not 512 characters. The UI disables the field for Transparent destinations;
+the server rejects a present memo there too.</p>
+<p>Be clear about what happens to it afterwards: <strong>this environment cannot show
+you a memo again.</strong> Activity rows have no memo column, no API response
+carries one, and no page displays one. The memo really is attached to the
+Orchard output — it is simply write-only from here. The one way to read it
+back is outside this dashboard: <code>GET /api/v1/accounts</code> returns a
+<code>unified_full_viewing_key</code> for each of Accounts 1–5, and a wallet imported
+with that key can decrypt the memos sent to that account. The public
+Explorer never reveals memo plaintext or Orchard recipient addresses.</p>
 <h2 id="a-pool-conversion-to-try-next"><a class="header" href="#a-pool-conversion-to-try-next">A pool conversion to try next</a></h2>
 <p>If you want to see a transparent source fund an Orchard destination, use the
 transparent funds in Account 2:</p>
@@ -259,6 +304,7 @@ Transparent inputs and outputs are public chain data; Orchard details are
 not exposed as the user-account transfer shown by Recent activity. The
 server’s activity record knows the development account IDs, while the
 Explorer follows the public chain.</p>
+<p><img src="images/explorer.png" alt="The Explorer page: a single search field accepting a block height, block hash, transaction ID, or t-address, above a Blocks table listing recent heights with their block hash, transaction count, size, and time."></p>
 <p><strong>Network</strong> shows the node height, tip hash, account count, and published
 endpoints. If a transaction is recorded but the wallet balance has not
 caught up, follow the next chapter rather than computing a balance from

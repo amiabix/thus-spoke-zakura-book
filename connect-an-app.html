@@ -8,7 +8,7 @@
 
         <!-- Custom HTML head -->
 
-        <meta name="description" content="">
+        <meta name="description" content="A disposable Zcash Regtest network for local development.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
@@ -28,6 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/figures-85d4c665.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -35,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-d4af569c.js";
+            window.path_to_searchindex_js = "searchindex-b780ff3d.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9bfa7156.js"></script>
@@ -143,6 +144,12 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
+                        <a href="https://github.com/zcashlabs/thus-spoke-zakura" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/zcashlabs/thus-spoke-zakura/edit/main/docs/connect-an-app.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
 
                     </div>
                 </div>
@@ -178,7 +185,7 @@
 <p>By now you have seen one payment from the dashboard down to Zakura and back
 to the wallet snapshot. An integration needs to choose the <strong>owner of the
 data it wants</strong>, then connect to that owner’s local interface.</p>
-<p><img src="images/interface-selection.svg" alt="Interface selection: use the dashboard HTTP API for reconciled user balances and activity, Zakura JSON-RPC for raw node and chain state, or plaintext lightwalletd gRPC for compact blocks; all host endpoints come from the running ths instance."></p>
+<p><img src="images/interface-selection.svg" alt="Wallet facts come from the dashboard HTTP API, node facts from Zakura’s JSON-RPC, and compact blocks from lightwalletd’s plaintext gRPC. Read the addresses from ths endpoints –json rather than hard-coding the ports."></p>
 <ol>
 <li>Use the <strong>dashboard HTTP API</strong> when your program needs user accounts,
 reconciled balances, activity, or the server’s wallet sync status.</li>
@@ -187,19 +194,29 @@ mempool state. Those facts do not tell you which Orchard notes your
 development wallet can spend.</li>
 <li>Use <strong>lightwalletd gRPC</strong> when building a compatible light client that
 scans compact blocks itself. The local service uses plaintext transport.</li>
-<li>Use <code>ths endpoints --json</code> each run to discover host ports. All
-published addresses are on <code>127.0.0.1</code>; the instance’s Docker-internal
-names are a different network.</li>
+<li>Use <code>ths endpoints --json</code> to discover host ports. All published
+addresses are on <code>127.0.0.1</code>; the instance’s Docker-internal names are a
+different network.</li>
 </ol>
 <h2 id="discover-the-current-instance"><a class="header" href="#discover-the-current-instance">Discover the current instance</a></h2>
 <p>Keep <code>ths</code> running in one terminal. In another:</p>
 <pre><code class="language-console">ths endpoints --json
 </code></pre>
-<p>For a named instance, use <code>ths --name alice endpoints --json</code>. The JSON
-fields are <code>dashboard</code>, <code>rpc</code>, <code>lightwalletd</code>, and <code>p2p</code>. The dashboard
-Network page shows the same addresses, while <code>GET /api/v1/status</code> calls
-the RPC field <code>zakura_rpc</code>. That naming difference is a property of the
-two current responses, not two different nodes.</p>
+<p>For a named instance, use <code>ths --name alice endpoints --json</code>:</p>
+<pre><code class="language-json">{
+  "dashboard": "http://127.0.0.1:32805",
+  "rpc": "http://127.0.0.1:18232",
+  "lightwalletd": "http://127.0.0.1:9067",
+  "p2p": "127.0.0.1:18233",
+  "network": "regtest",
+  "tls": false
+}
+</code></pre>
+<p>The dashboard Network page shows the same addresses, while
+<code>GET /api/v1/status</code> calls the RPC field <code>zakura_rpc</code>. That naming
+difference is a property of the two current responses, not two different
+nodes.</p>
+<p><img src="images/network.png" alt="The Network page: Height, Accounts, Verification and Chain tiles above a Node details panel listing the instance, network Regtest, height, and best block hash, and a Runtime endpoints panel listing the dashboard, Zakura RPC, lightwalletd, and P2P addresses with copy buttons. The Chain tile reads test, the raw value Zakura reports."></p>
 <div class="table-wrapper">
 <table>
 <thead>
@@ -210,11 +227,17 @@ two current responses, not two different nodes.</p>
 <tr><td><code>rpc</code></td><td>Zakura JSON-RPC, such as <code>getblockchaininfo</code>.</td></tr>
 <tr><td><code>lightwalletd</code></td><td>Compact-block gRPC client connection.</td></tr>
 <tr><td><code>p2p</code></td><td>Local Zakura peer connection address.</td></tr>
+<tr><td><code>network</code></td><td>The chain, always <code>"regtest"</code>. Assert on it before writing anything.</td></tr>
+<tr><td><code>tls</code></td><td>Always <code>false</code>. Configure transports as plaintext.</td></tr>
 </tbody>
 </table>
 </div>
-<p>Never hard-code the example port from another run. The launcher selects
-published ports dynamically.</p>
+<p>The four ports are fixed defaults — dashboard <code>32805</code>, Zakura RPC <code>18232</code>,
+P2P <code>18233</code>, lightwalletd <code>9067</code> — shifted as a block by whatever
+<code>--port-offset</code> that instance was started with. So they are stable across
+runs of one instance, but they are not a constant of the system: read
+<code>ths endpoints --json</code> rather than hard-code them, because you cannot know
+another developer’s offset.</p>
 <h2 id="build-a-small-read-client"><a class="header" href="#build-a-small-read-client">Build a small read client</a></h2>
 <p>Save the following as <code>read_tsz.py</code> and run <code>python3 read_tsz.py</code> while the
 default instance is alive. It uses only Python’s standard library:</p>
@@ -252,6 +275,14 @@ for account in get_json("/api/v1/accounts"):
 in the subprocess argument list. If Zakura does not answer the status query,
 check the Network page and logs. In a healthy ready instance, the example
 prints only user Accounts 1–5. <code>100000000</code> zatoshi is 1 ZEC.</p>
+<p><code>GET /api/v1/accounts</code> carries more than balances. Each account object also
+has <code>name</code>, <code>unified_address</code>, <code>transparent_address</code>, and
+<code>unified_full_viewing_key</code>. The addresses are what you pay from outside the
+dashboard; the viewing key is the only way to read an Orchard memo this
+environment sent, since nothing in the API or UI shows one back. Because the
+seed is fixed (see <a href="accounts-and-balances.html#an-account-is-a-wallet-identity">Chapter 3</a>),
+these values are identical in every instance — convenient for fixtures, and
+a reason never to reuse them anywhere real.</p>
 <p>The explicit <code>ready</code> check matters. <code>GET /api/v1/accounts</code> returns the
 last wallet snapshot even while a new scan is in progress or has failed.
 Use <code>wallet_sync.observed_height</code>, <code>observed_hash</code>,
@@ -295,16 +326,37 @@ describes the node. Use the accounts API for the development wallet’s
 balances and the activity API for recorded requests. Do not try to infer
 private Orchard recipients or memo plaintext from raw chain data.</p>
 <h2 id="connect-a-light-client"><a class="header" href="#connect-a-light-client">Connect a light client</a></h2>
-<p>Pass the current <code>lightwalletd</code> endpoint to a lightwalletd-compatible
-gRPC client configured for <strong>plaintext</strong>, since this Regtest listener
-does not use TLS. Some clients expect <code>host:port</code> rather than an
-<code>http://</code> URL; use the form your client library requires. The endpoint
-changes with each instance run.</p>
-<p>The dashboard also exposes read-only block, transaction, mempool, address,
-and search routes; <code>web/src/lib/api/endpoints.ts</code> lists the current
-paths. For writes, <a href="architecture/operations.html">Chapter 6</a> explains
-<code>POST /api/v1/send</code>, <code>POST /api/v1/faucet</code>, <code>POST /api/v1/mine</code>, and their
-retry boundaries. These interfaces are for local Regtest experiments;
+<p>Pass the <code>lightwalletd</code> endpoint to a lightwalletd-compatible gRPC client
+configured for <strong>plaintext</strong>. You do not have to take that on trust: the
+same <code>ths endpoints --json</code> that gave you the address reports <code>"tls": false</code>
+alongside it. Some clients expect <code>host:port</code> rather than an <code>http://</code> URL;
+use the form your client library requires.</p>
+<h2 id="the-rest-of-the-api-surface"><a class="header" href="#the-rest-of-the-api-surface">The rest of the API surface</a></h2>
+<p>These are every route the server serves today, from
+<code>crates/tsz-server/src/api.rs</code>:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Route</th><th>Notes</th></tr>
+</thead>
+<tbody>
+<tr><td><code>GET /api/v1/health</code></td><td>200 when Zakura answers <strong>and</strong> the wallet has published at least one snapshot; 503 otherwise. The natural readiness probe.</td></tr>
+<tr><td><code>GET /api/v1/status</code></td><td>Node tip, account count, network, endpoints, <code>wallet_sync</code>.</td></tr>
+<tr><td><code>GET /api/v1/accounts</code></td><td>Accounts 1–5 with balances, addresses, and viewing keys.</td></tr>
+<tr><td><code>GET /api/v1/activity</code></td><td>Recorded development payments; see <a href="architecture/operations.html#call-the-api-with-a-deliberate-key">Chapter 6</a> for the object’s eleven fields.</td></tr>
+<tr><td><code>POST /api/v1/send/quote</code></td><td>Dry run: <code>available_zatoshi</code>, <code>fee_zatoshi</code>, <code>max_zatoshi</code> for one account and pool pair. Builds and broadcasts nothing. Check an intended amount against <code>max_zatoshi</code> before calling <code>send</code>.</td></tr>
+<tr><td><code>POST /api/v1/send</code></td><td>Payment between accounts. Needs an idempotency key.</td></tr>
+<tr><td><code>POST /api/v1/faucet</code></td><td>Treasury payment to an account. Needs an idempotency key.</td></tr>
+<tr><td><code>POST /api/v1/faucet/address</code></td><td>Treasury payment to any Regtest address. <strong>No</strong> key, no activity record.</td></tr>
+<tr><td><code>POST /api/v1/mine</code></td><td>Generate 1–10,000 blocks. No retry key.</td></tr>
+<tr><td><code>POST /api/v1/dev/seed</code></td><td>Returns the raw seed hex. Refuses unless the body carries <code>"confirmation": "I understand this seed is for regtest only"</code>.</td></tr>
+<tr><td><code>GET /api/v1/blocks</code>, <code>/blocks/{id}</code>, <code>/transactions/{txid}</code>, <code>/mempool</code>, <code>/addresses/{address}</code>, <code>/search</code></td><td>Read-only explorer views of public chain data.</td></tr>
+<tr><td><code>GET /api/v1/events</code></td><td>The server-sent stream described above.</td></tr>
+</tbody>
+</table>
+</div>
+<p><a href="architecture/operations.html">Chapter 6</a> explains the retry boundaries around
+the four write routes. These interfaces are for local Regtest experiments;
 keep them on loopback and verify the current source before building a
 long-lived integration.</p>
 <p><strong>What you learned:</strong> choose an endpoint by state ownership, then check

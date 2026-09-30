@@ -1,0 +1,19 @@
+/* Figures are drawn wider than mdBook's 750px text column. Without this they
+   scale down to fit it, which shrinks a 13px diagram label to about 8px. Let
+   them break out of the column on wide screens and fall back to the column
+   width on narrow ones. */
+.content img {
+  display: block;
+  width: min(1160px, calc(100vw - 7rem));
+  max-width: none;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 1240px) {
+  .content img {
+    width: 100%;
+    margin-left: 0;
+    transform: none;
+  }
+}

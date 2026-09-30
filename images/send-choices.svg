@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 380" width="880" height="380" role="img" aria-label="A send picks a source account and pool on the left and a destination account and pool on the right, with the amount flowing between the pools. Three notes: transparent change returns as an Orchard note, the fee leaves the source on top of the amount, and a memo needs an Orchard destination.">
+<style>
+svg {
+  --bg: #fdfaf8;
+  --ink: #2c2430;
+  --muted: #7a6a7a;
+  --rule: #e0d3da;
+  --surface: #ffffff;
+  --zone: #f7f0f3;
+  --accent: #b24a6e;
+  --accent-soft: #fceef3;
+}
+@media (prefers-color-scheme: dark) {
+  svg {
+    --bg: #1b171f;
+    --ink: #efe8f0;
+    --muted: #a695a6;
+    --rule: #3d3442;
+    --surface: #252030;
+    --zone: #201b27;
+    --accent: #e79ab7;
+    --accent-soft: #3a2331;
+  }
+}
+text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+       "Helvetica Neue", Arial, sans-serif; fill: var(--ink); }
+.t { font-size: 15px; font-weight: 600; }
+.k { font-size: 10px; font-weight: 600; letter-spacing: .1em; fill: var(--muted); }
+.l { font-size: 13px; }
+.s { font-size: 11px; fill: var(--muted); }
+.a { font-size: 12px; font-weight: 600; fill: var(--accent); }
+.card { fill: var(--surface); stroke: var(--rule); stroke-width: 1; }
+.card-a { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1; }
+.zone { fill: var(--zone); stroke: none; }
+.note { fill: none; stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 3; }
+.flow { stroke: var(--accent); stroke-width: 2; fill: none; }
+.thin { stroke: var(--rule); stroke-width: 1.5; fill: none; }
+.lead { stroke: var(--rule); stroke-width: 1; fill: none; stroke-dasharray: 2 4; }
+</style>
+<defs><marker id="ar-a" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" markerHeight="7" orient="auto"><path d="M0 0 L10 4 L0 8 z" fill="var(--accent)"/></marker><marker id="ar-n" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="6" orient="auto"><path d="M0 0 L10 4 L0 8 z" fill="var(--rule)"/></marker></defs>
+<rect width="880" height="380" fill="var(--bg)"/>
+<text class="t" x="48" y="46">One send, two account + pool pairs</text>
+<text class="k" x="48" y="76" text-anchor="start">SOURCE</text>
+<text class="k" x="616" y="76" text-anchor="start">DESTINATION</text>
+<rect class="card" x="48" y="92" width="216" height="52" rx="8"/>
+<text class="l" x="156.0" y="115.0" text-anchor="middle">Source account</text>
+<text class="s" x="156.0" y="133.0" text-anchor="middle">one of 1–5</text>
+<rect class="card" x="616" y="92" width="216" height="52" rx="8"/>
+<text class="l" x="724.0" y="115.0" text-anchor="middle">Destination account</text>
+<text class="s" x="724.0" y="133.0" text-anchor="middle">one of 1–5</text>
+<path class="thin" d="M264 118 L392 118"/>
+<path class="thin" d="M488 118 L616 118"/>
+<text class="s" x="440" y="122" text-anchor="middle">must differ</text>
+<rect class="card" x="48" y="176" width="216" height="52" rx="8"/>
+<text class="l" x="156.0" y="199.0" text-anchor="middle">Source pool</text>
+<text class="s" x="156.0" y="217.0" text-anchor="middle">transparent · orchard</text>
+<rect class="card" x="616" y="176" width="216" height="52" rx="8"/>
+<text class="l" x="724.0" y="199.0" text-anchor="middle">Destination pool</text>
+<text class="s" x="724.0" y="217.0" text-anchor="middle">orchard · transparent</text>
+<path class="flow" d="M264 202 L606 202" marker-end="url(#ar-a)"/>
+<text class="a" x="440" y="192" text-anchor="middle">amount in zatoshi</text>
+<rect class="note" x="48" y="292" width="216" height="46" rx="8"/>
+<text class="l" x="156.0" y="312.0" text-anchor="middle">Transparent change</text>
+<text class="s" x="156.0" y="330.0" text-anchor="middle">returns as an Orchard note</text>
+<rect class="note" x="332" y="292" width="216" height="46" rx="8"/>
+<text class="l" x="440.0" y="312.0" text-anchor="middle">Fee leaves the source</text>
+<text class="s" x="440.0" y="330.0" text-anchor="middle">/send/quote reports the max</text>
+<rect class="note" x="616" y="292" width="216" height="46" rx="8"/>
+<text class="l" x="724.0" y="312.0" text-anchor="middle">Memo</text>
+<text class="s" x="724.0" y="330.0" text-anchor="middle">Orchard destination only</text>
+<path class="lead" d="M156 228 L156 292"/>
+<path class="lead" d="M440 206 L440 292"/>
+<path class="lead" d="M724 228 L724 292"/>
+</svg>

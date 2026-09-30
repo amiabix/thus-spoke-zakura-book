@@ -8,7 +8,7 @@
 
         <!-- Custom HTML head -->
 
-        <meta name="description" content="">
+        <meta name="description" content="A disposable Zcash Regtest network for local development.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
@@ -28,6 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/figures-85d4c665.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -35,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-d4af569c.js";
+            window.path_to_searchindex_js = "searchindex-b780ff3d.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9bfa7156.js"></script>
@@ -143,6 +144,12 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
+                        <a href="https://github.com/zcashlabs/thus-spoke-zakura" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/zcashlabs/thus-spoke-zakura/edit/main/docs/getting-started.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
 
                     </div>
                 </div>
@@ -175,15 +182,15 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="1-your-first-instance"><a class="header" href="#1-your-first-instance">1. Your first instance</a></h1>
-<p>In this chapter you will start one private chain, identify its live endpoints,
-and stop it. The next chapter will explain what the three services behind those
-endpoints do.</p>
+<p>In this chapter you will start one private chain, identify its endpoints, and
+watch a second one be thrown away. The next chapter will explain what the
+three services behind those endpoints do.</p>
 <p>An <strong>instance</strong> is one named set of Docker containers, a private Docker
 network, volumes, and host ports. The default name is <code>default</code>. Starting it
 again creates a <strong>fresh</strong> chain and wallet; stopping it removes its data.
 An <strong>image</strong> is the built template from which Docker starts a container;
 changing source files does not alter an image that already exists.</p>
-<p><img src="images/instance-lifecycle.svg" alt="Instance lifecycle: ths checks Docker and images, removes only the selected instance’s old resources, creates its volumes and services, waits for initial wallet funding and health, then removes that instance on shutdown or startup failure."></p>
+<p><img src="images/instance-lifecycle.svg" alt="Five startup stages left to right: ths start, checking Docker and images, claiming the fixed loopback ports, starting Zakura then lightwalletd then the app, and ready. A note records that init derives the fixed seed and that a fresh chain opens near height 103. Below, Ctrl+C or any failure deletes only this instance."></p>
 <ol>
 <li><code>ths</code> checks Docker and the required images.</li>
 <li>It removes leftovers for the selected instance name, then creates its
@@ -209,27 +216,63 @@ reachability check after installation.</p>
 release archive’s SHA-256 digest, installs <code>ths</code> in <code>~/.local/bin</code> by default,
 and pulls matching runtime images:</p>
 <pre><code class="language-console">curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/zcashlabs/thus-spoke-zakura/main/install.sh | sh
+ths --version
 ths doctor
 </code></pre>
-<p>If your shell says <code>ths: command not found</code>, put <code>~/.local/bin</code> on <code>PATH</code> or
-set <code>TSZ_INSTALL_DIR</code> to a directory already on <code>PATH</code> when installing. See
-<a href="troubleshooting.html">troubleshooting</a> for the exact checks.</p>
+<p><code>ths --version</code> prints the launcher version. This book documents <strong>0.2.1</strong>.</p>
+<p>The installer reads three environment variables: <code>TSZ_INSTALL_DIR</code> chooses the
+destination directory (default <code>~/.local/bin</code>), <code>TSZ_VERSION</code> installs an exact
+release instead of the latest, and <code>TSZ_SKIP_IMAGE_PULL=1</code> skips the image
+download. The image pull happens <strong>before</strong> the binary is moved into place, so
+if Docker is not running the installer aborts with nothing installed. Start
+Docker first, or install with <code>TSZ_SKIP_IMAGE_PULL=1</code> and run <code>ths pull</code> later.</p>
+<p>If your shell says <code>ths: command not found</code>, either the install aborted or
+<code>~/.local/bin</code> is not on <code>PATH</code>. See <a href="troubleshooting.html">troubleshooting</a> for
+the exact checks.</p>
 <p>If you are working from a clone, use the <a href="development.html">source build
 instructions</a> instead. The launcher uses Docker images, so a
 source edit does not automatically change a running app.</p>
 <h2 id="start-the-running-example"><a class="header" href="#start-the-running-example">Start the running example</a></h2>
-<p>Open a terminal and run:</p>
-<pre><code class="language-console">ths start --no-open
+<p>Open a terminal and run it there. Keep that terminal open; <code>--no-open</code> only
+skips opening the browser, and the dashboard still runs. The launcher ends
+with:</p>
+<pre><code class="language-console">$ ths start --no-open
+default is ready 🌸
+  Dashboard    http://127.0.0.1:32805
+  Zakura RPC   http://127.0.0.1:18232
+  lightwalletd http://127.0.0.1:9067  (network=regtest, tls=false)
+  P2P          127.0.0.1:18233
 </code></pre>
-<p>Keep that terminal open. <code>--no-open</code> only skips opening the browser; the
-dashboard still runs. Startup can take time because the server prepares the
-chain, scans the wallet, and gives Account 1 <strong>5 Orchard ZEC</strong>. Wait for the
-line <code>default is ready</code> and the four printed endpoints. There is no fixed
-<code>sleep</code> interval that means the wallet is ready.</p>
+<p>On a warm machine that takes well under a minute. The <strong>first</strong> run is much
+slower, because Docker must pull about 1.7 GB of images. There is no fixed
+<code>sleep</code> interval that means the wallet is ready; wait for <code>default is ready</code>.</p>
+<h2 id="what-scrolls-past-before-that-line"><a class="header" href="#what-scrolls-past-before-that-line">What scrolls past before that line</a></h2>
+<p>Everything above <code>default is ready</code> is the launcher narrating its work, and
+it is noisier than the result. You will see <code>Preparing a fresh default environment…</code>, <code>Starting default…</code>, then raw Docker network, volume, and
+container IDs, because <code>ths</code> lets Docker write to your terminal directly.</p>
+<p>Interleaved with those IDs, the init container prints the instance’s
+<strong>secrets</strong>: a <code>⚠ DISPOSABLE REGTEST SECRETS</code> banner, the BIP-39 mnemonic,
+and for each of the five development accounts its unified address and its
+<strong>unified spending key</strong> in hex. That is deliberate. These are the supported
+way to import one of these accounts into an external wallet, and they are
+safe to print because they protect nothing — <a href="accounts-and-balances.html#an-account-is-a-wallet-identity">Chapter
+3</a> explains why.</p>
+<h2 id="a-fresh-chain-already-has-103-blocks"><a class="header" href="#a-fresh-chain-already-has-103-blocks">A fresh chain already has 103 blocks</a></h2>
+<p>Before Account 1 can hold anything, the treasury must have a <em>spendable</em>
+mining reward, and a coinbase reward is not spendable until it has matured
+by <code>COINBASE_MATURITY_BLOCKS</code> (100) confirmations. So startup mines through
+maturity, shields a reward into the treasury, and pays Account 1 its 5
+Orchard ZEC. A newly ready instance therefore sits at height <strong>103</strong>, with
+the wallet fully scanned to the same height. Nothing is wrong; the Network
+page just does not start at 0.</p>
+<h2 id="read-the-endpoints-from-a-second-terminal"><a class="header" href="#read-the-endpoints-from-a-second-terminal">Read the endpoints from a second terminal</a></h2>
 <p>In a <strong>second terminal</strong>, inspect the same instance:</p>
-<pre><code class="language-console">ths status
-ths endpoints --json
-ths open
+<pre><code class="language-console">$ ths status
+default: running
+  Dashboard    http://127.0.0.1:32805
+  Zakura RPC   http://127.0.0.1:18232
+  lightwalletd http://127.0.0.1:9067  (network=regtest, tls=false)
+  P2P          127.0.0.1:18233
 </code></pre>
 <p><code>ths status</code> reports whether the app container is running and prints
 endpoints. It does <strong>not</strong> report the node height or wallet scan status.
@@ -244,34 +287,63 @@ endpoints. It does <strong>not</strong> report the node height or wallet scan st
 <tr><td><code>rpc</code></td><td>Zakura’s local JSON-RPC URL.</td></tr>
 <tr><td><code>lightwalletd</code></td><td>Plaintext lightwalletd gRPC endpoint for local clients.</td></tr>
 <tr><td><code>p2p</code></td><td>Zakura’s local peer address.</td></tr>
+<tr><td><code>network</code></td><td>The chain this instance runs: always <code>"regtest"</code>.</td></tr>
+<tr><td><code>tls</code></td><td>Always <code>false</code>; nothing here uses TLS.</td></tr>
 </tbody>
 </table>
 </div>
-<p>Host ports are chosen at runtime and published on <code>127.0.0.1</code>. Copy values
-from <strong>this run</strong>. The dashboard’s Network page or <code>GET /api/v1/status</code>
-shows node height and wallet sync state if you need more than process status.</p>
+<p>Host ports are <strong>fixed defaults</strong>, all published on <code>127.0.0.1</code>: dashboard
+<code>32805</code>, Zakura RPC <code>18232</code>, P2P <code>18233</code>, lightwalletd <code>9067</code>. They do not
+change between runs, and the launcher never picks a substitute — if one is
+occupied, startup fails and names it. <code>ths start --port-offset &lt;N&gt;</code> shifts
+all four by <code>N</code>, which must be a multiple of 10; that is the only thing that
+moves them. Scripts should still read <code>ths endpoints --json</code> rather than
+hard-code a port, because a given instance may have been started with an
+offset. <code>ths open</code> opens the dashboard for you.</p>
+<p>The dashboard’s Network page or <code>GET /api/v1/status</code> shows node height and
+wallet sync state if you need more than process status.</p>
 <h2 id="give-another-experiment-its-own-name"><a class="header" href="#give-another-experiment-its-own-name">Give another experiment its own name</a></h2>
-<p>You can run another instance in a different terminal:</p>
-<pre><code class="language-console">ths --name alice start --no-open
+<p>A second instance needs its own ports. Since every instance wants the same
+four defaults, the name alone is not enough:</p>
+<pre><code class="language-console">$ ths --name alice start --no-open
+Preparing a fresh alice environment…
+Starting alice…
+Error: port 32805 is already in use on 127.0.0.1
+</code></pre>
+<p>Give it an offset instead:</p>
+<pre><code class="language-console">$ ths --name alice start --no-open --port-offset 10
+alice is ready 🌸
+  Dashboard    http://127.0.0.1:32815
+  Zakura RPC   http://127.0.0.1:18242
+  lightwalletd http://127.0.0.1:9077  (network=regtest, tls=false)
+  P2P          127.0.0.1:18243
 </code></pre>
 <p>Address that instance with the same global option:</p>
 <pre><code class="language-console">ths --name alice status
 ths --name alice endpoints --json
 </code></pre>
 <p>Names contain 1–40 lowercase letters, digits, or internal hyphens. Each name
-gets its own chain, wallet, ports, and cleanup. Commands without <code>--name</code>
-target <code>default</code>.</p>
+gets its own chain, wallet, volumes, and cleanup. Commands without <code>--name</code>
+target <code>default</code>. The offset belongs to the <code>start</code> that created the
+instance; later commands find its ports from the instance record.</p>
 <h2 id="stop-deliberately"><a class="header" href="#stop-deliberately">Stop deliberately</a></h2>
-<p>Return to the terminal running <code>ths</code> and press <strong>Ctrl+C</strong>. The launcher
-deletes that instance’s containers, volumes, chain, seed, keys, and test
-funds. This is normal: the environment is disposable. If you need a result,
-copy it out before stopping.</p>
+<p>Stopping is not a crash to recover from — it is how the environment is meant
+to end. Try it on <code>alice</code>, which you do not need again. Return to the
+terminal running it and press <strong>Ctrl+C</strong>. The launcher deletes that
+instance’s containers, volumes, chain, seed, keys, and test funds. <code>default</code>
+is untouched. If you need a result out of an instance, copy it out before
+stopping.</p>
 <p>If an interrupted process left resources behind, <code>ths --name alice reset --force</code> deletes only <code>alice</code> and its volumes. This is irreversible. Never
 use Regtest addresses or keys for real ZEC, and never publish these local
 services beyond loopback.</p>
+<p><strong>Leave <code>default</code> running.</strong> <a href="using-the-dashboard.html">Chapter 4</a> funds and
+spends on it. If you do stop it, start it again with <code>ths start --no-open</code>;
+you will get a fresh chain back at height 103 with the same five accounts,
+but every block, transaction, and balance from this run will be gone.</p>
 <p><strong>What you learned:</strong> <code>ths</code> controls an instance, not a persistent wallet.
-Endpoints and data belong to a particular run. <strong>Next:</strong> <a href="architecture/overview.html">meet the services
-inside the instance</a>.</p>
+Data belongs to a particular run, and the ports belong to the instance’s
+offset. <strong>Next:</strong> <a href="architecture/overview.html">meet the services inside the
+instance</a>.</p>
 
                     </main>
 

@@ -8,7 +8,7 @@
 
         <!-- Custom HTML head -->
 
-        <meta name="description" content="">
+        <meta name="description" content="A disposable Zcash Regtest network for local development.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
@@ -28,6 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/figures-85d4c665.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -35,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-d4af569c.js";
+            window.path_to_searchindex_js = "searchindex-b780ff3d.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9bfa7156.js"></script>
@@ -143,6 +144,12 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
+                        <a href="https://github.com/zcashlabs/thus-spoke-zakura" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/zcashlabs/thus-spoke-zakura/edit/main/docs/troubleshooting.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
 
                     </div>
                 </div>
@@ -181,12 +188,13 @@ scanning; and an activity row can exist before its transaction confirms.
 The <a href="architecture/overview.html">state ownership chapter</a> explains those
 layers, and <a href="architecture/operations.html">Chapter 6</a> explains uncertain
 payment responses.</p>
-<p><img src="images/diagnose-state.svg" alt="Diagnosis flow: if ths cannot start, check Docker and images; if it starts, check the named instance and endpoint; if the node is healthy but balances lag, inspect wallet sync; if a payment is uncertain, inspect activity and chain before retrying."></p>
+<p><img src="images/diagnose-state.svg" alt="Four triage steps: does the launcher run at all, is this instance up and where, is the node healthy but the wallet stale, and only then a payment you are unsure of."></p>
 <ol>
 <li>If <code>ths</code> cannot prepare an instance, start with Docker access and
 required images.</li>
-<li>If the instance is running, get <strong>its</strong> current endpoints and node
-status. Do not reuse an old port or another name.</li>
+<li>If the instance is running, get <strong>its</strong> endpoints and node status.
+Ports are fixed per instance, but a second instance was started with a
+<code>--port-offset</code>, so confirm you are talking to the name you mean.</li>
 <li>If the node is healthy but Wallet looks stale, inspect wallet
 reconciliation state and logs, not the chain height alone.</li>
 <li>If a request timed out, inspect the operation’s recorded activity or
@@ -201,7 +209,9 @@ ths --name alice logs app
 <p>Omit <code>--name alice</code> for <code>default</code>. <code>ths status</code> reports whether the app
 container is running; it does <strong>not</strong> show the node height. The Network
 page and <code>GET /api/v1/status</code> show node height and wallet sync status.
-Ports change between runs.</p>
+An instance keeps the same ports across runs; a different instance has
+different ports only because it was started with a different
+<code>--port-offset</code>.</p>
 <h2 id="match-the-symptom-to-the-next-observation"><a class="header" href="#match-the-symptom-to-the-next-observation">Match the symptom to the next observation</a></h2>
 <div class="table-wrapper">
 <table>
@@ -210,13 +220,14 @@ Ports change between runs.</p>
 </thead>
 <tbody>
 <tr><td><code>Docker is not reachable</code></td><td>Run <code>docker version</code>. Its server section must respond without <code>sudo</code>. Start Docker Desktop or the daemon, then run <code>ths doctor</code>.</td></tr>
-<tr><td><code>ths: command not found</code> after installation</td><td>The installer defaults to <code>~/.local/bin</code>. Add it to <code>PATH</code> or install with <code>TSZ_INSTALL_DIR</code> set to a directory already on <code>PATH</code>.</td></tr>
+<tr><td><code>ths: command not found</code> after installation</td><td>Two different causes. Either nothing was installed — the installer runs <code>ths pull</code> <strong>before</strong> moving the binary into place, so with Docker stopped it downloads images, fails, and leaves no executable; start Docker and rerun, or rerun with <code>TSZ_SKIP_IMAGE_PULL=1</code>. Or it installed fine and <code>~/.local/bin</code> is not on <code>PATH</code>; check with <code>ls ~/.local/bin/ths</code>, then fix <code>PATH</code> or reinstall with <code>TSZ_INSTALL_DIR</code> set to a directory already on it.</td></tr>
+<tr><td><code>port 32805 is already in use on 127.0.0.1</code></td><td>Host ports are fixed defaults, and the launcher names the occupied one instead of choosing another. Usually another instance already holds it: run <code>ths list</code>. Start this one with <code>ths --name &lt;NAME&gt; start --port-offset 10</code> (any multiple of 10) to shift all four of its ports.</td></tr>
 <tr><td><code>required image ... is unavailable</code></td><td>An installed launcher can run <code>ths pull</code>. From source, run <code>cargo run -p thus-spoke-zakura -- build --dev</code>. Start again after the images are present.</td></tr>
 <tr><td>A source edit does not appear in the normal dashboard</td><td>The launcher runs an image, not live source. Rebuild with <code>cargo run -p thus-spoke-zakura -- build --dev</code> and start a fresh instance. Vite iteration has its own <a href="development.html#iterate-on-the-frontend">source workflow</a>.</td></tr>
-<tr><td><code>instance alice does not exist</code> or an endpoint is wrong</td><td>Run <code>ths list</code>, use the same <code>--name</code> for every command, and fetch new <code>ths --name alice endpoints --json</code>. Do not reuse ports from an earlier run.</td></tr>
+<tr><td><code>instance alice does not exist</code> or an endpoint is wrong</td><td>Run <code>ths list</code>, which prints every known instance with its dashboard URL. Use the same <code>--name</code> for every command and read its ports from <code>ths --name alice endpoints --json</code>.</td></tr>
 <tr><td>Startup never reaches <code>alice is ready</code></td><td>Read the launcher’s printed error first. While the relevant container still exists, use <code>ths --name alice logs zakura -f</code>, <code>ths --name alice logs lightwalletd -f</code>, or <code>ths --name alice logs app -f</code>. Startup waits for the node, index, wallet sync, and Account 1 funding; a failed start cleans up its containers.</td></tr>
 <tr><td>Wallet says data may be stale</td><td>Read <code>GET /api/v1/status</code>: <code>wallet_sync.state</code>, <code>wallet_sync.error</code>, observed and fully scanned heights <strong>and hashes</strong>. Check <code>ths logs lightwalletd -f</code> and <code>ths logs app -f</code>. Wait for <code>ready</code> before relying on balances; the server retries background reconciliation.</td></tr>
-<tr><td>A send reports insufficient spendable funds</td><td>Check the source account <strong>and source pool</strong>, leave room for the fee, and confirm wallet sync is ready. A displayed account total may include a different pool, pending change, or funds not yet spendable.</td></tr>
+<tr><td>A send reports insufficient spendable funds</td><td>Ask <code>POST /api/v1/send/quote</code> for that account and source pool: it dry-runs a proposal and returns <code>available_zatoshi</code>, <code>fee_zatoshi</code>, and <code>max_zatoshi</code> without broadcasting. Compare your amount with <code>max_zatoshi</code>, not with the displayed total, which may include a different pool, pending change, or funds not yet spendable. Also confirm wallet sync is ready.</td></tr>
 <tr><td>Faucet or send returned <code>broadcast</code> activity</td><td>Save the txid, inspect Recent activity and chain state, and mine if the transaction remains unconfirmed. Read <a href="architecture/operations.html#decide-what-to-do-after-a-lost-response">Chapter 6</a> before resubmitting.</td></tr>
 <tr><td>A mine request timed out or errored</td><td>Compare node height <strong>and tip hash</strong> via Network or <code>GET /api/v1/status</code> before trying again. Blocks may have been generated before wallet reconciliation failed; mining has no retry key.</td></tr>
 </tbody>
@@ -230,8 +241,10 @@ connectivity, not wallet health.</p>
 deletes its chain, wallet, seed, keys, and test funds. It does not remove
 another named instance. A normal foreground run cleans itself up on
 Ctrl+C.</p>
-<p>This environment is Regtest only. Never use these addresses for real
-ZEC or expose its local services beyond <code>127.0.0.1</code>.</p>
+<p>This environment is Regtest only. Its seed is fixed and public, so these
+addresses and keys are known to anyone who has read the project. Never use
+them for real ZEC, and never expose these local services beyond
+<code>127.0.0.1</code>.</p>
 
                     </main>
 
