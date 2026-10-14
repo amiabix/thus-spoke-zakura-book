@@ -28,7 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
-        <link rel="stylesheet" href="theme/figures-85d4c665.css">
+        <link rel="stylesheet" href="theme/figures-f9894ebb.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b780ff3d.js";
+            window.path_to_searchindex_js = "searchindex-15333e56.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9bfa7156.js"></script>
+        <script src="toc-6a776a01.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -188,17 +188,20 @@ able to predict <strong>which account and pool</strong> will change, and why a d
 total is not always spendable.</p>
 <h2 id="an-account-is-a-wallet-identity"><a class="header" href="#an-account-is-a-wallet-identity">An account is a wallet identity</a></h2>
 <p>The app initializes six deterministic wallet accounts from one disposable
-seed. Accounts <strong>1–5</strong> are development accounts. Account <strong>6</strong> is a hidden
-treasury used for mining rewards and faucet payments. The accounts API, Wallet
-page, account selector, and user-facing balances expose only 1–5.</p>
+seed.</p>
+<ul>
+<li>Accounts <strong>1–5</strong> are development accounts.</li>
+<li>Account <strong>6</strong> is a hidden treasury used for mining rewards and faucet payments.</li>
+</ul>
+<p>The accounts API, Wallet page, account selector, and user-facing balances expose only 1–5.</p>
 <p>Each user account has a transparent address and a unified address. For the
 flows in this book, selecting the <strong>Transparent</strong> destination pool uses the
-transparent address; selecting <strong>Orchard</strong> uses the unified address for a
+transparent address; selecting <strong>Ironwood</strong> uses the unified address for a
 shielded output. The server derives both from the instance’s seed.</p>
 <p>That seed is <strong>fixed</strong>: the server builds it from 32 zero bytes, which makes
 the mnemonic the well-known <code>abandon abandon … art</code> phrase. Every instance,
 on every machine, therefore derives the <em>same</em> six accounts and the same
-addresses — Account 1’s unified address always begins <code>uregtest1zkuzfv5m3…</code>.
+addresses.
 A different instance name gives you a different chain and different balances;
 it does <strong>not</strong> give you different keys.</p>
 <p>Say that plainly: these keys are public knowledge. Anyone who has read this
@@ -208,26 +211,27 @@ reproducible — and it is exactly why nothing of value may ever touch these
 addresses. Never send real ZEC to an address shown by this environment.</p>
 <p>A <strong>pool</strong> is a way value is represented and spent, not a separate wallet.
 Transparent value lives in unspent transaction outputs, or <strong>UTXOs</strong>; their
-addresses and amounts are public chain data. Orchard value lives in shielded
+addresses and amounts are public chain data. Ironwood value lives in shielded
 <strong>notes</strong>. The wallet learns which notes belong to it by scanning compact
 blocks; the public explorer cannot identify their recipient or read a memo.</p>
-<p><img src="images/account-pools.svg" alt="Mining pays every block reward to hidden Account 6’s transparent balance; shielding a matured reward moves it to Account 6’s Orchard balance, which is the pool every faucet payment spends from into accounts 1 to 5."></p>
+<p><img src="images/account-pools.svg" alt="Mining pays every block reward to hidden Account 6’s transparent balance; shielding a matured reward moves it to Account 6’s Ironwood balance, which is the pool every faucet payment spends from into accounts 1 to 5."></p>
 <ol>
-<li>Each user account can hold a transparent balance and an Orchard balance.
+<li>Each user account can hold a transparent balance and an Ironwood balance.
 These are separate sources of funds, even though the dashboard also shows
 their sum.</li>
 <li>The miner sends block rewards to Account 6’s transparent address. Account
 6 never appears in a user account list or balance total.</li>
 <li>The faucet can spend from Account 6 to a chosen user account and pool.
 A send between users spends the selected <strong>source</strong> account and pool and
-pays to the selected <strong>destination</strong> account and pool.</li>
+pays to the selected <strong>destination</strong> account and pool. The accounts may
+match when the pools differ; same-account/same-pool sends are rejected.</li>
 </ol>
 <h2 id="zec-zatoshi-and-spendability"><a class="header" href="#zec-zatoshi-and-spendability">ZEC, zatoshi, and spendability</a></h2>
-<p><strong>ZEC</strong> is the amount unit you enter in the UI and CLI. <strong>Zatoshi</strong> is the
-integer unit used by the API: <strong>1 ZEC = 100,000,000 zatoshi</strong>. For example,
-<code>0.5</code> ZEC is <code>50000000</code> zatoshi. Use integer zatoshi in JSON requests so a
+<p><strong>ZEC</strong> is the amount unit you enter in the UI and CLI.</p>
+<p><strong>Zatoshi</strong> is the integer unit used by the API: <strong>1 ZEC = 100,000,000 zatoshi (10⁸)</strong>.</p>
+<p>For example, <code>0.5</code> ZEC is <code>50000000</code> zatoshi. Use integer zatoshi in JSON requests so a
 decimal floating-point calculation does not choose the wrong amount.</p>
-<p>The accounts API returns <code>transparent_zatoshi</code> and <code>orchard_zatoshi</code> for
+<p>The accounts API returns <code>transparent_zatoshi</code> and <code>ironwood_zatoshi</code> for
 each user account. These are the server’s last reconciled <strong>wallet
 snapshot</strong>, not numbers reconstructed from the block explorer. The dashboard
 derives its displayed total from those fields.</p>
@@ -236,44 +240,49 @@ The wallet SDK selects actual outputs or notes, requires a sufficient scan,
 and accounts for the transaction fee. Pending change and immature mining
 rewards can also affect spendability. <strong>Change</strong> is the unspent remainder of a
 selected input returned to the wallet; it may not be ready to spend
-immediately.</p>
+immediately. The current send strategy routes change into the source
+account’s Ironwood pool, including change from transparent inputs.</p>
 <p>You do not have to guess how much room the fee needs. <code>POST /api/v1/send/quote</code>
-builds a <strong>dry-run proposal</strong> for one account and pool pair — it constructs
-nothing and broadcasts nothing — and answers with real numbers:</p>
+builds a <strong>dry-run proposal</strong> for one account and pool pair. It returns <code>available_zatoshi</code>, <code>fee_zatoshi</code>,
+and <code>max_zatoshi</code> for the current wallet state:</p>
 <pre><code class="language-console">$ DASHBOARD_URL="$(ths endpoints --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["dashboard"])')"
 $ curl -fsS "$DASHBOARD_URL/api/v1/send/quote" -H 'content-type: application/json' \
-    --data '{"from_account":1,"source_pool":"orchard","destination_pool":"orchard"}'
-{"available_zatoshi":399990000,"fee_zatoshi":10000,"max_zatoshi":399980000}
+    --data '{"from_account":1,"source_pool":"ironwood","destination_pool":"ironwood"}'
 </code></pre>
-<p><code>available_zatoshi</code> is what the pool holds, <code>fee_zatoshi</code> is what the SDK’s
-input selection will actually charge, and <code>max_zatoshi</code> is the largest amount
-that will go through. <code>max_zatoshi</code>, not the displayed balance, is the number
-to compare an intended amount against. When a send fails anyway, check the
-<strong>source pool</strong> and inspect wallet sync status before trying again.</p>
-<p>At the end of startup, Account 1 has <strong>5 Orchard ZEC</strong>. Account 2 starts
+<ul>
+<li><code>available_zatoshi</code> reports the proposal’s available funds,</li>
+<li><code>fee_zatoshi</code> reports its fee,</li>
+<li>and <code>max_zatoshi</code> reports the quoted maximum send amount.</li>
+</ul>
+<p>These values depend on the selected inputs and current wallet state; a quote
+does not reserve funds or guarantee a later send succeeds. Compare an intended
+amount against <code>max_zatoshi</code> rather than the displayed balance. When a send
+fails anyway, check the <strong>source pool</strong> and inspect wallet sync status before
+trying again.</p>
+<p>At the end of startup, Account 1 has <strong>5 Ironwood ZEC</strong>. Account 2 starts
 empty. In the next chapter, we will give Account 2 transparent funds and
-then send it Orchard funds from Account 1. That will make the two balances
+then send it Ironwood funds from Account 1. That will make the two balances
 visibly different.</p>
 <h2 id="where-faucet-funds-come-from"><a class="header" href="#where-faucet-funds-come-from">Where faucet funds come from</a></h2>
 <p>A faucet request does not mint coins directly into the destination. The
 miner first pays rewards to the hidden treasury’s transparent address. The
 reward created by mining a block is called <strong>coinbase</strong>; it must mature
-before it can be spent. When the treasury’s spendable Orchard funds are
+before it can be spent. When the treasury’s spendable Ironwood funds are
 insufficient, the server discovers needed mature rewards, shields them into
-the treasury’s Orchard pool, confirms that shielding transaction, and retries
+the treasury’s Ironwood pool, confirms that shielding transaction, and retries
 the faucet payment. This can move the node height by more than the one block
 used to confirm the final faucet payment.</p>
-<p><img src="images/treasury-funding.svg" alt="A faucet request proposes a payment from the treasury’s Orchard pool. With enough spendable funds it broadcasts, records and confirms. Otherwise it mines for maturity, discovers and shields a reward, and retries the proposal."></p>
+<p><img src="images/treasury-funding.svg" alt="A faucet request proposes a payment from the treasury’s Ironwood pool. The server durably claims the intent before SDK work and saves prepared bytes before broadcast and confirmation. If spendable funds are insufficient, it mines for maturity, discovers and shields a reward, and retries the proposal."></p>
 <ol>
 <li>Zakura mines to Account 6’s transparent address. The rewards are not
 user-account balances.</li>
-<li>The wallet SDK first tries the treasury payment. On insufficient
-spendable Orchard funds, the server advances the chain as needed for reward
-maturity, discovers the required reward output, and shields it to Account
-6’s Orchard funds. It retries the payment proposal.</li>
-<li>The server broadcasts the faucet transaction to the chosen user account and
-destination pool, records activity, and normally mines a
-confirming block. Each account faucet request is limited to <strong>5 ZEC</strong>.</li>
+<li>The server durably claims the request before asking the wallet SDK to
+prepare the treasury payment. On insufficient spendable Ironwood funds,
+it advances the chain as needed for reward maturity, discovers the required
+reward output, and shields it to Account 6’s Ironwood funds. It retries the payment proposal.</li>
+<li>The wallet and server save the prepared transaction bytes before the server
+broadcasts to the chosen user account and destination pool. It normally
+mines a confirming block. Each account faucet request is limited to <strong>5 ZEC</strong>.</li>
 </ol>
 <p>Routine user wallet synchronization does not query all treasury transparent
 outputs. Treasury discovery runs when replenishment needs it. The private
@@ -294,6 +303,9 @@ contradictory:</p>
 </tbody>
 </table>
 </div>
+<p>Confirmed activity can precede wallet settlement because confirmation checks
+and wallet synchronization run independently. Keep using the accounts snapshot
+for balances.</p>
 <p>Read <a href="mining-and-sync.html">Chapter 5</a> for the precise order in which those
 views catch up. The <a href="architecture/overview.html#the-five-owners-of-information">architecture chapter</a>
 maps each view to its owner.</p>

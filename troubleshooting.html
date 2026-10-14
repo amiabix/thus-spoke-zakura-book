@@ -28,7 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
-        <link rel="stylesheet" href="theme/figures-85d4c665.css">
+        <link rel="stylesheet" href="theme/figures-f9894ebb.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b780ff3d.js";
+            window.path_to_searchindex_js = "searchindex-15333e56.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9bfa7156.js"></script>
+        <script src="toc-6a776a01.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -220,27 +220,67 @@ different ports only because it was started with a different
 </thead>
 <tbody>
 <tr><td><code>Docker is not reachable</code></td><td>Run <code>docker version</code>. Its server section must respond without <code>sudo</code>. Start Docker Desktop or the daemon, then run <code>ths doctor</code>.</td></tr>
-<tr><td><code>ths: command not found</code> after installation</td><td>Two different causes. Either nothing was installed — the installer runs <code>ths pull</code> <strong>before</strong> moving the binary into place, so with Docker stopped it downloads images, fails, and leaves no executable; start Docker and rerun, or rerun with <code>TSZ_SKIP_IMAGE_PULL=1</code>. Or it installed fine and <code>~/.local/bin</code> is not on <code>PATH</code>; check with <code>ls ~/.local/bin/ths</code>, then fix <code>PATH</code> or reinstall with <code>TSZ_INSTALL_DIR</code> set to a directory already on it.</td></tr>
+<tr><td><code>ths: command not found</code> after installation</td><td>Two different causes. Either nothing was installed — the installer runs <code>ths pull</code> <strong>before</strong> moving the binary into place, so with Docker stopped the image pull fails and leaves no executable; start Docker and rerun, or rerun with <code>THS_SKIP_IMAGE_PULL=1</code>. Or it installed fine and <code>~/.local/bin</code> is not on <code>PATH</code>; check with <code>ls ~/.local/bin/ths</code>, then fix <code>PATH</code> or reinstall with <code>THS_INSTALL_DIR</code> set to a directory already on it.</td></tr>
 <tr><td><code>port 32805 is already in use on 127.0.0.1</code></td><td>Host ports are fixed defaults, and the launcher names the occupied one instead of choosing another. Usually another instance already holds it: run <code>ths list</code>. Start this one with <code>ths --name &lt;NAME&gt; start --port-offset 10</code> (any multiple of 10) to shift all four of its ports.</td></tr>
 <tr><td><code>required image ... is unavailable</code></td><td>An installed launcher can run <code>ths pull</code>. From source, run <code>cargo run -p thus-spoke-zakura -- build --dev</code>. Start again after the images are present.</td></tr>
 <tr><td>A source edit does not appear in the normal dashboard</td><td>The launcher runs an image, not live source. Rebuild with <code>cargo run -p thus-spoke-zakura -- build --dev</code> and start a fresh instance. Vite iteration has its own <a href="development.html#iterate-on-the-frontend">source workflow</a>.</td></tr>
 <tr><td><code>instance alice does not exist</code> or an endpoint is wrong</td><td>Run <code>ths list</code>, which prints every known instance with its dashboard URL. Use the same <code>--name</code> for every command and read its ports from <code>ths --name alice endpoints --json</code>.</td></tr>
-<tr><td>Startup never reaches <code>alice is ready</code></td><td>Read the launcher’s printed error first. While the relevant container still exists, use <code>ths --name alice logs zakura -f</code>, <code>ths --name alice logs lightwalletd -f</code>, or <code>ths --name alice logs app -f</code>. Startup waits for the node, index, wallet sync, and Account 1 funding; a failed start cleans up its containers.</td></tr>
-<tr><td>Wallet says data may be stale</td><td>Read <code>GET /api/v1/status</code>: <code>wallet_sync.state</code>, <code>wallet_sync.error</code>, observed and fully scanned heights <strong>and hashes</strong>. Check <code>ths logs lightwalletd -f</code> and <code>ths logs app -f</code>. Wait for <code>ready</code> before relying on balances; the server retries background reconciliation.</td></tr>
+<tr><td>Startup never reaches <code>alice is ready</code></td><td>Read the launcher’s printed error first. While the relevant container still exists, use <code>ths --name alice logs zakura -f</code>, <code>ths --name alice logs lightwalletd -f</code>, or <code>ths --name alice logs app -f</code>. Startup has bounded phases and waits for dependencies, wallet sync, and Account 1 funding; a failed start attempts cleanup. Preserve any reported <code>lifecycle-recovery.json</code> when cleanup fails or remains uncertain.</td></tr>
+<tr><td>A send, faucet, or mining POST returns 503 during startup</td><td>Side-effecting POSTs require startup to finish. Health returns 200 only after startup completes, the node responds, and a wallet snapshot has been published. While dependencies are unavailable, use the local read-only key lookups below to observe saved payments; POST replay can wait.</td></tr>
+<tr><td>Wallet says data may be stale</td><td>Read <code>GET /api/v1/status</code>: <code>wallet_sync.state</code>, <code>wallet_sync.error</code>, observed and fully scanned heights <strong>and hashes</strong>. Check <code>ths logs lightwalletd -f</code> and <code>ths logs app -f</code>. Wait for a <code>ready</code> snapshot before relying on balances; require <code>settled: true</code> if node/index/wallet alignment matters. The server retries background reconciliation.</td></tr>
 <tr><td>A send reports insufficient spendable funds</td><td>Ask <code>POST /api/v1/send/quote</code> for that account and source pool: it dry-runs a proposal and returns <code>available_zatoshi</code>, <code>fee_zatoshi</code>, and <code>max_zatoshi</code> without broadcasting. Compare your amount with <code>max_zatoshi</code>, not with the displayed total, which may include a different pool, pending change, or funds not yet spendable. Also confirm wallet sync is ready.</td></tr>
-<tr><td>Faucet or send returned <code>broadcast</code> activity</td><td>Save the txid, inspect Recent activity and chain state, and mine if the transaction remains unconfirmed. Read <a href="architecture/operations.html#decide-what-to-do-after-a-lost-response">Chapter 6</a> before resubmitting.</td></tr>
-<tr><td>A mine request timed out or errored</td><td>Compare node height <strong>and tip hash</strong> via Network or <code>GET /api/v1/status</code> before trying again. Blocks may have been generated before wallet reconciliation failed; mining has no retry key.</td></tr>
+<tr><td>Faucet or send returned <code>broadcast</code> activity</td><td>Save the txid and inspect activity and chain inclusion. Background checks can confirm account activity before wallet settlement. Pending dashboard sends and faucets retain their keys and exact details; use <strong>Resume</strong>. CLI payments retain journaled keys until terminal observation; rerun the same arguments and instance to resume. Use the <a href="architecture/operations.html#which-caller-are-you-retrying">caller table</a> before another submission.</td></tr>
+<tr><td>A mine request timed out or errored</td><td>Read the latest job through <code>GET /api/v1/mining/jobs</code>, then inspect canonical height and tip hash. Admitted work survives a disconnected client or the CLI’s 300-second timeout. <code>progress_uncertain</code> means acknowledged progress is a lower bound; sync failure can retain the full count while the job is failed. CLI reruns use fresh keys, so do not repeat the count blindly. See <a href="mining-and-sync.html#follow-mining-progress-in-the-dashboard">Chapter 5</a>.</td></tr>
 </tbody>
 </table>
 </div>
 <p>Use <code>ths logs app</code>, <code>ths logs zakura</code>, or <code>ths logs lightwalletd</code>
 for recent output; add <code>-f</code> to follow. <code>ths doctor</code> checks Docker
 connectivity, not wallet health.</p>
+<h2 id="a-payment-response-was-lost"><a class="header" href="#a-payment-response-was-lost">A payment response was lost</a></h2>
+<p>Keep the original request details, any caller-controlled key, and any txid.
+Direct API callers replay identical details with the same key. A changed valid
+payment or memo under that key returns 409. Pending dashboard sends and
+faucets retain their key and exact details across dialog closure, refresh,
+and browser restart. Use <strong>Resume</strong>; a <code>broadcast</code> response does not clear the
+key. Terminal <code>confirmed</code> or <code>failed</code> results release it. CLI account/address
+faucets retain journaled keys through pending results and errors; retry the
+same arguments and, for a partial account batch, the same account selection.
+CLI send, shield, and unshield also retain journaled keys for the same resolved
+intent through pending, unknown, or rejected results. They submit once per
+invocation and poll keyed status for up to 30 seconds. Rerun unchanged arguments
+and the same instance to resume; a terminal result clears the key, so a later
+identical invocation can create a new payment.</p>
+<p>Observe before another POST. <code>GET /api/v1/activity?idempotency_key=&lt;key&gt;</code>
+returns a one-item array or <code>[]</code> from local storage. Activity still omits the
+key from its objects. <code>GET /api/v1/faucet/address?idempotency_key=&lt;key&gt;</code> returns
+stored internal or external faucet status, or 404. Both are read-only and
+available during startup dependency outages. Activity and address-faucet
+responses include nullable <code>last_error</code>; a null value does not prove that the
+last request succeeded.</p>
+<p>No matching record does not prove nothing happened. External faucet records
+remain separate from account activity. Local reads do not progress payments;
+accepted payments, including external faucets, can progress in the background. Check chain state by txid where
+available and balances through the accounts snapshot.
+<code>confirmed</code> activity and <code>status.settled</code> answer different questions: inclusion
+observed by the server and full node/index/wallet alignment, respectively.
+See <a href="architecture/operations.html#decide-what-to-do-after-a-lost-response">Chapter 6</a>
+for payment preparation, recovery, and retry boundaries.</p>
 <h2 id="reset-only-when-you-mean-to-lose-this-instance"><a class="header" href="#reset-only-when-you-mean-to-lose-this-instance">Reset only when you mean to lose this instance</a></h2>
-<p>If an interrupted run left this instance’s resources, <code>ths --name alice reset --force</code> removes its containers and volumes. That permanently
-deletes its chain, wallet, seed, keys, and test funds. It does not remove
-another named instance. A normal foreground run cleans itself up on
-Ctrl+C.</p>
+<p>If an interrupted run left this instance’s resources, <code>ths --name alice reset --force</code> attempts to remove its containers and volumes. Verified
+cleanup permanently deletes its chain, wallet, seed, keys, and test funds.
+It does not remove another named instance. Ctrl+C triggers cleanup in a
+normal foreground run; external <code>stop</code> or <code>reset</code> deletion also ends that
+run once it observes the allocated app container disappear.</p>
+<p>Cleanup gets a separate 120-second budget. An incomplete cleanup means owned
+resources are known to remain; an uncertain cleanup means their outcome could
+not be proved. Either causes a nonzero exit. Keep <code>lifecycle-recovery.json</code>
+and any remaining <code>instance.json</code> at the path reported by the launcher.
+Restore Docker connectivity, then retry <code>ths --name alice reset --force</code>
+for that same instance. Do not delete recovery files by hand, retry an
+unknown create, or prune shared Docker resources. Recovery validates recorded
+allocation identities; it does not adopt a same-name replacement or coordinate
+concurrent launcher sessions.</p>
 <p>This environment is Regtest only. Its seed is fixed and public, so these
 addresses and keys are known to anyone who has read the project. Never use
 them for real ZEC, and never expose these local services beyond

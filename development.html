@@ -28,7 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
-        <link rel="stylesheet" href="theme/figures-85d4c665.css">
+        <link rel="stylesheet" href="theme/figures-f9894ebb.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b780ff3d.js";
+            window.path_to_searchindex_js = "searchindex-15333e56.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9bfa7156.js"></script>
+        <script src="toc-6a776a01.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -188,7 +188,7 @@ Rust or React source does not change a running container or an already-built
 image.</p>
 <p><img src="images/source-to-runtime.svg" alt="The web and server sources build the app image, the lightwalletd Dockerfile builds the lightwalletd image, and Zakura is pinned and pulled. ths start refuses to run until all three exist. Editing source changes neither a running container nor an existing image."></p>
 <ol>
-<li><code>web/</code> and <code>crates/tsz-server/</code> go into the app image. The app serves
+<li><code>web/</code> and <code>crates/ths-server/</code> go into the app image. The app serves
 both the built React dashboard and HTTP API.</li>
 <li>The build command also prepares the lightwalletd runtime image and ensures
 the pinned Zakura image is present.</li>
@@ -197,7 +197,7 @@ another image build and a new instance before the normal dashboard shows it.</li
 </ol>
 <h2 id="build-and-start"><a class="header" href="#build-and-start">Build and start</a></h2>
 <p>Use <strong>Rust 1.98</strong>, <strong>Node 24</strong>, and a running Docker daemon. Run these from
-the repository root:</p>
+the repository root of the <a href="README.html">recorded main checkout</a>:</p>
 <pre><code class="language-console">npm ci --prefix web
 cargo run -p thus-spoke-zakura -- build --dev
 cargo run -p thus-spoke-zakura -- start
@@ -208,14 +208,25 @@ builds runtime images, keeping workspace Rust code unoptimized for faster
 development builds. The last launches the default instance in the
 foreground. With no subcommand, the source launcher starts the same
 environment.</p>
-<p>Keep the launch terminal open. Ctrl+C removes that instance and its data,
+<p>Keep the launch terminal open. Ctrl+C triggers instance-scoped cleanup,
 as explained in <a href="getting-started.html">Chapter 1</a>. After changing
-<code>crates/tsz-server</code> or <code>web/</code>, rerun:</p>
+<code>crates/ths-server</code> or <code>web/</code>, rerun:</p>
 <pre><code class="language-console">cargo run -p thus-spoke-zakura -- build --dev
 </code></pre>
 <p>Then start a new instance. <code>build</code> without <code>--dev</code> produces
 release-optimized images. <code>start</code> requires the matching images already
 present; it does not fetch or rebuild them.</p>
+<h2 id="run-a-test-against-a-disposable-instance"><a class="header" href="#run-a-test-against-a-disposable-instance">Run a test against a disposable instance</a></h2>
+<p>Once the matching runtime images exist, the source launcher can run a child
+command against a settled, fresh environment:</p>
+<pre><code class="language-console">cargo run -p thus-spoke-zakura -- run --timeout 180 -- sh -c 'curl -fsS "$THS_API_URL/api/v1/accounts"'
+</code></pre>
+<p>The child receives the instance’s <code>THS_*</code> endpoint variables, and the launcher
+attempts instance-scoped cleanup after it exits. The timeout covers startup
+and settlement, not the child runtime. Use non-interactive commands. The
+<a href="cli.html">CLI reference</a> covers collision rules, interruption, and retained
+recovery metadata. To wait for an instance already started in another terminal,
+use <code>cargo run -p thus-spoke-zakura -- --name alice wait --timeout 180</code>.</p>
 <h2 id="find-the-part-you-need-to-change"><a class="header" href="#find-the-part-you-need-to-change">Find the part you need to change</a></h2>
 <div class="table-wrapper">
 <table>
@@ -223,11 +234,11 @@ present; it does not fetch or rebuild them.</p>
 <tr><th>Need</th><th>Start reading</th></tr>
 </thead>
 <tbody>
-<tr><td>Launcher commands, Docker ports, instance cleanup</td><td><code>crates/tsz-cli/src/main.rs</code> and <code>runtime.rs</code></td></tr>
-<tr><td>Server routes, payment and mine handlers, wallet snapshot</td><td><code>crates/tsz-server/src/api.rs</code></td></tr>
-<tr><td>User accounts, treasury boundary, activity and keys</td><td><code>crates/tsz-server/src/db.rs</code></td></tr>
-<tr><td>Wallet scan, transaction construction, spendability</td><td><code>crates/tsz-server/src/wallet.rs</code></td></tr>
-<tr><td>Canonical checkpoint and reorganization handling</td><td><code>crates/tsz-server/src/reconcile.rs</code></td></tr>
+<tr><td>Launcher commands, Docker ports, instance cleanup</td><td><code>crates/ths-cli/src/main.rs</code> and <code>runtime.rs</code></td></tr>
+<tr><td>Server routes, payment and mine handlers, wallet snapshot</td><td><code>crates/ths-server/src/api.rs</code></td></tr>
+<tr><td>User accounts, treasury boundary, activity and keys</td><td><code>crates/ths-server/src/db.rs</code></td></tr>
+<tr><td>Wallet scan, transaction construction, spendability</td><td><code>crates/ths-server/src/wallet.rs</code></td></tr>
+<tr><td>Canonical checkpoint and reorganization handling</td><td><code>crates/ths-server/src/reconcile.rs</code></td></tr>
 <tr><td>Dashboard requests, schemas, and query invalidation</td><td><code>web/src/lib/api/</code> and <code>web/src/hooks/</code></td></tr>
 </tbody>
 </table>
@@ -240,8 +251,9 @@ explain why these owners are separate. Keep host-published ports on
 <h2 id="iterate-on-the-frontend"><a class="header" href="#iterate-on-the-frontend">Iterate on the frontend</a></h2>
 <p>For a React-only change, build and start the runtime once. In a second
 terminal, get its live dashboard URL with the source launcher and pass it
-to Vite:</p>
-<pre><code class="language-console">TSZ_DEV_API="$(cargo run -q -p thus-spoke-zakura -- endpoints --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["dashboard"])')" npm run dev --prefix web
+to Vite. The example selects <code>alice</code>; use the same name that you started
+(or omit <code>--name alice</code> for <code>default</code>):</p>
+<pre><code class="language-console">THS_DEV_API="$(cargo run -q -p thus-spoke-zakura -- --name alice endpoints --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["dashboard"])')" npm run dev --prefix web
 </code></pre>
 <p>Vite proxies API calls to that running app. A frontend edit appears in
 the Vite page immediately. Rebuild the app image before checking it in

@@ -28,7 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
-        <link rel="stylesheet" href="theme/figures-85d4c665.css">
+        <link rel="stylesheet" href="theme/figures-f9894ebb.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b780ff3d.js";
+            window.path_to_searchindex_js = "searchindex-15333e56.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9bfa7156.js"></script>
+        <script src="toc-6a776a01.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -190,7 +190,7 @@ data it wants</strong>, then connect to that owner’s local interface.</p>
 <li>Use the <strong>dashboard HTTP API</strong> when your program needs user accounts,
 reconciled balances, activity, or the server’s wallet sync status.</li>
 <li>Use <strong>Zakura JSON-RPC</strong> for the node tip, blocks, raw transactions, and
-mempool state. Those facts do not tell you which Orchard notes your
+mempool state. Those facts do not tell you which Ironwood notes your
 development wallet can spend.</li>
 <li>Use <strong>lightwalletd gRPC</strong> when building a compatible light client that
 scans compact blocks itself. The local service uses plaintext transport.</li>
@@ -267,7 +267,7 @@ print("Node tip:", status["node"]["bestblockhash"])
 for account in get_json("/api/v1/accounts"):
     print(
         f'Account {account["id"]}: '
-        f'{account["orchard_zatoshi"]} Orchard zatoshi, '
+        f'{account["ironwood_zatoshi"]} Ironwood zatoshi, '
         f'{account["transparent_zatoshi"]} transparent zatoshi'
     )
 </code></pre>
@@ -278,11 +278,16 @@ prints only user Accounts 1–5. <code>100000000</code> zatoshi is 1 ZEC.</p>
 <p><code>GET /api/v1/accounts</code> carries more than balances. Each account object also
 has <code>name</code>, <code>unified_address</code>, <code>transparent_address</code>, and
 <code>unified_full_viewing_key</code>. The addresses are what you pay from outside the
-dashboard; the viewing key is the only way to read an Orchard memo this
+dashboard; the viewing key is the only way to read an Ironwood memo this
 environment sent, since nothing in the API or UI shows one back. Because the
 seed is fixed (see <a href="accounts-and-balances.html#an-account-is-a-wallet-identity">Chapter 3</a>),
 these values are identical in every instance — convenient for fixtures, and
 a reason never to reuse them anywhere real.</p>
+<p>For scripts that need the node, compact-block index, and wallet to agree,
+<code>GET /api/v1/status</code> also reports <code>settled</code> and <code>settlement_blocker</code>. Use
+<code>ths wait</code> before continuing, or <code>ths run -- &lt;command&gt;</code> to run a child command
+in a fresh settled instance and clean it up afterward. The child receives the
+API URL in <code>THS_API_URL</code>; see the <a href="cli.html">CLI reference</a>.</p>
 <p>The explicit <code>ready</code> check matters. <code>GET /api/v1/accounts</code> returns the
 last wallet snapshot even while a new scan is in progress or has failed.
 Use <code>wallet_sync.observed_height</code>, <code>observed_hash</code>,
@@ -291,7 +296,7 @@ needs to explain why the node and wallet differ. A same-height
 reorganization can change a hash without changing a height.</p>
 <h2 id="listen-for-changes-then-fetch-state"><a class="header" href="#listen-for-changes-then-fetch-state">Listen for changes, then fetch state</a></h2>
 <p><code>GET /api/v1/events</code> is a server-sent event stream. Each <code>update</code> event
-contains one topic: <code>wallet</code>, <code>chain</code>, or <code>sync</code>. The event is a <strong>hint
+contains one topic: <code>wallet</code>, <code>chain</code>, <code>sync</code>, <code>mining</code>, or <code>resync</code>. The event is a <strong>hint
 to refetch</strong>, not a balance or block payload. The dashboard’s query hooks
 invalidate the relevant queries when one arrives. A simple terminal view
 is:</p>
@@ -302,7 +307,8 @@ curl -N "$DASHBOARD_URL/api/v1/events"
 for <code>update</code> events. Press Ctrl+C to stop the stream. Your client should
 read the relevant HTTP endpoint after an event; it should also fetch
 initial state when it connects, since a stream starts with no full
-snapshot.</p>
+snapshot. A <code>mining</code> event prompts a job-status refresh. A <code>resync</code> event means
+updates were missed; refetch the state your client uses.</p>
 <h2 id="read-chain-state-directly"><a class="header" href="#read-chain-state-directly">Read chain state directly</a></h2>
 <p>This read-only JSON-RPC call asks Zakura for its chain view:</p>
 <pre><code class="language-python">import json
@@ -324,7 +330,7 @@ with urllib.request.urlopen(request, timeout=10) as response:
 <p>Save this as <code>chain_info.py</code> and run <code>python3 chain_info.py</code>. The result
 describes the node. Use the accounts API for the development wallet’s
 balances and the activity API for recorded requests. Do not try to infer
-private Orchard recipients or memo plaintext from raw chain data.</p>
+private Ironwood recipients or memo plaintext from raw chain data.</p>
 <h2 id="connect-a-light-client"><a class="header" href="#connect-a-light-client">Connect a light client</a></h2>
 <p>Pass the <code>lightwalletd</code> endpoint to a lightwalletd-compatible gRPC client
 configured for <strong>plaintext</strong>. You do not have to take that on trust: the
@@ -333,30 +339,39 @@ alongside it. Some clients expect <code>host:port</code> rather than an <code>ht
 use the form your client library requires.</p>
 <h2 id="the-rest-of-the-api-surface"><a class="header" href="#the-rest-of-the-api-surface">The rest of the API surface</a></h2>
 <p>These are every route the server serves today, from
-<code>crates/tsz-server/src/api.rs</code>:</p>
+<code>crates/ths-server/src/api.rs</code>:</p>
 <div class="table-wrapper">
 <table>
 <thead>
 <tr><th>Route</th><th>Notes</th></tr>
 </thead>
 <tbody>
-<tr><td><code>GET /api/v1/health</code></td><td>200 when Zakura answers <strong>and</strong> the wallet has published at least one snapshot; 503 otherwise. The natural readiness probe.</td></tr>
-<tr><td><code>GET /api/v1/status</code></td><td>Node tip, account count, network, endpoints, <code>wallet_sync</code>.</td></tr>
+<tr><td><code>GET /api/v1/health</code></td><td>200 after startup finishes, Zakura answers, and the wallet has published at least one snapshot; 503 otherwise. The natural readiness probe.</td></tr>
+<tr><td><code>GET /api/v1/status</code></td><td>Node tip, account count, network, endpoints, <code>wallet_sync</code>, and settlement status.</td></tr>
 <tr><td><code>GET /api/v1/accounts</code></td><td>Accounts 1–5 with balances, addresses, and viewing keys.</td></tr>
-<tr><td><code>GET /api/v1/activity</code></td><td>Recorded development payments; see <a href="architecture/operations.html#call-the-api-with-a-deliberate-key">Chapter 6</a> for the object’s eleven fields.</td></tr>
+<tr><td><code>GET /api/v1/activity</code></td><td>Recorded development payments; see <a href="architecture/operations.html#call-the-api-with-a-deliberate-key">Chapter 6</a> for the object’s thirteen fields.</td></tr>
+<tr><td><code>GET /api/v1/activity?idempotency_key=&lt;key&gt;</code></td><td>Read one payment’s stored activity as a one-item array, or <code>[]</code>; the read does not resume it.</td></tr>
 <tr><td><code>POST /api/v1/send/quote</code></td><td>Dry run: <code>available_zatoshi</code>, <code>fee_zatoshi</code>, <code>max_zatoshi</code> for one account and pool pair. Builds and broadcasts nothing. Check an intended amount against <code>max_zatoshi</code> before calling <code>send</code>.</td></tr>
-<tr><td><code>POST /api/v1/send</code></td><td>Payment between accounts. Needs an idempotency key.</td></tr>
+<tr><td><code>POST /api/v1/send</code></td><td>Payment to a user account or supported Regtest address. Needs an idempotency key.</td></tr>
 <tr><td><code>POST /api/v1/faucet</code></td><td>Treasury payment to an account. Needs an idempotency key.</td></tr>
-<tr><td><code>POST /api/v1/faucet/address</code></td><td>Treasury payment to any Regtest address. <strong>No</strong> key, no activity record.</td></tr>
-<tr><td><code>POST /api/v1/mine</code></td><td>Generate 1–10,000 blocks. No retry key.</td></tr>
+<tr><td><code>POST /api/v1/faucet/address</code></td><td>Treasury payment to a supported Regtest address. Needs an idempotency key; external recipients have a separate stored faucet record.</td></tr>
+<tr><td><code>GET /api/v1/faucet/address?idempotency_key=&lt;key&gt;</code></td><td>Read an internal or external address-faucet result, or 404 if none is stored.</td></tr>
+<tr><td><code>POST /api/v1/mine</code></td><td>Generate 1–10,000 blocks and wait for wallet synchronization. Each call uses a fresh internal key.</td></tr>
+<tr><td><code>POST /api/v1/mining/jobs</code></td><td>Start a keyed mining job with <code>{blocks,idempotency_key}</code>; returns HTTP 202 and the job.</td></tr>
+<tr><td><code>GET /api/v1/mining/jobs</code>, <code>/mining/jobs/{id}</code></td><td>Read the latest job or a specific job; see <a href="mining-and-sync.html">Chapter 5</a>.</td></tr>
+<tr><td><code>POST /api/v1/zip321/parse</code></td><td>Parse one Regtest payment URI into its address, pool, optional amount, and memo; moves no funds.</td></tr>
+<tr><td><code>POST /api/v1/zip321/request</code></td><td>Generate a payment URI from <code>{account_id}</code> and an optional amount and memo; moves no funds.</td></tr>
 <tr><td><code>POST /api/v1/dev/seed</code></td><td>Returns the raw seed hex. Refuses unless the body carries <code>"confirmation": "I understand this seed is for regtest only"</code>.</td></tr>
 <tr><td><code>GET /api/v1/blocks</code>, <code>/blocks/{id}</code>, <code>/transactions/{txid}</code>, <code>/mempool</code>, <code>/addresses/{address}</code>, <code>/search</code></td><td>Read-only explorer views of public chain data.</td></tr>
 <tr><td><code>GET /api/v1/events</code></td><td>The server-sent stream described above.</td></tr>
 </tbody>
 </table>
 </div>
+<p>Accepted payment intents now progress in the background, including payments
+to external faucet addresses. A successful response can still describe a
+pending payment; read its stored status before choosing whether to replay it.</p>
 <p><a href="architecture/operations.html">Chapter 6</a> explains the retry boundaries around
-the four write routes. These interfaces are for local Regtest experiments;
+payment and mining requests. These interfaces are for local Regtest experiments;
 keep them on loopback and verify the current source before building a
 long-lived integration.</p>
 <p><strong>What you learned:</strong> choose an endpoint by state ownership, then check

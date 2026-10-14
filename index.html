@@ -28,7 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
-        <link rel="stylesheet" href="theme/figures-85d4c665.css">
+        <link rel="stylesheet" href="theme/figures-f9894ebb.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b780ff3d.js";
+            window.path_to_searchindex_js = "searchindex-15333e56.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9bfa7156.js"></script>
+        <script src="toc-6a776a01.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -201,8 +201,9 @@ seed is a fixed constant in the source, so every instance on every machine
 derives the same accounts, and anyone who knows this project can derive them
 too. That reproducibility is the point; it is also why <strong>nothing of value may
 ever touch an address shown by this environment.</strong></p>
-<p>This book documents launcher version <strong>0.2.1</strong>; check yours with
-<code>ths --version</code>.</p>
+<p>Use the <a href="getting-started.html#install-the-launcher">installer</a> as the default
+setup path. The installer downloads a published release. Use the <a href="development.html">source build instructions</a>
+to run the recorded source baseline.</p>
 <h2 id="one-experiment-several-chapters"><a class="header" href="#one-experiment-several-chapters">One experiment, several chapters</a></h2>
 <p>We will start the default instance, look at its five user accounts, fund
 Account 2, send from Account 1 to Account 2, mine another block, and read the
@@ -212,9 +213,9 @@ result through the API. Along the way, we will answer three questions:</p>
 the wallet owns spendable balances, and SQLite records development activity.</li>
 <li><strong>When is it true?</strong> A block can exist before lightwalletd indexes it, and
 the index can advance before the wallet publishes a fresh balance snapshot.</li>
-<li><strong>What can be retried?</strong> A recorded payment key can resume confirmation;
-a lost response before the key is recorded is ambiguous, and mining has no
-retry key.</li>
+<li><strong>What can be retried?</strong> The caller and operation determine which identity
+to retain and which state to inspect after an uncertain response. <a href="architecture/operations.html">Chapter
+6</a> traces those boundaries.</li>
 </ol>
 <p>Those distinctions explain most surprising behavior in the dashboard.</p>
 <h2 id="how-to-read"><a class="header" href="#how-to-read">How to read</a></h2>

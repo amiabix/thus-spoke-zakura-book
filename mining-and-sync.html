@@ -28,7 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
-        <link rel="stylesheet" href="theme/figures-85d4c665.css">
+        <link rel="stylesheet" href="theme/figures-f9894ebb.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b780ff3d.js";
+            window.path_to_searchindex_js = "searchindex-15333e56.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9bfa7156.js"></script>
+        <script src="toc-6a776a01.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -190,18 +190,21 @@ block from the node to the wallet and browser.</p>
 a block hash. That does not instantly make every wallet view current:
 lightwalletd still has
 to index the block, and the wallet still has to scan and reconcile it.</p>
-<p><img src="images/mining-flow.svg" alt="ths mine N posts to the mine endpoint, which validates the count, asks Zakura to generate the blocks, waits for lightwalletd to index and the wallet to scan, then returns the block hashes. A failure after generate is not a rollback."></p>
+<p><img src="images/mining-flow.svg" alt="The dashboard starts a keyed mining job and receives its accepted status; the CLI waits for that server-owned job. Mining advances acknowledged progress, then wallet synchronization completes or fails. Client disconnection does not cancel admitted work, and an uncertain RPC may have generated extra blocks."></p>
 <ol>
-<li><code>ths mine N</code> or the dashboard Mine dialog calls <code>POST /api/v1/mine</code> with
-<code>{"blocks":N}</code>. The server accepts <strong>1–10,000</strong> blocks.</li>
+<li><code>ths mine N</code> calls <code>POST /api/v1/mine</code> with <code>{"blocks":N}</code>. The dashboard
+Mine dialog calls <code>POST /api/v1/mining/jobs</code> with a block count and
+idempotency key; it receives HTTP <strong>202</strong> and a job before mining finishes.
+The server accepts <strong>1–10,000</strong> blocks.</li>
 <li>Zakura generates blocks and returns their hashes. The server asks Zakura
 for the last returned block’s height.</li>
 <li>The wallet waits for lightwalletd to index that height, scans compact
 blocks, reconciles against Zakura’s canonical block hashes, and publishes
 a fresh user-account snapshot at a matching checkpoint.</li>
-<li>The server notifies dashboard clients of a <code>chain</code> update and returns
-<code>blocks</code> and <code>hashes</code>. If a step after generation fails, the API returns
-an error even though blocks may already exist.</li>
+<li>The server notifies dashboard clients of a <code>chain</code> update. After successful
+synchronization, the CLI returns <code>blocks</code> and <code>hashes</code>; the dashboard job
+becomes <code>completed</code>. If a step after generation fails, the CLI returns an
+error and the job becomes <code>failed</code>, even though blocks may already exist.</li>
 </ol>
 <h2 id="mine-and-inspect-one-result"><a class="header" href="#mine-and-inspect-one-result">Mine and inspect one result</a></h2>
 <p>In the second terminal from Chapter 1, mine two blocks:</p>
@@ -209,11 +212,22 @@ an error even though blocks may already exist.</li>
 Mined 2 blocks on default.
 New tip: 9ef8f0064e3f088f2012fe04d5d70b42f00ae1e9676cdc3d5384ad31d384b8c4
 </code></pre>
-<p>The tip hash differs on every run. Two blocks come back in about a second;
-Regtest has no proof-of-work delay, so the wait is wallet scanning, not
-mining. The dashboard’s <strong>Mine</strong> dialog performs the same API operation.
+<p>The tip hash differs on every run. Regtest has no proof-of-work delay;
+completion also waits for indexing and wallet scanning. The dashboard’s
+<strong>Mine</strong> dialog starts a job and shows its progress.
 Do not run both if you intend to add only two blocks.</p>
 <p><img src="images/mine.png" alt="The Mine blocks dialog over the Wallet page, labelled CHAIN CONTROL, explaining that Regtest mines on demand with no proof-of-work delay, with a Number of blocks field accepting 1 to 10,000 and a Mine blocks button."></p>
+<h2 id="follow-mining-progress-in-the-dashboard"><a class="header" href="#follow-mining-progress-in-the-dashboard">Follow mining progress in the dashboard</a></h2>
+<p>The <strong>Mine</strong> dialog shows block-generation progress, then <code>syncing</code> while the
+wallet catches up. A job becomes <code>completed</code> only after synchronization
+succeeds; generation or synchronization errors leave it <code>failed</code>. Only one
+manual job can be active, including its synchronization phase.</p>
+<p><img src="images/mining-progress.png" alt="The Mine blocks modal during a real 200-block job, with a partially filled progress bar and partial acknowledged count, Mining blocks text, and disabled count and submission controls. A matching progress panel remains visible on the Network page behind the dialog."></p>
+<p><img src="images/mining-completed.png" alt="The reopened Mine blocks modal after refresh, showing 2 of 2 blocks confirmed, a full progress bar, and Mining completed. Wallet synchronized. The new-admission count has reset to 1; the status still describes the prior two-block job."></p>
+<p>The dashboard reads <code>GET /api/v1/mining/jobs</code> for the latest job, or
+<code>GET /api/v1/mining/jobs/{id}</code> for a specific job. Reusing an accepted key with
+the same block count returns the same job within that server lifetime; a
+fresh CLI invocation requests new mining.</p>
 <p>Read the node and wallet view through the running instance’s API:</p>
 <pre><code class="language-console">DASHBOARD_URL="$(ths endpoints --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["dashboard"])')"
 curl -fsS "$DASHBOARD_URL/api/v1/status"
@@ -222,12 +236,6 @@ curl -fsS "$DASHBOARD_URL/api/v1/accounts"
 <p><code>ths status</code> reports container status and endpoints, not chain height. In
 <code>GET /api/v1/status</code>, <code>node.blocks</code> is the node height and
 <code>node.bestblockhash</code> is the tip hash.</p>
-<p>One field there will look wrong: <code>node.chain</code> reads <code>"test"</code>, not
-<code>"regtest"</code>. That string comes straight from Zakura, which reports Regtest
-under its testnet chain name; the Network page’s <strong>Chain</strong> tile shows the
-same raw value. The instance is Regtest — <code>status.network</code> says <code>Regtest</code>
-and <code>ths endpoints --json</code> says <code>"network": "regtest"</code>. Ignore <code>node.chain</code>
-and use either of those.</p>
 <p>The wallet fields mean:</p>
 <div class="table-wrapper">
 <table>
@@ -243,7 +251,7 @@ and use either of those.</p>
 </tbody>
 </table>
 </div>
-<p>After a successful explicit mine on the normal running example, the wallet
+<p>After a successful <code>ths mine</code> on the normal running example, the wallet
 has reconciled through the mined tip before the response. An independent
 chain change can happen later, so use the current status fields when making
 a decision. <code>GET /api/v1/accounts</code> serves the <strong>last wallet snapshot</strong>; it
