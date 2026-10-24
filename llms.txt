@@ -1,0 +1,22 @@
+# Thus Spoke Zakura
+
+> A disposable Zcash Regtest network for local development: a launcher, a node, lightwalletd, and a wallet-backed dashboard, all in Docker on loopback.
+
+- [The whole book in one file](https://amiabix.github.io/thus-spoke-zakura-book/book.md): every chapter concatenated as markdown
+
+## Chapters
+
+- [Introduction](https://amiabix.github.io/thus-spoke-zakura-book/index.md): What the environment is, who owns which fact, and how to read the book
+- [1. Your first instance](https://amiabix.github.io/thus-spoke-zakura-book/getting-started.md): Start an instance, read its endpoints, and throw it away
+- [2. Components and state](https://amiabix.github.io/thus-spoke-zakura-book/architecture/overview.md): Three containers, four volumes, and which one owns each answer
+- [3. Accounts and balances](https://amiabix.github.io/thus-spoke-zakura-book/accounts-and-balances.md): Transparent and Ironwood pools, authoritative snapshots, and treasury funding
+- [4. Fund and send](https://amiabix.github.io/thus-spoke-zakura-book/using-the-dashboard.md): Fund, send, and generate ZIP-321 requests from the dashboard or CLI
+- [5. Mining and wallet sync](https://amiabix.github.io/thus-spoke-zakura-book/mining-and-sync.md): Server-owned mining jobs, uncertain retries, and canonical wallet settlement
+- [6. Uncertain operations](https://amiabix.github.io/thus-spoke-zakura-book/architecture/operations.md): Idempotency keys, what an HTTP response proves, and what a lost one does not
+- [7. Connect your application](https://amiabix.github.io/thus-spoke-zakura-book/connect-an-app.md): Choose an interface by who owns the data, then read it from your own code
+
+## Reference
+
+- [Appendix A: the ths CLI](https://amiabix.github.io/thus-spoke-zakura-book/cli.md): Every command, with its flags and an example
+- [Appendix B: develop from source](https://amiabix.github.io/thus-spoke-zakura-book/development.md): Build the images from source and run the checks
+- [Appendix C: troubleshooting](https://amiabix.github.io/thus-spoke-zakura-book/troubleshooting.md): Work down the layers, from Docker to an uncertain payment

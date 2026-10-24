@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 440" width="1040" height="440" role="img" aria-label="If the call was a send or faucet you chose the idempotency key, so look at the activity: a row with your key can be resent safely, while no row does not prove nothing was broadcast. Mine and address-faucet take no key, so compare the chain instead.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="44 0 912 420" width="912" height="420" role="img" aria-label="After a lost payment response, direct API callers reuse their saved key, dashboard callers resume retained payments, and CLI callers rerun the same command and instance. A new key requests a new payment. Activity omits keys and external faucet records; inspect txids and wallet snapshots separately.">
 <style>
 svg {
   --bg: #fdfaf8;
@@ -24,11 +24,11 @@ svg {
 }
 text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
        "Helvetica Neue", Arial, sans-serif; fill: var(--ink); }
-.t { font-size: 15px; font-weight: 600; }
-.k { font-size: 10px; font-weight: 600; letter-spacing: .1em; fill: var(--muted); }
-.l { font-size: 13px; }
-.s { font-size: 11px; fill: var(--muted); }
-.a { font-size: 12px; font-weight: 600; fill: var(--accent); }
+.t { font-size: 16px; font-weight: 600; }
+.k { font-size: 11px; font-weight: 600; letter-spacing: .1em; fill: var(--muted); }
+.l { font-size: 14px; }
+.s { font-size: 12px; fill: var(--muted); }
+.a { font-size: 13px; font-weight: 600; fill: var(--accent); }
 .card { fill: var(--surface); stroke: var(--rule); stroke-width: 1; }
 .card-a { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1; }
 .zone { fill: var(--zone); stroke: none; }
@@ -38,30 +38,34 @@ text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
 .lead { stroke: var(--rule); stroke-width: 1; fill: none; stroke-dasharray: 2 4; }
 </style>
 <defs><marker id="ar-a" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" markerHeight="7" orient="auto"><path d="M0 0 L10 4 L0 8 z" fill="var(--accent)"/></marker><marker id="ar-n" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="6" orient="auto"><path d="M0 0 L10 4 L0 8 z" fill="var(--rule)"/></marker></defs>
-<rect width="1040" height="440" fill="var(--bg)"/>
-<text class="t" x="48" y="46">What a lost response lets you conclude</text>
-<rect class="card-a" x="348" y="92" width="344" height="56" rx="8"/>
-<text class="l" x="520.0" y="117.0" text-anchor="middle">The response never arrived</text>
-<text class="s" x="520.0" y="135.0" text-anchor="middle">which call was it?</text>
-<rect class="card" x="48" y="196" width="424" height="60" rx="8"/>
-<text class="l" x="260.0" y="223.0" text-anchor="middle">send or faucet</text>
-<text class="s" x="260.0" y="241.0" text-anchor="middle">you chose the idempotency key</text>
-<rect class="card" x="568" y="196" width="424" height="60" rx="8"/>
-<text class="l" x="780.0" y="223.0" text-anchor="middle">mine or faucet/address</text>
-<text class="s" x="780.0" y="241.0" text-anchor="middle">no key, nothing to replay</text>
-<path class="flow" d="M520 148 L520 170 L260 170 L260 188" marker-end="url(#ar-a)"/>
-<path class="flow" d="M520 148 L520 170 L780 170 L780 188" marker-end="url(#ar-a)"/>
-<rect class="card" x="48" y="296" width="200" height="60" rx="8"/>
-<text class="l" x="148.0" y="323.0" text-anchor="middle">Row with your key</text>
-<text class="s" x="148.0" y="341.0" text-anchor="middle">resend it — no second payment</text>
-<rect class="note" x="272" y="296" width="200" height="60" rx="8"/>
-<text class="l" x="372.0" y="323.0" text-anchor="middle">No row</text>
-<text class="s" x="372.0" y="341.0" text-anchor="middle">not proof nothing was sent</text>
-<path class="lead" d="M148 256 L148 288"/>
-<path class="lead" d="M372 256 L372 288"/>
-<rect class="card" x="568" y="296" width="424" height="60" rx="8"/>
-<text class="l" x="780.0" y="323.0" text-anchor="middle">Compare the chain</text>
-<text class="s" x="780.0" y="341.0" text-anchor="middle">tip height, or the destination balance</text>
-<path class="lead" d="M780 256 L780 288"/>
-<text class="s" x="520" y="400" text-anchor="middle">look at GET /api/v1/activity and the chain before deciding to call again</text>
+<text class="t" x="48" y="46">Retain the caller's payment identity</text>
+<rect class="card-a" x="290" y="76" width="420" height="54" rx="8"/>
+<text class="l" x="500.0" y="100.0" text-anchor="middle">A payment response is uncertain</text>
+<text class="s" x="500.0" y="118.0" text-anchor="middle">which caller and result?</text>
+<rect class="card" x="48.0" y="184" width="282.6666666666667" height="64" rx="8"/>
+<text class="l" x="189.33333333333334" y="213.0" text-anchor="middle">API: saved key</text>
+<text class="s" x="189.33333333333334" y="231.0" text-anchor="middle">same request details</text>
+<path class="flow" d="M500 130 L500 154 L189.33333333333334 154 L189.33333333333334 176" marker-end="url(#ar-a)"/>
+<rect class="card" x="358.6666666666667" y="184" width="282.6666666666667" height="64" rx="8"/>
+<text class="l" x="500.0" y="213.0" text-anchor="middle">Dashboard: Resume</text>
+<text class="s" x="500.0" y="231.0" text-anchor="middle">saved payment across reloads</text>
+<path class="flow" d="M500 130 L500 154 L500.0 154 L500.0 176" marker-end="url(#ar-a)"/>
+<rect class="card" x="669.3333333333334" y="184" width="282.6666666666667" height="64" rx="8"/>
+<text class="l" x="810.6666666666667" y="213.0" text-anchor="middle">CLI: same command</text>
+<text class="s" x="810.6666666666667" y="231.0" text-anchor="middle">same arguments and instance</text>
+<path class="flow" d="M500 130 L500 154 L810.6666666666667 154 L810.6666666666667 176" marker-end="url(#ar-a)"/>
+<rect class="card-a" x="48.0" y="288" width="282.6666666666667" height="64" rx="8"/>
+<text class="l" x="189.33333333333334" y="317.0" text-anchor="middle">Resume same intent</text>
+<text class="s" x="189.33333333333334" y="335.0" text-anchor="middle">same key + same details</text>
+<path class="flow" d="M189.33333333333334 248 L189.33333333333334 280" marker-end="url(#ar-a)"/>
+<rect class="note" x="358.6666666666667" y="288" width="282.6666666666667" height="64" rx="8"/>
+<text class="l" x="500.0" y="317.0" text-anchor="middle">Keep pending payment</text>
+<text class="s" x="500.0" y="335.0" text-anchor="middle">broadcast is not terminal</text>
+<path class="flow" d="M500.0 248 L500.0 280" marker-end="url(#ar-a)"/>
+<rect class="note" x="669.3333333333334" y="288" width="282.6666666666667" height="64" rx="8"/>
+<text class="l" x="810.6666666666667" y="317.0" text-anchor="middle">Resume saved intent</text>
+<text class="s" x="810.6666666666667" y="335.0" text-anchor="middle">terminal observation clears key</text>
+<path class="flow" d="M810.6666666666667 248 L810.6666666666667 280" marker-end="url(#ar-a)"/>
+<text class="s" x="500" y="380" text-anchor="middle">activity omits keys and external faucets; no row is not proof nothing happened</text>
+<text class="s" x="500" y="400" text-anchor="middle">observe chain inclusion and wallet balances separately</text>
 </svg>

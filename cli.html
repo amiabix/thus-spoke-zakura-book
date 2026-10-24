@@ -28,7 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
-        <link rel="stylesheet" href="theme/figures-85d4c665.css">
+        <link rel="stylesheet" href="theme/figures-f9894ebb.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b780ff3d.js";
+            window.path_to_searchindex_js = "searchindex-5b2d4067.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9bfa7156.js"></script>
+        <script src="toc-6a776a01.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -183,25 +183,33 @@
                     <main>
                         <h1 id="appendix-a-ths-cli-reference"><a class="header" href="#appendix-a-ths-cli-reference">Appendix A: <code>ths</code> CLI reference</a></h1>
 <p><code>ths</code> is the Thus Spoke Zakura launcher. It manages the Docker-based Regtest
-environment and, once an environment is running, talks to its dashboard API on
-your behalf. This page documents every command in detail, with examples.</p>
+environment and, once an environment is running, talks to its dashboard API or
+Zakura JSON-RPC on your behalf. This page documents every command in detail,
+with examples.</p>
 <p>Read <a href="getting-started.html">Chapter 1</a> for an instance’s lifecycle, <a href="accounts-and-balances.html">Chapter
 3</a> for accounts and pools, and <a href="architecture/operations.html">Chapter
 6</a> before retrying a payment or mine request.
 The examples below demonstrate individual commands; they are not one script
-to run in order. For a worked dashboard flow, see <a href="using-the-dashboard.html">Chapter
-4</a>.</p>
+to run in order. If a send or faucet command cannot write its result, fix the
+output destination and repeat the same arguments against the same instance.
+Its saved payment identity remains available for that retry. For a worked
+dashboard flow, see <a href="using-the-dashboard.html">Chapter 4</a>.</p>
 <h2 id="conventions-used-below"><a class="header" href="#conventions-used-below">Conventions used below</a></h2>
 <ul>
 <li>All commands accept two <strong>global options</strong>, which can be placed before or
 after the subcommand:
 <ul>
 <li><code>--name &lt;NAME&gt;</code> — target a named, isolated environment instead of the
-default one (default: <code>default</code>).</li>
+default one (default: <code>default</code>, or a fresh <code>run-&lt;UUID&gt;</code> for <code>run</code>). Names
+use 1–40 lowercase ASCII letters, digits, or internal hyphens.</li>
 <li><code>--json</code> — print machine-readable JSON instead of human-readable text,
 where the command supports it.</li>
 </ul>
 </li>
+<li>Use <code>-h</code> / <code>--help</code> or <code>ths help &lt;command&gt;</code> for help; <code>-V</code> /
+<code>--version</code> prints the launcher version. <code>--json</code> does not convert logs,
+browser opening, builds, cleanup messages, or <code>rpc</code> results into JSON and is
+rejected for <code>run</code>. Use <code>rpc --raw</code> for the full JSON-RPC response.</li>
 <li>Accounts are referred to by <strong>index</strong>, <code>1</code> through <code>5</code>. Every environment
 starts with five disposable development accounts; there is no need to copy
 full Regtest addresses to use the commands on this page. (A hidden sixth
@@ -209,24 +217,110 @@ account acts as the mining/faucet treasury and is not addressable from the
 CLI.)</li>
 <li>Amounts are ZEC decimal strings with up to 8 decimal places, e.g. <code>1</code>,
 <code>0.5</code>, <code>2.25000001</code>. These are disposable Regtest coins with no value.</li>
-<li>Commands that call the app (<code>mine</code>, <code>faucet</code>, and <code>wallet</code> subcommands) require
-a running environment. Start one first with <code>ths</code> (or <code>ths --name &lt;NAME&gt;</code>).
+<li>Commands that call the app (<code>tx</code>, <code>block</code>, <code>mine</code>, <code>reorg</code>, <code>rollback</code>, <code>faucet</code>, and <code>wallet</code>
+subcommands) or the node (<code>rpc</code>) require a running environment. Start one
+first with <code>ths</code> (or <code>ths --name &lt;NAME&gt;</code>).
 <code>stop</code> and <code>reset --force</code> can remove resources left by an interrupted run.</li>
 </ul>
 <hr>
 <h2 id="environment-lifecycle"><a class="header" href="#environment-lifecycle">Environment lifecycle</a></h2>
 <h3 id="ths--ths-start"><a class="header" href="#ths--ths-start"><code>ths</code> / <code>ths start</code></a></h3>
 <p>Starts a fresh environment in the foreground and opens the dashboard in your
-browser. Interrupting with Ctrl+C stops the environment and deletes its chain,
-wallet, keys, and Docker volumes.</p>
+browser. Ctrl+C starts bounded, instance-scoped deletion of its chain, wallet,
+keys, containers, and volumes. Incomplete or uncertain cleanup exits with an
+error and retains <code>lifecycle-recovery.json</code>; see <a href="getting-started.html">Chapter 1</a>.</p>
 <pre><code class="language-console">ths
 ths start --no-open      # don't open a browser tab
 ths --name alice start --port-offset 10  # start a second, independent environment
 </code></pre>
 <p>The default loopback ports are dashboard <code>32805</code>, Zakura RPC <code>18232</code>, P2P
-<code>18233</code>, and lightwalletd <code>9067</code>. <code>--port-offset</code> adds a multiple of 10 to
-each host port (default: <code>0</code>). Startup fails and names an occupied port
+<code>18233</code>, and lightwalletd <code>9067</code>. <code>--port-offset</code> is the amount added to
+each host port (default: <code>0</code>), and must be a multiple of 10. It is not multiplied
+by 10; the result must fit a valid nonzero host port. Startup fails and names an occupied port
 instead of selecting a random port.</p>
+<p><code>start</code> also selects the instance’s <strong>mining mode</strong>. Exactly one mode is active
+for the whole server lifetime, so the flags below are mutually exclusive:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Mode</th><th>Flag</th><th>Behavior</th></tr>
+</thead>
+<tbody>
+<tr><td><code>auto</code> (default)</td><td>none</td><td>Each payment, faucet, and treasury operation mines its own confirming block.</td></tr>
+<tr><td><code>interval</code></td><td><code>--block-time &lt;SECONDS&gt;</code></td><td>A background task mines an empty block every <code>&lt;SECONDS&gt;</code> seconds. The value must be a positive integer.</td></tr>
+<tr><td><code>mempool</code></td><td><code>--mine-on-mempool</code></td><td>A background task mines a block when the mempool holds a new, nonempty transaction set.</td></tr>
+<tr><td><code>manual</code></td><td><code>--no-auto-mine</code></td><td>Nothing is mined automatically; unresolved work waits for <a href="#ths-mine-blocks"><code>ths mine</code></a>.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Funding the accounts during startup completes in <strong>every</strong> mode. Afterward, the
+mode decides who mines: in <code>auto</code>, a payment mines its own block; in <code>interval</code>
+and <code>mempool</code>, a background task produces blocks outside any manual job, so
+those blocks never count toward a <code>ths mine</code> request; in <code>manual</code>, a payment
+stays pending until you run <code>ths mine</code>. The selected mode is reported verbatim
+as <code>mining_mode</code> in <code>GET /api/v1/status</code> (with <code>block_time</code> for <code>interval</code>), and
+the dashboard’s Network page names it. <code>ths run</code> always uses <code>auto</code>.</p>
+<pre><code class="language-console">ths start --block-time 2        # mine an empty block every 2 seconds
+ths start --mine-on-mempool     # mine whenever a transaction arrives
+ths start --no-auto-mine        # mine only when you run `ths mine`
+</code></pre>
+<h3 id="ths-wait---timeout-seconds"><a class="header" href="#ths-wait---timeout-seconds"><code>ths wait [--timeout &lt;SECONDS&gt;]</code></a></h3>
+<p>Waits for an instance’s node, lightwalletd index, and wallet to be settled at
+the same canonical tip, and for the <code>ths start</code> or <code>ths run</code> that owns it to
+report ready. It also waits for an instance that is still being created in
+another shell, and fails after a few seconds if no command is creating it or
+if its launcher has exited and left only its containers behind. It creates
+no instance and makes no chain changes. The timeout defaults to <strong>120 seconds</strong>, and status reads are bounded
+by the remaining budget. Timeout or interruption exits nonzero and leaves the
+instance running. On timeout, the error reports the last observed heights and
+settlement blocker. <code>--json</code> emits the settlement object on success:
+<code>node_height</code>, <code>lightwalletd_height</code>, <code>wallet_scanned_height</code>,
+<code>wallet_sync_state</code>, <code>settled</code>, and nullable <code>settlement_blocker</code>.</p>
+<pre><code class="language-console">ths --name alice wait --timeout 180 --json
+</code></pre>
+<h3 id="ths-run---timeout-seconds----command-arguments"><a class="header" href="#ths-run---timeout-seconds----command-arguments"><code>ths run [--timeout &lt;SECONDS&gt;] -- &lt;COMMAND&gt; [ARGUMENTS...]</code></a></h3>
+<p>Starts a fresh instance, waits for readiness and full settlement, runs a child
+command in your current directory, then attempts bounded instance cleanup.
+The <strong>120-second</strong> default timeout covers startup and settlement; it does not
+limit child execution. No browser opens. Without <code>--name</code>, the name is
+<code>run-&lt;32 UUID hex digits&gt;</code>; an explicit name must be fresh. Existing metadata
+or resources cause a collision error rather than reuse. Docker assigns free
+loopback ports to each run. Cleanup removes the run’s per-instance lock file;
+failures are reported.</p>
+<pre><code class="language-console">ths run --timeout 180 -- sh -c 'curl -fsS "$THS_API_URL/api/v1/accounts"'
+</code></pre>
+<p>The child inherits standard streams and the calling directory, but <code>run</code>
+supports non-interactive commands: it creates a separate process group without
+transferring control of the terminal. Commands that read from the controlling
+terminal are unsupported. No persistent environment is provided. Seeds and
+spending keys are not exported. <code>--json</code> is rejected
+because the child owns stdout; launcher progress, Docker output, and the
+init container’s secrets banner go to stderr. The child receives:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Variable</th><th>Value</th></tr>
+</thead>
+<tbody>
+<tr><td><code>THS_INSTANCE</code></td><td>Selected/generated name</td></tr>
+<tr><td><code>THS_NETWORK</code></td><td><code>regtest</code></td></tr>
+<tr><td><code>THS_API_URL</code></td><td>Dashboard/API base URL</td></tr>
+<tr><td><code>THS_ZAKURA_RPC_URL</code></td><td>Zakura JSON-RPC URL</td></tr>
+<tr><td><code>THS_LIGHTWALLETD_URL</code></td><td>Plaintext compact-block endpoint</td></tr>
+<tr><td><code>THS_LIGHTWALLETD_TLS</code></td><td><code>false</code></td></tr>
+<tr><td><code>THS_P2P_ADDR</code></td><td>Loopback peer <code>host:port</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>A normal child exit preserves its exit code. A signaled child exits 1. On Unix,
+launcher interruption forwards the signal to the child process group, with
+bounded grace before forced termination. Cleanup failure after a successful
+child makes <code>run</code> fail; after a nonzero child exit its code is preserved and
+cleanup errors are reported separately. Recovery metadata remains when deletion
+cannot be verified. Settlement is an observation before the child starts,
+not a lock against later chain changes. <code>ths --name &lt;name&gt; stop</code> or
+<code>reset --force</code> from another shell stops the child as Ctrl+C would, cleans
+up, and exits with status 1.</p>
 <h3 id="ths-build---dev"><a class="header" href="#ths-build---dev"><code>ths build [--dev]</code></a></h3>
 <p>Builds the runtime Docker images from the current source checkout (for
 development from a clone, not needed for the installed release).</p>
@@ -239,7 +333,14 @@ building them locally.</p>
 <pre><code class="language-console">ths pull
 </code></pre>
 <h3 id="ths-status---json"><a class="header" href="#ths-status---json"><code>ths status [--json]</code></a></h3>
-<p>Shows whether the named environment is running and prints its endpoints.</p>
+<p>Shows the named environment’s service state and endpoints. Like <code>ths list</code>, it
+checks the app, Zakura, and lightwalletd containers and reports <code>running</code>,
+<code>paused</code>, <code>degraded</code>, <code>stopped</code>, <code>conflict</code>, or <code>unknown</code>; the one-shot <code>init</code>
+container does not decide the overall state. It exits nonzero unless the state
+is <code>running</code>. It is not <code>/health</code> or a wallet-settlement check; use <code>ths wait</code>
+when a script needs the node, index, and wallet settled at one tip. JSON keeps
+the existing <code>name</code>, <code>running</code>, and <code>endpoints</code> fields and adds <code>state</code> and
+<code>containers</code>.</p>
 <pre><code class="language-console">ths status
 ths status --name alice --json
 </code></pre>
@@ -247,44 +348,89 @@ ths status --name alice --json
 <p>Opens the running dashboard in your default browser.</p>
 <pre><code class="language-console">ths open
 </code></pre>
-<h3 id="ths-endpoints---json"><a class="header" href="#ths-endpoints---json"><code>ths endpoints [--json]</code></a></h3>
+<h3 id="ths-endpoints---json----env"><a class="header" href="#ths-endpoints---json----env"><code>ths endpoints [--json | --env]</code></a></h3>
 <p>Prints the dashboard, Zakura RPC, lightwalletd, and P2P endpoints, useful for
-scripts and other developer tooling.</p>
+scripts and other developer tooling. <code>--env</code> prints <code>export</code> lines for the
+same variables <code>ths run</code> passes to its child, so
+<code>eval "$(ths endpoints --env)"</code> can set them for an environment that is
+already running. <code>--env</code> cannot be combined with <code>--json</code>.</p>
 <pre><code class="language-console">ths endpoints
 ths endpoints --json
+ths endpoints --env
 </code></pre>
 <p>JSON output includes <code>"network": "regtest"</code> and <code>"tls": false</code>; lightwalletd
 uses plaintext HTTP on loopback.</p>
-<h3 id="ths-logs-appzakuralightwalletd--f--follow"><a class="header" href="#ths-logs-appzakuralightwalletd--f--follow"><code>ths logs [app|zakura|lightwalletd] [-f|--follow]</code></a></h3>
+<h3 id="ths-rpc---raw---yes-method-params"><a class="header" href="#ths-rpc---raw---yes-method-params"><code>ths rpc [--raw] [--yes] &lt;METHOD&gt; [PARAMS...]</code></a></h3>
+<p>Calls one method on the named instance’s Zakura JSON-RPC endpoint and prints
+the result. The endpoint is the loopback URL stored for that instance. The
+call is sent only when the Zakura container recorded for the instance is still
+that container, is owned by the instance, and still publishes that URL. A
+container that only reuses the name is refused.</p>
+<pre><code class="language-console">ths rpc getblockcount
+ths rpc getblockhash 0
+ths rpc --raw getblockchaininfo
+ths --name alice rpc getblockcount
+</code></pre>
+<p><code>getblockcount</code> prints the current height. A string result, such as a block
+hash, is printed without quotes. Objects and arrays are pretty-printed JSON.
+<code>--raw</code> prints the full JSON-RPC response instead of only <code>result</code>. The global
+<code>--json</code> flag does not change this output.</p>
+<p>Parameters are parsed as JSON when they are numbers, <code>true</code>, <code>false</code>, <code>null</code>,
+objects, or arrays. Any other argument is sent as a string.</p>
+<p>An RPC error prints the node’s error message and exits nonzero. <code>stop</code> shuts
+the node down, so it is refused unless <code>--yes</code> is set:</p>
+<pre><code class="language-console">ths rpc --yes stop
+</code></pre>
+<h3 id="ths-logs-appzakuralightwalletd--f--follow---tail-n----head-n"><a class="header" href="#ths-logs-appzakuralightwalletd--f--follow---tail-n----head-n"><code>ths logs [app|zakura|lightwalletd] [-f|--follow] [--tail N | --head N]</code></a></h3>
 <p>Prints or streams logs for a service in the named environment. Defaults to the
-<code>app</code> (dashboard/server) service.</p>
-<pre><code class="language-console">ths logs                       # last logs from the app service
+<code>app</code> (dashboard/server) service. Without <code>--tail</code> or <code>--head</code>, it prints
+all available Docker logs. Counts must be positive. <code>--head</code> conflicts with
+<code>--tail</code> and <code>--follow</code>; <code>--tail</code> can be combined with <code>--follow</code>. Output remains
+log text even with the global <code>--json</code> flag. App lines are plain text, without
+terminal color codes. If the reader closes the pipe, the command stops without an
+error.</p>
+<pre><code class="language-console">ths logs                       # available logs from the app service
 ths logs zakura -f             # follow node logs
 ths logs lightwalletd --follow # follow lightwalletd logs
+ths logs --tail 200 -f         # last 200 app lines, then follow
+ths logs zakura --head 200     # first 200 node lines
 </code></pre>
 <h3 id="ths-stop"><a class="header" href="#ths-stop"><code>ths stop</code></a></h3>
-<p>Stops the named environment and deletes its containers, volumes, and network.</p>
+<p>Stops the named environment and deletes its containers, volumes, and network.
+If a <code>ths start</code> or <code>ths run</code> for it is still running, even while starting,
+<code>stop</code> asks that launcher to shut down as Ctrl+C would, waits for its cleanup,
+and succeeds only once the deletion is verified.</p>
 <pre><code class="language-console">ths stop
 </code></pre>
-<blockquote>
-<p>Note: <code>stop</code> removes the Docker resources but does not signal a <code>ths start</code>
-running in another terminal. That launcher stays in the foreground
-supervising nothing until you press Ctrl+C there. Prefer Ctrl+C in the
-launcher’s own terminal; use <code>stop</code> for an environment whose launcher is
-already gone.</p>
-</blockquote>
+<p><code>stop</code> uses verified, instance-scoped cleanup. A foreground <code>start</code> observes
+external deletion and exits; you do not need to interrupt it separately.
+Cleanup errors retain <code>lifecycle-recovery.json</code> for this instance. A successful
+message requires verified deletion; neither stop nor reset removes another
+instance’s resources. If the name has no instance metadata, recovery state, or
+owned Docker resources, both commands report that the environment does not
+exist and exit nonzero.</p>
 <h3 id="ths-reset---force"><a class="header" href="#ths-reset---force"><code>ths reset --force</code></a></h3>
 <p>Same as <code>stop</code>, but named explicitly as a destructive action; requires
 <code>--force</code> since it permanently deletes chain, wallet, and seed data.</p>
 <pre><code class="language-console">ths reset --force
 </code></pre>
 <h3 id="ths-list---json"><a class="header" href="#ths-list---json"><code>ths list [--json]</code></a></h3>
-<p>Lists every known environment and its dashboard URL.</p>
+<p>Lists known environments in sections by state, with each one’s dashboard URL,
+state (running, paused, degraded or stopped), and containers’ status and
+creation and start times. <code>--json</code> gives the same data with unix-second
+timestamps. The JSON array contains <code>name</code>, metadata <code>version</code>, <code>endpoints</code>,
+nullable <code>created_at</code>, <code>state</code>, and <code>containers</code>. Each container has <code>service</code>,
+<code>state</code>, and nullable <code>created_at</code> / <code>started_at</code>; the one-shot <code>init</code> service
+may already be exited. An environment whose container names are held by containers it
+doesn’t own is listed as a conflict, and if Docker can’t be reached,
+environments are still listed with their state as unknown.</p>
 <pre><code class="language-console">ths list
 </code></pre>
 <h3 id="ths-doctor---json"><a class="header" href="#ths-doctor---json"><code>ths doctor [--json]</code></a></h3>
 <p>Checks that Docker is reachable and prints the launcher’s configuration
-directory.</p>
+directory. If Docker is unreachable, the command exits nonzero in both output
+modes. With <code>--json</code>, stdout still contains one diagnostic JSON object with
+<code>ok: false</code> and <code>docker: null</code>; the error is written to stderr.</p>
 <pre><code class="language-console">ths doctor
 </code></pre>
 <h3 id="ths-update-version---check--ths-uninstall"><a class="header" href="#ths-update-version---check--ths-uninstall"><code>ths update [VERSION] [--check]</code> / <code>ths uninstall</code></a></h3>
@@ -292,38 +438,136 @@ directory.</p>
 the installed <code>ths</code> executable.</p>
 <pre><code class="language-console">ths update --check     # only report whether a newer release exists
 ths update              # install the latest verified release
-ths update v0.2.0       # install (or roll back to) an exact version
+ths update v0.3.0       # install (or roll back to) an exact version
 ths uninstall
 </code></pre>
-<p><code>ths --version</code> prints the installed version. This book documents <code>0.2.1</code>.</p>
-<p><code>uninstall</code> removes <strong>only</strong> the executable, and says so. Two things survive
-it: roughly 1.7 GB of Docker images, and the launcher’s configuration
-directory, whose path <code>ths doctor</code> prints. To remove everything:</p>
-<pre><code class="language-console">ths stop                 # for each environment still defined; see `ths list`
+<p><code>ths --version</code> prints the installed version. The recorded source baseline uses package version <code>0.3.0</code>;
+the installer downloads a published release, not a build of recorded main.
+An explicit VERSION conflicts with <code>--check</code>.</p>
+<p><code>uninstall</code> removes only the installed executable. Images and launcher
+configuration remain. Capture the real directory <strong>before</strong> uninstalling.
+The image tags below match this book’s source baseline; inspect your selected
+launcher’s tags before removing shared images used by other instances.</p>
+<pre><code class="language-console">THS_CONFIG_DIR="$(ths doctor --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["config_dir"])')"
+ths list
+ths stop                 # repeat with --name for each instance you intend to delete
 ths uninstall
-docker image rm ghcr.io/zcashlabs/thus-spoke-zakura-app:0.2.1 \
-                ghcr.io/zcashlabs/thus-spoke-zakura-lightwalletd:0.2.1 \
-                zakuracore/zakura:1.4.0
-rm -rf "$(ths doctor --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["config_dir"])')"
+docker image rm ghcr.io/zcashlabs/thus-spoke-zakura-app:0.3.0 \
+                ghcr.io/zcashlabs/thus-spoke-zakura-lightwalletd:0.3.0 \
+                zakuracore/zakura:1.6.0
 </code></pre>
-<p>Read the config directory path before uninstalling — <code>ths doctor</code> will not
-run afterwards.</p>
+<p>Inspect <code>$THS_CONFIG_DIR</code> separately before deleting configuration. Retained
+recovery records should be resolved before removing that directory. Executable,
+shared image, and configuration removal are separate decisions.</p>
 <h3 id="ths-mine-blocks"><a class="header" href="#ths-mine-blocks"><code>ths mine &lt;BLOCKS&gt;</code></a></h3>
 <p>Mines blocks on the running environment and synchronizes its wallet — useful
 for testing confirmations, expiry, or coinbase maturity.</p>
 <pre><code class="language-console">ths mine 1
 ths mine 10 --json
 </code></pre>
+<p>Counts must be <strong>1–10,000</strong>. Mining POSTs return 503 until startup finishes.
+The command submits to the mining-job API (<code>POST /api/v1/mining/jobs</code> with
+<code>{blocks, idempotency_key}</code>; acceptance returns HTTP 202) and polls
+<code>GET /api/v1/mining/jobs/{id}</code> until the job completes or fails, printing
+progress as it goes in human-readable mode (including the mined tip hash on
+completion and the job ID on failure) and the final job as JSON with
+<code>--json</code>. Each poll is capped at 2 seconds, so a single stalled or dropped
+connection cannot delay Ctrl+C or the overall 300-second deadline; a poll
+that fails to get a response is retried within that deadline rather than
+ending the command, since the job may still be running on the server. The
+idempotency key for a given block count is saved to the instance directory
+before the request is sent and only cleared once the job reaches a terminal
+state, so a submission whose response is lost or fails to decode, or a
+command interrupted or timed out mid-poll, does not lose track of the job:
+the next <code>ths mine</code> with the same block count reuses the saved key and picks
+the same job back up instead of starting a second one. Once a job completes
+or fails, its key is forgotten, so repeating that command afterward starts a
+fresh job. A different manual request during mining or wallet synchronization
+is rejected with HTTP 409.</p>
+<p><code>--json</code> output keeps the legacy endpoint’s <code>blocks</code> (the confirmed count)
+and <code>hashes</code> fields, alongside the job’s <code>id</code>, <code>requested_blocks</code>, <code>state</code>,
+<code>error</code>, and <code>progress_uncertain</code>. A failed job after partial progress still
+reports what it mined rather than only the error.</p>
+<p>Dashboard jobs use <code>POST /api/v1/mining/jobs</code> with <code>{blocks, idempotency_key}</code>;
+acceptance returns HTTP 202. Replaying an accepted key with the same count returns
+the same job, including after completion or failure. Reusing that key with a
+different count returns HTTP 409. The latest-job GET returns <code>{job}</code> or
+<code>{job:null}</code>; <code>GET /api/v1/mining/jobs/{id}</code> returns the job directly or 404.
+The dashboard restores latest-job progress after refresh, navigation, modal
+dismissal, or closing and reopening a tab. Its accepted response clears the
+session admission key; a cached completed or failed job also clears a prior
+key before another attempt. See <a href="mining-and-sync.html#follow-mining-progress-in-the-dashboard">Chapter 5</a>
+for the UI retry boundary.</p>
+<p>Progress counts only acknowledged hashes from that job, excluding interleaved
+payment or faucet mining. A failed mining RPC may have committed extra blocks;
+its acknowledged count is a lower bound and the server never automatically retries
+the uncertain RPC. A wallet synchronization failure after mining retains the
+full mined count but leaves the job <code>failed</code>, with the synchronization error;
+it does not mark the job <code>completed</code>.</p>
+<p>Job history and keys last only for the server process lifetime, with a limit of
+1,024 jobs and no key eviction. At capacity, new admissions return HTTP 503;
+existing-key replays and reads continue. Stopping the server cancels running work
+and discards this history. Jobs and deduplication do not survive a restart.</p>
+<h3 id="ths-reorg---depth-n---keep-txs--ths-rollback---depth-n"><a class="header" href="#ths-reorg---depth-n---keep-txs--ths-rollback---depth-n"><code>ths reorg --depth &lt;N&gt; [--keep-txs]</code> / <code>ths rollback --depth &lt;N&gt;</code></a></h3>
+<p><code>reorg</code> removes the last N blocks and mines N replacements, keeping the tip
+height but changing those block hashes. <code>rollback</code> removes them without
+replacements. Both reconcile the wallet and support <code>--name</code> and <code>--json</code>.
+Depth must be 1–1,000, within Zakura’s non-finalized window, and leave at least
+block 1 for wallet reconciliation. Active mining, payment execution, or another
+chain operation causes HTTP 409.</p>
+<pre><code class="language-console">ths reorg --depth 3
+ths reorg --depth 3 --keep-txs --json
+ths rollback --depth 3
+ths wait
+</code></pre>
+<p>Without <code>--keep-txs</code>, ths does not rebroadcast dropped transactions; replacement
+mining still uses the node’s mempool. Zakura can independently requeue a prior
+RPC submission, so neither rollback nor reorg guarantees an empty mempool or
+prevents later inclusion of a dropped transaction. With <code>--keep-txs</code>, ths
+attempts to reinclude the original non-coinbase transactions and verifies their
+replacement-block inclusion.
+Invalid anchors or other admission failures may prevent reinclusion. Failures
+are reported in both output modes; <code>--json</code> also lists <code>retained_txids</code> and
+<code>failed_transactions</code>. The CLI exits nonzero if any transaction was not retained,
+even though the chain changed.</p>
+<p>Affected payment records become <code>unconfirmed</code>, keeping their txids and keys.
+The server observes them but does not automatically rebroadcast, replace, or
+mine them. Later canonical inclusion can restore <code>confirmed</code>. This is not a
+wallet snapshot restore: unexpired local transactions can still reserve inputs.
+The server owns admitted work after client disconnection. An error or lost
+response can follow a partial chain change; inspect the current tip before
+retrying. Neither invalidation nor replacement mining is automatically retried.
+Transient lightwalletd read failures during reorg repair are retried within the
+wallet synchronization deadline, without repeating the chain mutation.</p>
 <hr>
+<h2 id="explorer-ths-tx-txid--ths-block-id"><a class="header" href="#explorer-ths-tx-txid--ths-block-id">Explorer: <code>ths tx &lt;TXID&gt;</code> / <code>ths block [ID]</code></a></h2>
+<p>Read the same transaction or block data as the dashboard explorer. Block IDs
+can be heights or hashes; omitting the ID shows the chain tip.
+Human output lists every returned field; <code>--json</code> prints the complete API object.
+Unknown transactions or blocks exit nonzero with the server’s 404 message.</p>
+<pre><code class="language-console">ths tx "$TXID" --json  # Set TXID to a transaction ID first.
+ths block
+ths block 100 --json
+</code></pre>
 <h2 id="funding-an-address-ths-faucet-address---amount-zec"><a class="header" href="#funding-an-address-ths-faucet-address---amount-zec">Funding an address: <code>ths faucet &lt;ADDRESS&gt; [--amount &lt;ZEC&gt;]</code></a></h2>
 <p>Sends disposable Regtest ZEC from the treasury directly to any Regtest unified
 or transparent address, not necessarily one of the five development accounts.
-Limited to 5 ZEC per request; defaults to 1 ZEC. It does not move funds between
-accounts and takes no memo. For the development accounts, use
+Limited to 5 ZEC per request; defaults to 1 ZEC. It takes no memo. For the
+development accounts, use
 <a href="#ths-wallet-the-development-wallet"><code>ths wallet</code></a>.</p>
-<pre><code class="language-console">ths faucet uregtest1exampleaddress...
-ths faucet tmExampleTransparentAddress... --amount 2.5
+<pre><code class="language-console">RECIPIENT="$(ths wallet balances --json | python3 -c 'import json,sys; print(json.load(sys.stdin)[0]["unified_address"])')"
+ths faucet "$RECIPIENT" --amount 2.5
 </code></pre>
+<p>The address API requires an idempotency key, which the CLI saves in its
+instance-local faucet journal. Pending results or errors retain the key; rerun
+the same command with the same address, amount, and instance name to resume.
+Confirmation with a block hash or a stored terminal failure clears it, so the
+next identical command can fund again. Each invocation submits once then polls
+read-only keyed status within a 30-second payment budget. Pending/unknown results
+exit nonzero; JSON includes the retained <code>idempotency_key</code>. A recognized
+user-account address produces account activity; an external
+address has a separate persisted faucet record and is absent from the activity
+list. Preserve the returned txid and status for observation.</p>
 <h2 id="ths-wallet-the-development-wallet"><a class="header" href="#ths-wallet-the-development-wallet"><code>ths wallet</code>: the development wallet</a></h2>
 <p>Everything under <code>ths wallet</code> acts on the wallet held by the running <code>ths</code>
 server: the five development accounts (index <code>1</code>-<code>5</code>) and the hidden treasury
@@ -335,17 +579,114 @@ and Send dialogs, from a script or terminal:</p>
 <tr><th>Subcommand</th><th>What it does</th></tr>
 </thead>
 <tbody>
+<tr><td><code>ths wallet balances</code></td><td>Print each account’s balances and addresses</td></tr>
+<tr><td><code>ths wallet activity</code></td><td>Print canonical incoming and outgoing wallet history, plus pending or failed payments</td></tr>
+<tr><td><code>ths wallet quote</code></td><td>Show the spendable funds, fee, and maximum send for one account and pool route, without sending</td></tr>
 <tr><td><code>ths wallet faucet</code></td><td>Fund one or more accounts from the treasury</td></tr>
-<tr><td><code>ths wallet send</code></td><td>Send funds from one account to another, with an optional memo</td></tr>
-<tr><td><code>ths wallet shield</code></td><td>Spend one account’s transparent funds into another account’s Orchard balance</td></tr>
-<tr><td><code>ths wallet unshield</code></td><td>Spend one account’s Orchard funds into another account’s transparent balance</td></tr>
+<tr><td><code>ths wallet send</code></td><td>Send funds between accounts or pools or to a Regtest address, with an optional memo, or pay a <code>zcash:</code> URI</td></tr>
+<tr><td><code>ths wallet shield</code></td><td>Spend transparent funds into the same or another account’s Ironwood balance</td></tr>
+<tr><td><code>ths wallet unshield</code></td><td>Spend Ironwood funds into the same or another account’s transparent balance</td></tr>
 </tbody>
 </table>
 </div>
-<p>Every subcommand attempts to mine a confirming block and prints the resulting
-transaction ID. If auto-mining fails, activity may remain in <code>broadcast</code>
-state; <code>send</code>, <code>shield</code>, and <code>unshield</code> print a confirming block hash when one
-is available. Pass <code>--json</code> for machine-readable output.</p>
+<p>The mutating subcommands attempt to mine a confirming block and
+print the resulting transaction ID. If auto-mining fails, activity may remain
+in <code>broadcast</code> state; <code>send</code>, <code>shield</code>, and <code>unshield</code> print a confirming block
+hash when one is available. In <code>interval</code>, <code>mempool</code>, and <code>manual</code> modes the
+command submits the payment, then waits up to 30 seconds for a confirming
+block. In <code>interval</code> and <code>mempool</code> modes the background task usually produces
+that block within the wait; in <code>manual</code> mode no block is produced automatically,
+so the wait expires and the command exits with status 1 and a pending-payment
+message that includes the idempotency key. Running the same command again with
+the same arguments resumes the retained payment identity and waits for another
+30 seconds; <code>ths mine</code> in a separate terminal produces the confirming block.
+Pass <code>--json</code> for machine-readable output.</p>
+<h3 id="ths-wallet-balances"><a class="header" href="#ths-wallet-balances"><code>ths wallet balances</code></a></h3>
+<p>Prints accounts 1–5 with their transparent and Ironwood balances in ZEC and the
+addresses that receive them. With <code>--json</code>, balances are integer zatoshi and
+the array contains <code>id</code>, both addresses, <code>transparent_zatoshi</code>, and
+<code>ironwood_zatoshi</code>. The command first requires <code>wallet_sync.state: ready</code>;
+syncing or failed scans exit nonzero instead of printing stale balances.
+This is not a full settlement test: use <code>ths wait</code> if node/index/wallet
+alignment is required.</p>
+<pre><code class="language-console">ths wallet balances
+ths wallet balances --json
+</code></pre>
+<h3 id="ths-wallet-activity---limit-n"><a class="header" href="#ths-wallet-activity---limit-n"><code>ths wallet activity [--limit &lt;N&gt;]</code></a></h3>
+<p>Prints recent canonical activity for the five development accounts, newest
+first, together with pending or failed payment-journal entries. The output
+includes external incoming payments. Each transaction appears once; internal
+transfers retain both their source and destination accounts. It distinguishes
+receives, sends, shields, unshields, and faucet payments, and shows their
+status, route, amount,
+transaction ID and confirmation block (when available), creation time, and any
+retained payment error. External Regtest recipients are shown by their full
+address. Faucet routes are labeled <code>faucet</code>; the hidden treasury account is
+never exposed as a user account.</p>
+<p>Without <code>--limit</code>, the server’s default of 30 entries is used. An explicit
+limit must be between 1 and 100. An environment with no activity prints a
+short empty-state message.</p>
+<pre><code class="language-console">ths wallet activity
+ths wallet activity --limit 20
+ths wallet activity --json
+ths wallet activity --limit 20 --json
+</code></pre>
+<p>JSON output is the unmodified activity schema returned by
+<code>GET /api/v1/activity</code>, including transaction direction, pools, decoded text
+memos, mining metadata, <code>created_at</code>, and nullable <code>block_hash</code>. The
+<code>from_accounts</code> and <code>to_accounts</code> arrays retain every development account
+affected by a transaction. Their singular counterparts are populated only
+when exactly one account is affected. Outputs to the hidden treasury are not
+included in the displayed amount, recipients, or account lists. Detecting a
+transparent source for an external incoming transaction is best effort and
+uses one short, shared lookup budget, so an unavailable Zakura node does not
+hold up the activity response.</p>
+<h3 id="ths-wallet-quote---from-n---source-pool-pool---destination-pool-pool"><a class="header" href="#ths-wallet-quote---from-n---source-pool-pool---destination-pool-pool"><code>ths wallet quote --from &lt;N&gt; --source-pool &lt;POOL&gt; --destination-pool &lt;POOL&gt;</code></a></h3>
+<p>Shows how much one account could send along one pool route, and the network
+fee for that route, without sending anything. It asks the same dry-run quote
+the dashboard’s <strong>Send ZEC</strong> dialog uses for its <strong>Max</strong> button
+(<code>POST /api/v1/send/quote</code>); see
+<a href="accounts-and-balances.html#zec-zatoshi-and-spendability">quoting a send</a>.</p>
+<ul>
+<li><code>--from &lt;N&gt;</code> (required): account index, 1–5. The treasury account cannot be
+quoted.</li>
+<li><code>--source-pool &lt;ironwood|transparent&gt;</code> (required): pool the send would spend
+from.</li>
+<li><code>--destination-pool &lt;ironwood|transparent&gt;</code> (required): pool the send would
+pay into. Both pools are required because the fee depends on the route.</li>
+</ul>
+<pre><code class="language-console">ths wallet quote --from 1 --source-pool ironwood --destination-pool ironwood
+ths --name demo --json wallet quote --from 1 --source-pool ironwood --destination-pool transparent
+</code></pre>
+<p>The text output shows ZEC; <code>--json</code> keeps the server’s integer zatoshi fields
+and adds the route they answer:</p>
+<pre><code class="language-json">{
+  "from_account": 1,
+  "source_pool": "ironwood",
+  "destination_pool": "transparent",
+  "available_zatoshi": 500000000,
+  "fee_zatoshi": 15000,
+  "max_zatoshi": 499985000
+}
+</code></pre>
+<ul>
+<li><code>available_zatoshi</code>: funds the quote’s proposal could spend from the source
+pool. This can be lower than the pool’s balance in <code>ths wallet balances</code>,
+for example while change is not yet spendable.</li>
+<li><code>fee_zatoshi</code>: the fee for spending them along this route.</li>
+<li><code>max_zatoshi</code>: the largest amount <code>ths wallet send</code> could send along this
+route. <code>--max</code> on <code>send</code>, <code>shield</code>, and <code>unshield</code> asks for its own quote
+when it runs, so it can submit a different amount if the wallet has changed.</li>
+</ul>
+<p>The quote is a <strong>snapshot</strong> for the selected route, not a reservation: a later
+payment, faucet, or mined block can change it, and it does not simulate one
+particular amount. The fee depends on the destination pool rather than which
+account receives, so the quote applies to a send to any development account
+in that pool. Like <code>balances</code>, the command first requires
+<code>wallet_sync.state: ready</code>.</p>
+<p>The command never submits a payment and never saves an idempotency key. An
+empty pool is a valid answer: <code>max_zatoshi</code> is <code>0</code> and the command exits 0.
+Invalid arguments, a syncing or failed wallet, and server errors exit nonzero.</p>
 <h3 id="ths-wallet-faucet---accounts-list---amount-zec---pool-pool"><a class="header" href="#ths-wallet-faucet---accounts-list---amount-zec---pool-pool"><code>ths wallet faucet --accounts &lt;LIST&gt; [--amount &lt;ZEC&gt;] [--pool &lt;POOL&gt;]</code></a></h3>
 <p>Funds one or more accounts from the treasury faucet in a single command.</p>
 <ul>
@@ -354,7 +695,7 @@ is available. Pass <code>--json</code> for machine-readable output.</p>
 transaction for the full <code>--amount</code>.</li>
 <li><code>--amount &lt;ZEC&gt;</code>: amount to send to <strong>each</strong> account (default <code>1</code>, maximum
 <code>5</code>, matching the dashboard faucet’s per-request limit).</li>
-<li><code>--pool &lt;orchard|transparent&gt;</code>: which balance to fund (default <code>orchard</code>).</li>
+<li><code>--pool &lt;ironwood|transparent&gt;</code>: which balance to fund (default <code>ironwood</code>).</li>
 </ul>
 <pre><code class="language-console"># Fund accounts 1, 2, 3, and 5 with 3 ZEC each (shielded)
 ths wallet faucet --accounts 1,2,3,5 --amount 3
@@ -365,76 +706,156 @@ ths wallet faucet --accounts 4 --amount 1 --pool transparent
 # Machine-readable output, e.g. for a setup script
 ths --json wallet faucet --accounts 1,2,3,4,5 --amount 5
 </code></pre>
-<p>If some accounts fail (for example, a treasury shortfall) the command still
-funds the rest, prints a <code>Failed to fund ...</code> line per failure, and exits with
-a non-zero status summarizing how many of the requests failed.</p>
-<h3 id="ths-wallet-send---from-n---to-n---amount-zec---source-pool-pool---destination-pool-pool---memo-text"><a class="header" href="#ths-wallet-send---from-n---to-n---amount-zec---source-pool-pool---destination-pool-pool---memo-text"><code>ths wallet send --from &lt;N&gt; --to &lt;N&gt; --amount &lt;ZEC&gt; [--source-pool &lt;POOL&gt;] [--destination-pool &lt;POOL&gt;] [--memo &lt;TEXT&gt;]</code></a></h3>
-<p>Sends funds from one development account to another. It does the same thing as
+<p>The command attempts each selected account and reports confirmed, pending,
+and failed results. Pending, unknown, or rejected work exits nonzero and keeps
+the batch’s journaled keys, including keys for accounts already terminal. It
+submits each key once, then polls local keyed status within a shared 30-second
+budget. Retry the same
+amount, pool, account selection, and instance name to resume that batch; an
+overlapping changed selection for the same amount and pool is rejected while
+it remains unfinished. Changing the amount or pool selects a different intent.
+Only a fully terminal batch (<code>confirmed</code> or stored <code>failed</code> for every member)
+clears all its keys. Terminal failures still exit nonzero. After that,
+rerunning the same command requests a new set of payments. JSON returns
+<code>{funded:[confirmed operations],pending:[operations with retained keys], failed:[diagnostic strings]}</code>; unknown pending members include <code>error</code>.</p>
+<h3 id="ths-wallet-send---from-n---to-n----to-address-address---amount-zec----max---source-pool-pool---destination-pool-pool---memo-text"><a class="header" href="#ths-wallet-send---from-n---to-n----to-address-address---amount-zec----max---source-pool-pool---destination-pool-pool---memo-text"><code>ths wallet send --from &lt;N&gt; (--to &lt;N&gt; | --to-address &lt;ADDRESS&gt;) (--amount &lt;ZEC&gt; | --max) [--source-pool &lt;POOL&gt;] [--destination-pool &lt;POOL&gt;] [--memo &lt;TEXT&gt;]</code></a></h3>
+<p>Sends funds between development accounts or pools. It does the same thing as
 the dashboard’s <strong>Send ZEC</strong> dialog and uses the same endpoint
 (<code>POST /api/v1/send</code>).</p>
 <ul>
-<li><code>--from &lt;N&gt;</code> / <code>--to &lt;N&gt;</code> (required): two different account indices,
-<code>1</code>-<code>5</code>. The treasury account can’t be used.</li>
-<li><code>--amount &lt;ZEC&gt;</code> (required): limited only by the sending account’s balance.</li>
-<li><code>--source-pool &lt;orchard|transparent&gt;</code>: pool to spend from (default
-<code>orchard</code>).</li>
-<li><code>--destination-pool &lt;orchard|transparent&gt;</code>: pool the destination account
-receives into (default <code>orchard</code>).</li>
+<li><code>--from &lt;N&gt;</code> / <code>--to &lt;N&gt;</code> (required): two account indices,
+1–5. They may match when the source and destination pools differ. The treasury
+account cannot be used.</li>
+<li><code>--to-address &lt;ADDRESS&gt;</code>: pay a Regtest unified or transparent address
+instead of <code>--to</code>, like the dashboard’s <strong>Other address</strong> destination. The
+destination pool follows the address, so <code>--destination-pool</code> is not
+accepted; a unified address must include an Ironwood receiver.</li>
+<li><code>--amount &lt;ZEC&gt;</code> / <code>--max</code> (exactly one required): send an explicit amount,
+or ask <code>POST /api/v1/send/quote</code> for the maximum spendable amount after the
+network fee. The CLI submits the server’s quoted <code>max_zatoshi</code>; it does not
+calculate the fee itself. Spendable source funds must cover an explicit
+amount plus the fee; use the quote’s <code>max_zatoshi</code> as the ceiling, rather
+than the displayed balance. See <a href="#ths-wallet-quote---from-n---source-pool-pool---destination-pool-pool"><code>ths wallet quote</code></a>.</li>
+<li><code>--source-pool &lt;ironwood|transparent&gt;</code>: pool to spend from (default
+<code>ironwood</code>).</li>
+<li><code>--destination-pool &lt;ironwood|transparent&gt;</code>: pool the destination account
+receives into (default <code>ironwood</code>).</li>
 <li><code>--memo &lt;TEXT&gt;</code>: optional memo for the recipient. See <a href="#memos">Memos</a>.</li>
 </ul>
-<pre><code class="language-console"># Move 1 ZEC from account 2's Orchard balance to account 3's Orchard balance
+<pre><code class="language-console"># Move 1 ZEC from account 2's Ironwood balance to account 3's Ironwood balance
 ths wallet send --from 2 --to 3 --amount 1
 
-# Spend account 1's transparent balance into account 4's Orchard balance
+# Empty account 2's spendable Ironwood balance into account 3
+ths wallet send --from 2 --to 3 --max
+
+# Spend account 1's transparent balance into account 4's Ironwood balance
 ths wallet send --from 1 --to 4 --amount 0.5 --source-pool transparent
+
+# Move funds between pools within account 1
+ths wallet send --from 1 --to 1 --amount 0.01 --destination-pool transparent
+ths wallet send --from 1 --to 1 --amount 0.005 --source-pool transparent
 
 # Attach a memo for the recipient
 ths wallet send --from 2 --to 3 --amount 1 --memo "rent for October"
 
+# Pay an app's own Regtest address from account 2
+ths wallet send --from 2 --to-address uregtest1… --amount 0.1 --memo "order 42"
+ths wallet send --from 2 --to-address tmXzrDnkD3c38xn8CRzSqg8azgK24iuvzFZ --amount 0.1
+
 # Rejected: transparent outputs cannot carry a memo
 ths wallet send --from 2 --to 3 --amount 1 --destination-pool transparent --memo "hi"
 </code></pre>
-<h3 id="ths-wallet-shield---from-n---to-n---amount-zec---memo-text"><a class="header" href="#ths-wallet-shield---from-n---to-n---amount-zec---memo-text"><code>ths wallet shield --from &lt;N&gt; --to &lt;N&gt; --amount &lt;ZEC&gt; [--memo &lt;TEXT&gt;]</code></a></h3>
-<p>Shorthand for <code>ths wallet send</code> with <code>--source-pool transparent --destination-pool orchard</code>: spends one account’s transparent balance into
-another account’s Orchard balance.</p>
+<p>Same-account transfers require sufficient spendable funds for the amount and
+fee; using the same account and pool is rejected. CLI <code>send</code>, <code>shield</code>, and
+<code>unshield</code> journal a key for the resolved request body, including memo. Each
+invocation submits once, then polls read-only keyed activity within a 30-second
+budget. Pending, unknown, or rejected results retain the key; rerun unchanged
+arguments and the same instance to resume. A stdout write error also retains
+that identity, including the resolved amount for <code>--max</code>. Successfully reporting
+<code>confirmed</code> or terminal <code>failed</code> clears it, so an identical command afterward can
+create another payment.
+Pending/unknown output includes the key (also in JSON) and exits nonzero;
+see the <a href="architecture/operations.html#which-caller-are-you-retrying">caller table</a>.</p>
+<h3 id="ths-wallet-send---from-n---uri-uri---amount-zec----max---source-pool-pool"><a class="header" href="#ths-wallet-send---from-n---uri-uri---amount-zec----max---source-pool-pool"><code>ths wallet send --from &lt;N&gt; --uri &lt;URI&gt; [--amount &lt;ZEC&gt; | --max] [--source-pool &lt;POOL&gt;]</code></a></h3>
+<p>Pays a single-payment ZIP-321 <code>zcash:</code> URI, like the <strong>Payment request</strong> field
+in the dashboard’s <strong>Send ZEC</strong> dialog. The URI sets the destination (any
+Regtest unified or transparent address), its pool, and any memo, so <code>--to</code>,
+<code>--destination-pool</code>, and <code>--memo</code> can’t be combined with <code>--uri</code>. The server
+parses the URI (<code>POST /api/v1/zip321/parse</code>), so the CLI and the dashboard
+accept exactly the same URIs: one payment to a supported Regtest address,
+with a text memo only for Ironwood. Multipayment, wrong-network, unsupported
+receiver, and nontext-memo requests are rejected.</p>
+<ul>
+<li><code>--amount &lt;ZEC&gt;</code> or <code>--max</code>: required when the URI has no amount, and rejected
+when it sets one. <code>--max</code> quotes against the destination pool parsed from the
+URI.</li>
+</ul>
+<pre><code class="language-console">DASHBOARD_URL="$(ths endpoints --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["dashboard"])')"
+URI="$(curl -fsS "$DASHBOARD_URL/api/v1/zip321/request" -H 'content-type: application/json' --data '{"account_id":2,"amount_zatoshi":1000000,"memo":"coffee"}' | python3 -c 'import json,sys; print(json.load(sys.stdin)["uri"])')"
+ths wallet send --from 1 --uri "$URI"
+# Pay a request for 0.01 ZEC with the memo "coffee"
+ths wallet send --from 1 --uri "zcash:uregtest1...?amount=0.01&amp;memo=Y29mZmVl"
+
+# A URI without an amount needs --amount
+ths wallet send --from 1 --uri "zcash:tm..." --amount 0.5
+
+# Or send the maximum available after fees
+ths wallet send --from 1 --uri "zcash:tm..." --max
+</code></pre>
+<h3 id="ths-wallet-shield---from-n---to-n---amount-zec----max---memo-text"><a class="header" href="#ths-wallet-shield---from-n---to-n---amount-zec----max---memo-text"><code>ths wallet shield --from &lt;N&gt; --to &lt;N&gt; (--amount &lt;ZEC&gt; | --max) [--memo &lt;TEXT&gt;]</code></a></h3>
+<p>Shorthand for <code>ths wallet send</code> with <code>--source-pool transparent --destination-pool ironwood</code>: spends one account’s transparent balance into
+the same or another account’s Ironwood balance.</p>
 <ul>
 <li><code>--from &lt;N&gt;</code> (required): account to spend transparent funds from.</li>
-<li><code>--to &lt;N&gt;</code> (required): a different account to receive them as Orchard
-funds. Sends between the same account are rejected.</li>
-<li><code>--amount &lt;ZEC&gt;</code> (required).</li>
-<li><code>--memo &lt;TEXT&gt;</code>: optional memo on the Orchard output (up to 512 bytes).</li>
+<li><code>--to &lt;N&gt;</code> (required): account to receive them as Ironwood funds; may match
+<code>--from</code>.</li>
+<li><code>--amount &lt;ZEC&gt;</code> / <code>--max</code> (exactly one required).</li>
+<li><code>--memo &lt;TEXT&gt;</code>: optional memo on the Ironwood output (up to 512 bytes).</li>
 </ul>
-<pre><code class="language-console"># Shield 0.5 ZEC of account 4's transparent balance into account 2's Orchard balance
+<pre><code class="language-console"># Shield 0.5 ZEC of account 4's transparent balance into account 2's Ironwood balance
 ths wallet shield --from 4 --to 2 --amount 0.5
+
+# Shield within account 1
+ths wallet shield --from 1 --to 1 --amount 0.005
+
+# Shield the maximum spendable transparent balance after fees
+ths wallet shield --from 1 --to 1 --max
 
 # The same, with a memo
 ths wallet shield --from 4 --to 2 --amount 0.5 --memo "welcome to the shielded pool"
 </code></pre>
+<p>These transfers require sufficient spendable funds for the amount and fee.</p>
 <blockquote>
-<p>Note: because transparent notes must be fully spent, the wallet may route
-any leftover change from a transparent source into the shielded pool as
-well. Shielding “0.5 ZEC” from an account holding 1 transparent ZEC can
-leave that account with its change in Orchard rather than transparent.</p>
+<p>Note: wallet input selection may route leftover transparent change into
+the shielded pool as well. Shielding “0.5 ZEC” from an account holding
+1 transparent ZEC can leave that account with its change in Ironwood
+rather than transparent.</p>
 </blockquote>
-<h3 id="ths-wallet-unshield---from-n---to-n---amount-zec"><a class="header" href="#ths-wallet-unshield---from-n---to-n---amount-zec"><code>ths wallet unshield --from &lt;N&gt; --to &lt;N&gt; --amount &lt;ZEC&gt;</code></a></h3>
-<p>Shorthand for <code>ths wallet send</code> with <code>--source-pool orchard --destination-pool transparent</code>: spends one account’s Orchard balance into
-another account’s transparent balance. It takes no memo, because transparent
-outputs cannot carry one.</p>
+<h3 id="ths-wallet-unshield---from-n---to-n---amount-zec----max"><a class="header" href="#ths-wallet-unshield---from-n---to-n---amount-zec----max"><code>ths wallet unshield --from &lt;N&gt; --to &lt;N&gt; (--amount &lt;ZEC&gt; | --max)</code></a></h3>
+<p>Shorthand for <code>ths wallet send</code> with <code>--source-pool ironwood --destination-pool transparent</code>: spends one account’s Ironwood balance into
+the same or another account’s transparent balance. It takes no memo, because
+transparent outputs cannot carry one.</p>
 <ul>
-<li><code>--from &lt;N&gt;</code> (required): account to spend Orchard funds from.</li>
-<li><code>--to &lt;N&gt;</code> (required): a different account to receive them as transparent
-funds.</li>
-<li><code>--amount &lt;ZEC&gt;</code> (required).</li>
+<li><code>--from &lt;N&gt;</code> (required): account to spend Ironwood funds from.</li>
+<li><code>--to &lt;N&gt;</code> (required): account to receive them as transparent funds; may match
+<code>--from</code>.</li>
+<li><code>--amount &lt;ZEC&gt;</code> / <code>--max</code> (exactly one required).</li>
 </ul>
-<pre><code class="language-console"># Unshield 0.2 ZEC from account 1's Orchard balance into account 3's transparent balance
+<pre><code class="language-console"># Unshield 0.2 ZEC from account 1's Ironwood balance into account 3's transparent balance
 ths wallet unshield --from 1 --to 3 --amount 0.2
+
+# Unshield within account 1
+ths wallet unshield --from 1 --to 1 --amount 0.01
+
+# Unshield the maximum spendable Ironwood balance after fees
+ths wallet unshield --from 1 --to 1 --max
 </code></pre>
 <h3 id="memos"><a class="header" href="#memos">Memos</a></h3>
-<p>Zcash lets the sender attach a memo of up to 512 bytes to an Orchard output
+<p>Zcash lets the sender attach a memo of up to 512 bytes to an Ironwood output
 (ZIP 302). The memo is encrypted to the recipient. Only holders of that
 account’s keys can read it.</p>
 <ul>
-<li>A memo is only allowed when the destination pool is <code>orchard</code>. With a
+<li>A memo is only allowed when the destination pool is <code>ironwood</code>. With a
 <code>transparent</code> destination, <code>ths</code>, the dashboard, and the API all reject it.
 Transparent outputs have no memo field, and none is invented.</li>
 <li><code>ths wallet send</code>, <code>ths wallet shield</code>, and the dashboard’s <strong>Send ZEC</strong>
@@ -454,13 +875,15 @@ plaintext.</li>
 accounts. A viewing-only wallet imported with one account’s viewing key can
 decrypt only the memos sent to that account.</li>
 </ul>
-<p>Memos here are <strong>write-only</strong>. This environment can send one and can never
-show it to you again: there is no memo column in the activity table, no memo
-field in any API response, and no place in the dashboard that displays one.
-The memo is genuinely in the Orchard output — reading it just has to happen
-elsewhere. <code>GET /api/v1/accounts</code> returns a <code>unified_full_viewing_key</code> for
-each of Accounts 1–5; import that into a wallet that can decrypt memos, and
-it will show the memos sent to that account.</p>
+<p>The server stores the supplied memo separately in its idempotency record.
+An omitted memo and a <code>null</code> memo are equivalent; explicitly empty text is a
+different payment intent. Changing the memo under an existing direct API key
+returns HTTP 409. Activity has no memo field, and
+dashboard transaction views do not decrypt received memos. ZIP-321 parsing can
+return a supplied URI memo without reading one from a transaction.</p>
+<p><code>GET /api/v1/accounts</code> returns a <code>unified_full_viewing_key</code> for each user
+account. Import it into an external wallet that can decrypt memos to read
+those sent to that account’s Ironwood outputs.</p>
 <h3 id="putting-it-together-seeding-a-fresh-environment"><a class="header" href="#putting-it-together-seeding-a-fresh-environment">Putting it together: seeding a fresh environment</a></h3>
 <p>A typical setup starts the environment in one terminal:</p>
 <pre><code class="language-console">ths --name demo start --no-open
@@ -475,6 +898,30 @@ ths --name demo wallet send --from 1 --to 3 --amount 1 --memo "welcome"
 shields part of it into account 4, and sends shielded funds with a memo from
 account 1 to account 3, all without opening the dashboard.</p>
 <hr>
+<h2 id="ths-completions-bashzshfish"><a class="header" href="#ths-completions-bashzshfish"><code>ths completions bash|zsh|fish</code></a></h2>
+<p>Prints a completion script for bash, zsh, or fish. The script covers every
+<code>ths</code> command and flag, including <code>wallet</code> subcommands. It does not start an
+environment or contact Docker. Save it where your shell loads completions,
+then open a new terminal.</p>
+<pre><code class="language-console"># bash (requires the bash-completion package)
+mkdir -p ~/.local/share/bash-completion/completions
+ths completions bash &gt; ~/.local/share/bash-completion/completions/ths
+
+# zsh
+mkdir -p ~/.zsh/completions
+ths completions zsh &gt; ~/.zsh/completions/_ths
+
+# fish
+mkdir -p ~/.config/fish/completions
+ths completions fish &gt; ~/.config/fish/completions/ths.fish
+</code></pre>
+<p>Zsh loads <code>~/.zsh/completions</code> only when that directory is on <code>fpath</code> before
+<code>compinit</code>:</p>
+<pre><code class="language-zsh">fpath=(~/.zsh/completions $fpath)
+autoload -U compinit
+compinit
+</code></pre>
+<hr>
 <h2 id="command-summary"><a class="header" href="#command-summary">Command summary</a></h2>
 <div class="table-wrapper">
 <table>
@@ -485,24 +932,39 @@ account 1 to account 3, all without opening the dashboard.</p>
 <tr><td><code>ths</code></td><td>Start a fresh environment and open the dashboard</td></tr>
 <tr><td><code>ths start --no-open</code></td><td>Start without opening a browser</td></tr>
 <tr><td><code>ths start --port-offset &lt;N&gt;</code></td><td>Shift loopback host ports by a multiple of 10 for another instance</td></tr>
+<tr><td><code>ths start --block-time &lt;SECONDS&gt;</code></td><td>Interval mining: mine an empty block every <code>SECONDS</code> seconds</td></tr>
+<tr><td><code>ths start --mine-on-mempool</code></td><td>Mempool mining: mine when the mempool holds new transactions</td></tr>
+<tr><td><code>ths start --no-auto-mine</code></td><td>Manual mining: nothing is mined until <code>ths mine</code></td></tr>
+<tr><td><code>ths wait [--timeout]</code></td><td>Wait for existing node/index/wallet settlement</td></tr>
+<tr><td><code>ths run [--timeout] -- &lt;command&gt;</code></td><td>Run a child in a fresh settled instance, then clean up</td></tr>
 <tr><td><code>ths build [--dev]</code></td><td>Build runtime images from source</td></tr>
 <tr><td><code>ths pull</code></td><td>Pull the exact images for this launcher version</td></tr>
-<tr><td><code>ths status [--json]</code></td><td>Show health and endpoint information</td></tr>
+<tr><td><code>ths status [--json]</code></td><td>Show environment service state and endpoints</td></tr>
 <tr><td><code>ths open</code></td><td>Open the running dashboard</td></tr>
-<tr><td><code>ths endpoints [--json]</code></td><td>Print endpoints for scripts and developer tools</td></tr>
+<tr><td><code>ths endpoints [--json | --env]</code></td><td>Print endpoints, or <code>export</code> lines for the variables <code>ths run</code> passes to its child</td></tr>
+<tr><td><code>ths rpc [--raw] [--yes] &lt;METHOD&gt; [PARAMS...]</code></td><td>Call the instance’s Zakura JSON-RPC and print the result</td></tr>
+<tr><td><code>ths tx &lt;TXID&gt; [--json]</code></td><td>Show explorer transaction data</td></tr>
+<tr><td><code>ths block [ID] [--json]</code></td><td>Show a block by height or hash, or the chain tip when omitted</td></tr>
 <tr><td><code>ths mine &lt;N&gt;</code></td><td>Mine blocks and synchronize the wallet</td></tr>
+<tr><td><code>ths reorg --depth N [--keep-txs]</code></td><td>Replace recent blocks, optionally attempting transaction reinclusion</td></tr>
+<tr><td><code>ths rollback --depth N</code></td><td>Remove recent blocks without replacements</td></tr>
 <tr><td><code>ths faucet &lt;ADDRESS&gt; [--amount]</code></td><td>Send disposable ZEC to any Regtest address</td></tr>
+<tr><td><code>ths wallet balances [--json]</code></td><td>Print the five accounts’ balances and addresses</td></tr>
+<tr><td><code>ths wallet activity [--limit N] [--json]</code></td><td>Print recent development-wallet activity</td></tr>
+<tr><td><code>ths wallet quote --from --source-pool --destination-pool [--json]</code></td><td>Show an account’s maximum send and fee for one pool route without sending</td></tr>
 <tr><td><code>ths wallet faucet --accounts &lt;LIST&gt; [--amount] [--pool]</code></td><td>Fund one or more of the five accounts by index</td></tr>
-<tr><td><code>ths wallet send --from --to --amount [--source-pool] [--destination-pool] [--memo]</code></td><td>Send between accounts by index, optionally with an Orchard memo</td></tr>
-<tr><td><code>ths wallet shield --from --to --amount [--memo]</code></td><td>Spend transparent funds into another account’s Orchard balance</td></tr>
-<tr><td><code>ths wallet unshield --from --to --amount</code></td><td>Spend Orchard funds into another account’s transparent balance</td></tr>
-<tr><td><code>ths logs [service] [-f]</code></td><td>Stream or print service logs</td></tr>
-<tr><td><code>ths list</code></td><td>List known environments</td></tr>
+<tr><td><code>ths wallet send --from --to (--amount | --max) [--source-pool] [--destination-pool] [--memo]</code></td><td>Send between accounts or pools, optionally with an Ironwood memo</td></tr>
+<tr><td><code>ths wallet send --from --uri [--amount | --max] [--source-pool]</code></td><td>Pay a ZIP-321 <code>zcash:</code> URI to any Regtest address</td></tr>
+<tr><td><code>ths wallet shield --from --to (--amount | --max) [--memo]</code></td><td>Spend transparent funds into the same or another account’s Ironwood balance</td></tr>
+<tr><td><code>ths wallet unshield --from --to (--amount | --max)</code></td><td>Spend Ironwood funds into the same or another account’s transparent balance</td></tr>
+<tr><td><code>ths logs [service] [-f] [--tail N | --head N]</code></td><td>Stream or print service logs</td></tr>
+<tr><td><code>ths list</code></td><td>List environments and their container status</td></tr>
 <tr><td><code>ths stop</code></td><td>Stop and delete the environment</td></tr>
 <tr><td><code>ths reset --force</code></td><td>Force-delete one environment and all its data</td></tr>
 <tr><td><code>ths doctor</code></td><td>Check Docker and local configuration</td></tr>
 <tr><td><code>ths update [--check]</code></td><td>Check for or install a newer release</td></tr>
 <tr><td><code>ths uninstall</code></td><td>Remove the installed launcher executable</td></tr>
+<tr><td><code>ths completions bash|zsh|fish</code></td><td>Print a shell completion script for every command and flag</td></tr>
 </tbody>
 </table>
 </div>

@@ -28,7 +28,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
-        <link rel="stylesheet" href="theme/figures-85d4c665.css">
+        <link rel="stylesheet" href="theme/figures-f9894ebb.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b780ff3d.js";
+            window.path_to_searchindex_js = "searchindex-5b2d4067.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9bfa7156.js"></script>
+        <script src="toc-6a776a01.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -182,52 +182,110 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="5-mining-and-wallet-sync"><a class="header" href="#5-mining-and-wallet-sync">5. Mining and wallet sync</a></h1>
-<p>You have funded Account 2 and sent a payment. Both operations normally mine
-a confirming block for you. This chapter mines explicitly and follows a
-block from the node to the wallet and browser.</p>
+<p>You have funded Account 2 and sent a payment. In the default <code>auto</code> mode both
+operations mine a confirming block for you. This chapter mines explicitly and
+follows a block from the node to the wallet and browser.</p>
 <p><strong>Mining</strong> asks Zakura to generate Regtest blocks on demand. A transaction is
 <strong>confirmed</strong> when the node reports it in a block on its current chain with
 a block hash. That does not instantly make every wallet view current:
-lightwalletd still has
-to index the block, and the wallet still has to scan and reconcile it.</p>
-<p><img src="images/mining-flow.svg" alt="ths mine N posts to the mine endpoint, which validates the count, asks Zakura to generate the blocks, waits for lightwalletd to index and the wallet to scan, then returns the block hashes. A failure after generate is not a rollback."></p>
+lightwalletd still has to index the block, and the wallet still has to scan
+and reconcile it.</p>
+<p><img src="images/mining-flow.svg" alt="The dashboard starts a keyed mining job and receives its accepted status; the CLI waits for that server-owned job. Mining advances acknowledged progress, then wallet synchronization completes or fails. Client disconnection does not cancel admitted work, and an uncertain RPC may have generated extra blocks."></p>
 <ol>
-<li><code>ths mine N</code> or the dashboard Mine dialog calls <code>POST /api/v1/mine</code> with
-<code>{"blocks":N}</code>. The server accepts <strong>1–10,000</strong> blocks.</li>
+<li><code>ths mine N</code> and the dashboard Mine dialog call
+<code>POST /api/v1/mining/jobs</code> with a block count and
+idempotency key; each receives HTTP <strong>202</strong> and a job before mining finishes.
+The server accepts <strong>1–10,000</strong> blocks.</li>
 <li>Zakura generates blocks and returns their hashes. The server asks Zakura
 for the last returned block’s height.</li>
 <li>The wallet waits for lightwalletd to index that height, scans compact
 blocks, reconciles against Zakura’s canonical block hashes, and publishes
 a fresh user-account snapshot at a matching checkpoint.</li>
-<li>The server notifies dashboard clients of a <code>chain</code> update and returns
-<code>blocks</code> and <code>hashes</code>. If a step after generation fails, the API returns
-an error even though blocks may already exist.</li>
+<li>The server notifies dashboard clients of a <code>chain</code> update. After successful
+synchronization, the CLI returns <code>blocks</code> and <code>hashes</code>; the dashboard job
+becomes <code>completed</code>. If a step after generation fails, the CLI returns an
+error and the job becomes <code>failed</code>, even though blocks may already exist.</li>
 </ol>
+<h2 id="mining-modes"><a class="header" href="#mining-modes">Mining modes</a></h2>
+<p>An instance is started in exactly one mining mode, chosen by a <a href="cli.html#ths-ths-start"><code>ths start</code>
+flag</a>. The mode never changes for the server’s lifetime.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Mode</th><th>Who produces the block</th></tr>
+</thead>
+<tbody>
+<tr><td><code>auto</code> (default)</td><td>The payment, faucet, or treasury operation itself.</td></tr>
+<tr><td><code>interval</code></td><td>A background task, one empty block every <code>--block-time</code> seconds.</td></tr>
+<tr><td><code>mempool</code></td><td>A background task, when the mempool holds a new, nonempty transaction set.</td></tr>
+<tr><td><code>manual</code></td><td>Nobody, until you run <code>ths mine</code>.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Funding the development accounts during startup mines regardless of mode, so an
+instance is always ready to use. What changes is the chain’s progress after
+startup:</p>
+<ul>
+<li>In <code>interval</code> and <code>mempool</code>, the background task produces blocks directly, not
+through the manual mining coordinator. Those blocks therefore <strong>do not count</strong>
+toward a <code>ths mine</code> job’s requested block count, and a manual job is never
+interleaved with them.</li>
+<li><code>mempool</code> remembers the last transaction set it tried to mine. It only mines
+a new block when that set changes, so a transaction the node cannot include
+does not make the server generate a stream of empty blocks.</li>
+<li>In <code>manual</code>, a payment is submitted and left pending. It confirms once a block
+that includes it arrives, normally from <code>ths mine</code>.</li>
+</ul>
+<p><code>GET /api/v1/status</code> reports the exact mode as <code>mining_mode</code>. It also keeps the
+legacy boolean <code>auto_mine</code> (true only in <code>auto</code> mode), plus <code>block_time</code> in
+<code>interval</code> mode and <code>mine_on_mempool</code> in <code>mempool</code> mode. The dashboard’s Network
+page reads <code>mining_mode</code> and names the rule in words.</p>
 <h2 id="mine-and-inspect-one-result"><a class="header" href="#mine-and-inspect-one-result">Mine and inspect one result</a></h2>
 <p>In the second terminal from Chapter 1, mine two blocks:</p>
 <pre><code class="language-console">$ ths mine 2
-Mined 2 blocks on default.
-New tip: 9ef8f0064e3f088f2012fe04d5d70b42f00ae1e9676cdc3d5384ad31d384b8c4
+2 of 2 blocks confirmed on default. Mining completed. Wallet synchronized. New tip: 9ef8f0064e3f088f2012fe04d5d70b42f00ae1e9676cdc3d5384ad31d384b8c4
 </code></pre>
-<p>The tip hash differs on every run. Two blocks come back in about a second;
-Regtest has no proof-of-work delay, so the wait is wallet scanning, not
-mining. The dashboard’s <strong>Mine</strong> dialog performs the same API operation.
-Do not run both if you intend to add only two blocks.</p>
+<p>The tip hash differs on every run. Regtest has no proof-of-work delay;
+completion also waits for indexing and wallet scanning. The dashboard’s
+<strong>Mine</strong> dialog starts a job and shows its progress. Do not run both if you
+intend to add only two blocks.</p>
 <p><img src="images/mine.png" alt="The Mine blocks dialog over the Wallet page, labelled CHAIN CONTROL, explaining that Regtest mines on demand with no proof-of-work delay, with a Number of blocks field accepting 1 to 10,000 and a Mine blocks button."></p>
+<h2 id="follow-mining-progress-in-the-dashboard"><a class="header" href="#follow-mining-progress-in-the-dashboard">Follow mining progress in the dashboard</a></h2>
+<p>The <strong>Mine</strong> dialog shows block-generation progress, then <code>syncing</code> while the
+wallet catches up. A job becomes <code>completed</code> only after synchronization
+succeeds; generation or synchronization errors leave it <code>failed</code>. Only one
+manual job can be active, including its synchronization phase.</p>
+<p><img src="images/mining-progress.png" alt="The Mine blocks modal during a real 200-block job, with a partially filled progress bar and partial acknowledged count, Mining blocks text, and disabled count and submission controls. A matching progress panel remains visible on the Network page behind the dialog."></p>
+<p><img src="images/mining-completed.png" alt="The reopened Mine blocks modal after refresh, showing 2 of 2 blocks confirmed, a full progress bar, and Mining completed. Wallet synchronized. The new-admission count has reset to 1; the status still describes the prior two-block job."></p>
+<p>The dashboard reads <code>GET /api/v1/mining/jobs</code> for the latest job, or
+<code>GET /api/v1/mining/jobs/{id}</code> for a specific job. Reusing an accepted key with
+the same block count returns the same job within that server lifetime.</p>
+<p><code>ths mine</code> saves its key in the instance directory before submission and polls
+for progress. A lost or undecodable response, interruption, or 300-second
+polling timeout leaves the key in place. Rerun the command with the same block
+count to resume that job. Once the job finishes, the CLI clears its key, so
+repeating the command starts new mining. Each poll is capped at two seconds.
+On completion, the CLI reports the confirmed count and mined tip hash; errors
+include the job ID. <code>--json</code> includes the legacy <code>blocks</code> and <code>hashes</code> fields
+alongside the job’s ID, state, and progress.</p>
+<p>Before starting a job, the dashboard retains its idempotency key in browser
+session storage. If browser policy denies storage access or the key cannot be
+saved, the Mine dialog stays open and shows a storage error; no mining request
+is sent. Allow site storage before retrying. After an uncertain response, keep
+the existing session storage so a retry can reuse the same key.</p>
+<p>If storage cleanup fails after the server accepts a job, the dashboard still
+shows the accepted job and follows its progress. The dialog reports cleanup
+failure separately; it does not mean the mining request was rejected.</p>
 <p>Read the node and wallet view through the running instance’s API:</p>
 <pre><code class="language-console">DASHBOARD_URL="$(ths endpoints --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["dashboard"])')"
 curl -fsS "$DASHBOARD_URL/api/v1/status"
 curl -fsS "$DASHBOARD_URL/api/v1/accounts"
 </code></pre>
-<p><code>ths status</code> reports container status and endpoints, not chain height. In
+<p><code>ths status</code> reports the combined app, Zakura, and lightwalletd container state
+and endpoints, not chain height or settlement. Use <code>ths wait</code> when a script
+needs the node, index, and wallet settled at one tip. In
 <code>GET /api/v1/status</code>, <code>node.blocks</code> is the node height and
 <code>node.bestblockhash</code> is the tip hash.</p>
-<p>One field there will look wrong: <code>node.chain</code> reads <code>"test"</code>, not
-<code>"regtest"</code>. That string comes straight from Zakura, which reports Regtest
-under its testnet chain name; the Network page’s <strong>Chain</strong> tile shows the
-same raw value. The instance is Regtest — <code>status.network</code> says <code>Regtest</code>
-and <code>ths endpoints --json</code> says <code>"network": "regtest"</code>. Ignore <code>node.chain</code>
-and use either of those.</p>
 <p>The wallet fields mean:</p>
 <div class="table-wrapper">
 <table>
@@ -243,7 +301,7 @@ and use either of those.</p>
 </tbody>
 </table>
 </div>
-<p>After a successful explicit mine on the normal running example, the wallet
+<p>After a successful <code>ths mine</code> on the normal running example, the wallet
 has reconciled through the mined tip before the response. An independent
 chain change can happen later, so use the current status fields when making
 a decision. <code>GET /api/v1/accounts</code> serves the <strong>last wallet snapshot</strong>; it
@@ -253,25 +311,38 @@ does not calculate balances from <code>node.blocks</code>.</p>
 position. A <strong>reorganization</strong> replaces one branch of recent blocks with
 another. A local chain can reorganize and replace a block with another at
 the same height: height <code>H</code> may have hash <code>A</code>, then hash <code>B</code>. The server
-compares hashes, finds a common checkpoint,
-rewinds its wallet scan when necessary, and scans the canonical chain again.
-It publishes balances only after reconciliation succeeds.</p>
+compares hashes, finds a common checkpoint, rewinds its wallet scan when
+necessary, and scans the canonical chain again. It publishes balances only
+after reconciliation succeeds.</p>
 <p><img src="images/wallet-sync.svg" alt="About every two seconds the server asks Zakura for its height and hash and compares them with the wallet’s scanned checkpoint. When they match it stays ready; when either moved it waits for the index, rewinds if the stored hashes disagree, rescans and publishes. On error the last good snapshot stays visible."></p>
 <ol>
 <li>About every two seconds, the background loop asks Zakura for the current
 checkpoint. A changed height <strong>or hash</strong> starts reconciliation.</li>
 <li>The wallet checks its scanned chain against Zakura and uses
 lightwalletd’s compact blocks to catch up. A mismatch can require a
-rewind and rescan.</li>
+rewind and rescan.
+It also imports mined transaction history for public transparent
+addresses, including transactions created by another wallet using the
+development accounts. This records spent outputs as well as incoming
+funds. Each address has durable history progress; existing wallets
+backfill from their birthday on the first run with this support.</li>
 <li>On success, the server refreshes account balances, marks sync <code>ready</code>,
 and notifies dashboard query hooks. On failure it reports <code>error</code>;
 the last known balances can remain visible and may be stale.</li>
 </ol>
+<p>Transparent history must catch up through the scanned checkpoint before
+that snapshot is published. Interrupted history requests retain their last
+complete progress and retry; a reorganization rewinds history progress
+with the wallet. This does not add external transactions to the
+request-based Recent activity feed.</p>
 <p>This is why the Network page, Explorer, Recent activity, and Wallet page can
 show different stages of one event. They are observations of different
 owners, not four copies of one database. Revisit <a href="architecture/overview.html#the-five-owners-of-information">the state ownership
 diagram</a> if that
 distinction is unclear.</p>
+<p>The local chain uses NU7 rules from height 1, including a 25-second target,
+shielded action limits, and fee recycling into the network sustainability
+mechanism (NSM). Regtest blocks are still generated on demand with <code>ths mine</code>.</p>
 <p><strong>Next:</strong> <a href="architecture/operations.html">learn what to do when a payment or mining response is
 uncertain</a>.</p>
 
