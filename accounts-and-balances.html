@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-15333e56.js";
+            window.path_to_searchindex_js = "searchindex-5b2d4067.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-6a776a01.js"></script>
@@ -188,12 +188,13 @@ able to predict <strong>which account and pool</strong> will change, and why a d
 total is not always spendable.</p>
 <h2 id="an-account-is-a-wallet-identity"><a class="header" href="#an-account-is-a-wallet-identity">An account is a wallet identity</a></h2>
 <p>The app initializes six deterministic wallet accounts from one disposable
-seed.</p>
+seed:</p>
 <ul>
 <li>Accounts <strong>1–5</strong> are development accounts.</li>
 <li>Account <strong>6</strong> is a hidden treasury used for mining rewards and faucet payments.</li>
 </ul>
-<p>The accounts API, Wallet page, account selector, and user-facing balances expose only 1–5.</p>
+<p>The accounts API, Wallet page, account selector, and user-facing balances
+expose only 1–5.</p>
 <p>Each user account has a transparent address and a unified address. For the
 flows in this book, selecting the <strong>Transparent</strong> destination pool uses the
 transparent address; selecting <strong>Ironwood</strong> uses the unified address for a
@@ -201,9 +202,17 @@ shielded output. The server derives both from the instance’s seed.</p>
 <p>That seed is <strong>fixed</strong>: the server builds it from 32 zero bytes, which makes
 the mnemonic the well-known <code>abandon abandon … art</code> phrase. Every instance,
 on every machine, therefore derives the <em>same</em> six accounts and the same
-addresses.
-A different instance name gives you a different chain and different balances;
+addresses.</p>
+<p>A different instance name gives you a different chain and different balances;
 it does <strong>not</strong> give you different keys.</p>
+<p>Use <code>ths wallet balances</code> or <code>GET /api/v1/accounts</code> to read the five addresses
+for the instance you are using.</p>
+<p>In the dashboard, select a Wallet account’s name to inspect and copy its full
+unified and transparent addresses. Its stable page is <code>/wallet/accounts/1</code>
+through <code>/wallet/accounts/5</code>. The page also offers the unified full viewing key
+when the server includes it; it never shows spending keys. Searching a known
+local unified address in Explorer reaches this same account page. That is a
+wallet identity lookup, not a public history lookup for a shielded address.</p>
 <p>Say that plainly: these keys are public knowledge. Anyone who has read this
 project can derive every address and every spending key your instance uses.
 That is fine, because it is what makes the environment disposable and
@@ -214,6 +223,9 @@ Transparent value lives in unspent transaction outputs, or <strong>UTXOs</strong
 addresses and amounts are public chain data. Ironwood value lives in shielded
 <strong>notes</strong>. The wallet learns which notes belong to it by scanning compact
 blocks; the public explorer cannot identify their recipient or read a memo.</p>
+<p>This Regtest chain activates NU7 at height 1. The API offers transparent and
+Ironwood pools; it rejects <code>orchard</code> because Orchard no longer accepts deposits
+under NU6.3. Ironwood is this chain’s shielded pool;</p>
 <p><img src="images/account-pools.svg" alt="Mining pays every block reward to hidden Account 6’s transparent balance; shielding a matured reward moves it to Account 6’s Ironwood balance, which is the pool every faucet payment spends from into accounts 1 to 5."></p>
 <ol>
 <li>Each user account can hold a transparent balance and an Ironwood balance.
@@ -224,13 +236,17 @@ their sum.</li>
 <li>The faucet can spend from Account 6 to a chosen user account and pool.
 A send between users spends the selected <strong>source</strong> account and pool and
 pays to the selected <strong>destination</strong> account and pool. The accounts may
-match when the pools differ; same-account/same-pool sends are rejected.</li>
+match when the pools differ; same-account/same-pool sends are rejected.
+An Ironwood send uses only Ironwood inputs; Sapling or legacy Orchard
+funds cannot cover a shortfall in the selected source pool.</li>
 </ol>
 <h2 id="zec-zatoshi-and-spendability"><a class="header" href="#zec-zatoshi-and-spendability">ZEC, zatoshi, and spendability</a></h2>
 <p><strong>ZEC</strong> is the amount unit you enter in the UI and CLI.</p>
-<p><strong>Zatoshi</strong> is the integer unit used by the API: <strong>1 ZEC = 100,000,000 zatoshi (10⁸)</strong>.</p>
-<p>For example, <code>0.5</code> ZEC is <code>50000000</code> zatoshi. Use integer zatoshi in JSON requests so a
-decimal floating-point calculation does not choose the wrong amount.</p>
+<p><strong>Zatoshi</strong> is the integer unit used by the API: <strong>1 ZEC = 100,000,000
+zatoshi (10⁸)</strong>.</p>
+<p>For example, <code>0.5</code> ZEC is <code>50000000</code> zatoshi. Use integer zatoshi in JSON
+requests so a decimal floating-point calculation does not choose the wrong
+amount.</p>
 <p>The accounts API returns <code>transparent_zatoshi</code> and <code>ironwood_zatoshi</code> for
 each user account. These are the server’s last reconciled <strong>wallet
 snapshot</strong>, not numbers reconstructed from the block explorer. The dashboard
@@ -243,17 +259,25 @@ selected input returned to the wallet; it may not be ready to spend
 immediately. The current send strategy routes change into the source
 account’s Ironwood pool, including change from transparent inputs.</p>
 <p>You do not have to guess how much room the fee needs. <code>POST /api/v1/send/quote</code>
-builds a <strong>dry-run proposal</strong> for one account and pool pair. It returns <code>available_zatoshi</code>, <code>fee_zatoshi</code>,
-and <code>max_zatoshi</code> for the current wallet state:</p>
+builds a <strong>dry-run proposal</strong> for one account and pool pair. It returns
+<code>available_zatoshi</code>, <code>fee_zatoshi</code>, and <code>max_zatoshi</code> for the current wallet
+state:</p>
 <pre><code class="language-console">$ DASHBOARD_URL="$(ths endpoints --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["dashboard"])')"
 $ curl -fsS "$DASHBOARD_URL/api/v1/send/quote" -H 'content-type: application/json' \
     --data '{"from_account":1,"source_pool":"ironwood","destination_pool":"ironwood"}'
 </code></pre>
 <ul>
-<li><code>available_zatoshi</code> reports the proposal’s available funds,</li>
+<li><code>available_zatoshi</code> reports the funds available for one send before fees,</li>
 <li><code>fee_zatoshi</code> reports its fee,</li>
 <li>and <code>max_zatoshi</code> reports the quoted maximum send amount.</li>
 </ul>
+<p>A transparent send can use at most 1,333 eligible inputs. If an account holds
+more, the quote’s <code>available_zatoshi</code> can be lower than its full transparent
+balance in <code>GET /api/v1/accounts</code>. <strong>Max</strong> uses the amount that fits in one
+send after fees; the account balance is unchanged.</p>
+<p>From a terminal, <code>ths wallet quote --from 1 --source-pool ironwood --destination-pool ironwood</code> asks for the same quote and prints it in ZEC, or
+in zatoshi with <code>--json</code>; see the
+<a href="cli.html#ths-wallet-quote---from-n---source-pool-pool---destination-pool-pool">CLI reference</a>.</p>
 <p>These values depend on the selected inputs and current wallet state; a quote
 does not reserve funds or guarantee a later send succeeds. Compare an intended
 amount against <code>max_zatoshi</code> rather than the displayed balance. When a send
@@ -279,7 +303,8 @@ user-account balances.</li>
 <li>The server durably claims the request before asking the wallet SDK to
 prepare the treasury payment. On insufficient spendable Ironwood funds,
 it advances the chain as needed for reward maturity, discovers the required
-reward output, and shields it to Account 6’s Ironwood funds. It retries the payment proposal.</li>
+reward output, and shields it to Account 6’s Ironwood funds. It retries
+the payment proposal.</li>
 <li>The wallet and server save the prepared transaction bytes before the server
 broadcasts to the chosen user account and destination pool. It normally
 mines a confirming block. Each account faucet request is limited to <strong>5 ZEC</strong>.</li>

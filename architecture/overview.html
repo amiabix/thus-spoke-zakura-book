@@ -36,7 +36,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-15333e56.js";
+            window.path_to_searchindex_js = "../searchindex-5b2d4067.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-6a776a01.js"></script>
@@ -252,16 +252,18 @@ six derived account records, and a Regtest Zakura configuration.</p>
 <p>The node mines to the treasury’s transparent address. Normal transparent-output queries cover user accounts; treasury rewards are discovered when a faucet payment needs replenishment.</p>
 <p>The instance also has separate <code>chain</code>, <code>lightwalletd</code>, and <code>config</code>
 volumes. <code>ths</code> attempts instance-scoped cleanup on shutdown, interruption,
-or startup failure. It reports success only after verifying cleanup.</p>
+or startup failure. It reports success only after verifying cleanup.
+Zakura runs with <code>ZAKURA_STATE__CACHE_DIR=/data</code>, so its state uses the <code>chain</code>
+volume mounted at <code>/data</code> instead of the image’s default cache directory.</p>
 <p>Recovery records allocation identities as well as resource names. A known
 original container ID can be checked and removed without adopting a same-name
 replacement.</p>
 <p>For the exact container and endpoint lifecycle, revisit <a href="../getting-started.html">Chapter
 1</a>. For the meaning of an account
 balance, continue to <a href="../accounts-and-balances.html">Chapter 3</a>.</p>
-<p><strong>Source map:</strong> <a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/crates/ths-cli/src/runtime.rs">launcher runtime</a>,
-<a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/crates/ths-server/src/main.rs">server startup</a>,
-<a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/crates/ths-server/src/api.rs">API snapshot</a>,
+<p><strong>Source map:</strong> <a href="https://github.com/zcashlabs/thus-spoke-zakura/tree/main/crates/ths-cli/src/runtime">launcher runtime</a>,
+<a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/crates/ths-server/src/bootstrap.rs">server startup</a>,
+<a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/crates/ths-server/src/sync.rs">wallet snapshot</a>,
 <a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/crates/ths-server/src/reconcile.rs">reconciliation</a>,
 and <a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/web/src/hooks/queries.ts">dashboard queries</a>.</p>
 <p><strong>Next:</strong> <a href="../accounts-and-balances.html">accounts, pools, and balances</a>.</p>

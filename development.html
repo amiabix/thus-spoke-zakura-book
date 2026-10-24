@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-15333e56.js";
+            window.path_to_searchindex_js = "searchindex-5b2d4067.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-6a776a01.js"></script>
@@ -234,10 +234,14 @@ use <code>cargo run -p thus-spoke-zakura -- --name alice wait --timeout 180</cod
 <tr><th>Need</th><th>Start reading</th></tr>
 </thead>
 <tbody>
-<tr><td>Launcher commands, Docker ports, instance cleanup</td><td><code>crates/ths-cli/src/main.rs</code> and <code>runtime.rs</code></td></tr>
-<tr><td>Server routes, payment and mine handlers, wallet snapshot</td><td><code>crates/ths-server/src/api.rs</code></td></tr>
-<tr><td>User accounts, treasury boundary, activity and keys</td><td><code>crates/ths-server/src/db.rs</code></td></tr>
-<tr><td>Wallet scan, transaction construction, spendability</td><td><code>crates/ths-server/src/wallet.rs</code></td></tr>
+<tr><td>Launcher commands and flags</td><td><code>crates/ths-cli/src/args.rs</code> and <code>commands.rs</code></td></tr>
+<tr><td>Docker ports, instance startup and cleanup</td><td><code>crates/ths-cli/src/runtime/</code>, starting with <code>instance.rs</code>, <code>startup.rs</code>, and <code>cleanup.rs</code></td></tr>
+<tr><td>Server routes</td><td><code>crates/ths-server/src/api.rs</code></td></tr>
+<tr><td>Payment and mine handlers</td><td><code>crates/ths-server/src/api/payments.rs</code> and <code>api/mining.rs</code></td></tr>
+<tr><td>Payment progression, confirmation, and treasury replenishment</td><td><code>crates/ths-server/src/payments/</code></td></tr>
+<tr><td>Wallet snapshot and sync status</td><td><code>crates/ths-server/src/state.rs</code> and <code>sync.rs</code></td></tr>
+<tr><td>User accounts, treasury boundary, activity and keys</td><td><code>crates/ths-server/src/db.rs</code> and <code>db/</code></td></tr>
+<tr><td>Wallet scan, transaction construction, spendability</td><td><code>crates/ths-server/src/wallet.rs</code> and <code>wallet/payments.rs</code></td></tr>
 <tr><td>Canonical checkpoint and reorganization handling</td><td><code>crates/ths-server/src/reconcile.rs</code></td></tr>
 <tr><td>Dashboard requests, schemas, and query invalidation</td><td><code>web/src/lib/api/</code> and <code>web/src/hooks/</code></td></tr>
 </tbody>
@@ -250,9 +254,11 @@ explain why these owners are separate. Keep host-published ports on
 <code>127.0.0.1</code> and Account 6 out of user-facing lists.</p>
 <h2 id="iterate-on-the-frontend"><a class="header" href="#iterate-on-the-frontend">Iterate on the frontend</a></h2>
 <p>For a React-only change, build and start the runtime once. In a second
-terminal, get its live dashboard URL with the source launcher and pass it
-to Vite. The example selects <code>alice</code>; use the same name that you started
-(or omit <code>--name alice</code> for <code>default</code>):</p>
+terminal, start Vite:</p>
+<pre><code class="language-console">npm run dev --prefix web
+</code></pre>
+<p>Vite proxies to the default dashboard port, <code>32805</code>. For a
+<code>--port-offset</code> instance, set <code>THS_DEV_API</code> to its URL (here <code>alice</code>):</p>
 <pre><code class="language-console">THS_DEV_API="$(cargo run -q -p thus-spoke-zakura -- --name alice endpoints --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["dashboard"])')" npm run dev --prefix web
 </code></pre>
 <p>Vite proxies API calls to that running app. A frontend edit appears in
@@ -271,17 +277,64 @@ npm run format:check --prefix web
 npm test --prefix web
 npm run build --prefix web
 </code></pre>
-<p>The normal <code>cargo test --workspace</code> run needs no Docker. The live
-<code>activity_recovery</code> regression is ignored there and has a separate
-Docker setup; read the <a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/README.md#activity-recovery-integration-test">README’s integration-test
-instructions</a>
-before running it.</p>
+<p>The normal <code>cargo test --workspace</code> run needs no Docker. Ignored live
+regressions use the <a href="#docker-lifecycle-regressions">Docker lifecycle</a> and
+<a href="#activity-recovery-integration-test">activity-recovery</a> setups below.</p>
 <p>For contribution and pull-request policy, see
 <a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/CONTRIBUTING.md"><code>CONTRIBUTING.md</code></a>.
 For release images and publication, see
 <a href="https://github.com/zcashlabs/thus-spoke-zakura/blob/main/RELEASING.md"><code>RELEASING.md</code></a>.
 For operational symptoms, turn to <a href="troubleshooting.html">Appendix C:
 Troubleshooting</a>.</p>
+<h2 id="docker-lifecycle-regressions"><a class="header" href="#docker-lifecycle-regressions">Docker lifecycle regressions</a></h2>
+<p>These ignored launcher tests need a disposable Docker daemon. The lost-create
+and lost-start cases also need prepared runtime images. List the cases, then
+run the one you need with <code>--ignored --exact</code>:</p>
+<pre><code class="language-console">cargo test -p thus-spoke-zakura runtime::docker_lifecycle_tests:: -- --ignored --list
+cargo test -p thus-spoke-zakura runtime::docker_lifecycle_tests::lost_start_reply_is_cleaned_up_and_can_be_retried -- --ignored --exact
+</code></pre>
+<p>The launcher allows 120 seconds per readiness phase, 30 seconds for ordinary
+Docker startup commands, 120 seconds for attached initialization, and a separate
+120 seconds for cleanup. A killed Docker client may leave a mutation running in
+the daemon. Cleanup checks resource identity and never adopts a same-name
+replacement or removes another instance’s resources. Only one <code>start</code> or <code>run</code>
+owns a name at a time; <code>stop</code> and <code>reset --force</code> ask that launcher to shut down
+and wait for verified cleanup. Shutdown requests are tied to its session, so an
+old request cannot stop a later launch.</p>
+<h2 id="activity-recovery-integration-test"><a class="header" href="#activity-recovery-integration-test">Activity-recovery integration test</a></h2>
+<p>Run from the repository root with Rust 1.98.0, Docker, network access, and
+enough resources for the pinned images and real Ironwood proofs. The first two
+Cargo commands compile the test and run its Docker-free helpers. List the
+ignored cases, then run one at a time:</p>
+<pre><code class="language-console">cargo test --locked --profile dev-runtime -p ths-server --test activity_recovery --no-run
+cargo test --locked --profile dev-runtime -p ths-server --test activity_recovery
+docker pull zakuracore/zakura:1.6.0
+docker build -f docker/lightwalletd.Dockerfile -t ths-recovery-lightwalletd:local .
+cargo test --locked --profile dev-runtime -p ths-server --test activity_recovery -- --ignored --list
+cargo test --locked --profile dev-runtime -p ths-server --test activity_recovery -- --ignored --exact broadcast_recovers_after_auto_mine_failure
+cargo test --locked --profile dev-runtime -p ths-server --test activity_recovery -- --ignored --exact reorg_and_rollback_preserve_canonical_wallet_and_payment_state
+cargo test --locked --profile dev-runtime -p ths-server --test activity_recovery -- --ignored --exact dependent_payments_resume_in_admission_order_after_restart --nocapture
+cargo test --locked --profile dev-runtime -p ths-server --test activity_recovery -- --ignored --exact external_transparent_spend_reconciles_after_restart
+</code></pre>
+<p>Linux CI runs reorg/rollback, broadcast recovery, concurrent sends, address-faucet restart
+recovery, and queued-response cases on every push and PR. The other cases in
+<code>tests/activity_recovery.rs</code> cover startup funding, pool transfers, and
+external faucets. The fixture owns and cleans up only its own Docker resources;
+it fails on a timeout or incomplete cleanup.</p>
+<p>The dependent-payment case seeds a retained Faucet→Send→Send chain while the
+server is stopped, with reversed IDs and tied timestamps. Restart must confirm
+all three original operations without another submission. Controlled automatic
+mining failures first keep the funder in the mempool; both dependents must
+attempt preparation and remain pending for insufficient funds. The fixture
+restarts, mines the original funder, and allows progression again. It checks
+actual chain inclusion and wallet balances, then restarts again and replays
+each key to verify unchanged identities, journals, balances, and chain tip.</p>
+<p>The reorg/rollback regression observes the server’s <code>SendTransaction</code> calls
+through the existing gRPC proxy to check that rollback, idempotent replay, and
+restart do not rebroadcast orphaned payments. Mempool absence is not that proof:
+Zakura’s own RPC retry queue can re-admit an earlier submission even while the
+server is stopped. Canonical inclusion, balances, signed bytes, payment identity,
+and the reconciled wallet checkpoint are checked separately.</p>
 
                     </main>
 

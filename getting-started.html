@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-15333e56.js";
+            window.path_to_searchindex_js = "searchindex-5b2d4067.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-6a776a01.js"></script>
@@ -189,8 +189,8 @@ three services behind those endpoints do.</p>
 network, volumes, and host ports. The default name is <code>default</code>. Starting it
 again creates a <strong>fresh</strong> chain and wallet after cleanup succeeds; stopping
 it requests deletion of its data. Check the command result before assuming
-cleanup completed.
-An <strong>image</strong> is the built template from which Docker starts a container;
+cleanup completed.</p>
+<p>An <strong>image</strong> is the built template from which Docker starts a container;
 changing source files does not alter an image that already exists.</p>
 <p><img src="images/instance-lifecycle.svg" alt="Five startup stages left to right: ths start, checking Docker and images, claiming the fixed loopback ports, starting Zakura then lightwalletd then the app, and funded readiness. HTTP serves local saved status during startup. Interruption or failure triggers bounded, instance-scoped cleanup; incomplete deletion retains lifecycle-recovery.json."></p>
 <ol>
@@ -281,8 +281,10 @@ default: running
   lightwalletd http://127.0.0.1:9067  (network=regtest, tls=false)
   P2P          127.0.0.1:18233
 </code></pre>
-<p><code>ths status</code> reports whether the app container is running and prints
-endpoints. It does <strong>not</strong> report the node height or wallet scan status.
+<p><code>ths status</code> reports the combined app, Zakura, and lightwalletd container state
+and prints endpoints. It exits nonzero unless all three services are running.
+It does <strong>not</strong> report the node height or wallet scan status; use <code>ths wait</code>
+when a script needs the node, index, and wallet settled at one tip.
 <code>ths endpoints --json</code> reports these keys:</p>
 <div class="table-wrapper">
 <table>
@@ -299,7 +301,7 @@ endpoints. It does <strong>not</strong> report the node height or wallet scan st
 </tbody>
 </table>
 </div>
-<p>Host ports are <strong>fixed defaults</strong>, all published on <code>127.0.0.1</code>: dashboard
+<p><code>ths start</code> uses <strong>fixed defaults</strong>, all published on <code>127.0.0.1</code>: dashboard
 <code>32805</code>, Zakura RPC <code>18232</code>, P2P <code>18233</code>, lightwalletd <code>9067</code>. They do not
 change between runs, and the launcher never picks a substitute — if one is
 occupied, startup fails and names it. <code>ths start --port-offset &lt;N&gt;</code> shifts
@@ -310,7 +312,7 @@ offset. <code>ths open</code> opens the dashboard for you.</p>
 <p>The dashboard’s Network page or <code>GET /api/v1/status</code> shows node height and
 wallet sync state if you need more than process status.</p>
 <h2 id="give-another-experiment-its-own-name"><a class="header" href="#give-another-experiment-its-own-name">Give another experiment its own name</a></h2>
-<p>A second instance needs its own ports. Since every instance wants the same
+<p>A second instance needs its own ports. Since every <code>ths start</code> wants the same
 four defaults, the name alone is not enough:</p>
 <pre><code class="language-console">$ ths --name alice start --no-open
 Preparing a fresh alice environment…
@@ -329,8 +331,9 @@ alice is ready 🌸
 <pre><code class="language-console">ths --name alice status
 ths --name alice endpoints --json
 </code></pre>
-<p>Each name gets its own chain, wallet, volumes, and cleanup. The offset belongs to the <code>start</code> that created the
-instance; later commands find its ports from the instance record.</p>
+<p>Each name gets its own chain, wallet, volumes, and cleanup. The offset belongs
+to the <code>start</code> that created the instance; later commands find its ports from
+the instance record.</p>
 <h2 id="stop-deliberately"><a class="header" href="#stop-deliberately">Stop deliberately</a></h2>
 <p>Stopping is not a crash to recover from — it is how the environment is meant
 to end. Try it on <code>alice</code>, which you do not need again. Return to the

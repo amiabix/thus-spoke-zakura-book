@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-15333e56.js";
+            window.path_to_searchindex_js = "searchindex-5b2d4067.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-6a776a01.js"></script>
@@ -182,7 +182,11 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="4-fund-and-send"><a class="header" href="#4-fund-and-send">4. Fund and send</a></h1>
-<p>An account has two pool balances and that the treasury funds faucet requests. We will use the <code>default</code> instance from Chapter 1 to make those ideas visible. Keep <code>ths start --no-open</code> running in its first terminal; run commands below in a second terminal. If you stopped it, run <code>ths start --no-open</code> again — you get the same five accounts on a fresh chain.</p>
+<p>An account has separate transparent and Ironwood balances. The treasury funds
+faucet requests. We will use the <code>default</code> instance from Chapter 1 to see both
+in action. Keep <code>ths start --no-open</code> running in its first terminal; run the
+commands below in a second terminal. If you stopped it, start it again for a
+fresh chain with the same five accounts.</p>
 <p>The dashboard has <strong>Wallet</strong>, <strong>Explorer</strong>, and <strong>Network</strong> pages. Use <code>ths open</code> to bring it up. On desktop, the <strong>Mine</strong> button sits at the top of
 each page; on a narrow screen you can always use <code>ths mine</code>.</p>
 <h2 id="first-observe-the-starting-state"><a class="header" href="#first-observe-the-starting-state">First, observe the starting state</a></h2>
@@ -192,14 +196,28 @@ Account 2 should have no funds. If balances have not appeared, inspect
 sending. The server wallet snapshot, not a browser calculation from chain
 history, supplies these balances.</p>
 <p><img src="images/wallet.png" alt="The Wallet page: a total balance banner over five account cards, each showing Ironwood and transparent balances, a truncated unified address, and Fund and Send buttons. Request and Send ZEC controls sit above the cards, Faucet and Mine are in the header, and Recent activity is below."></p>
+<p>Select an account’s name to open its detail page. The full unified address and
+transparent address each have a copy button. The unified full viewing key is
+also shown and copyable when the server supplies it; an older server that omits
+the key simply has no viewing-key row. These pages cover development accounts
+1–5 only.</p>
+<p>Explorer also recognises those accounts. Searching the exact unified address of
+a local account opens the same account page. Known transparent addresses in
+transaction and address views have an <strong>Account N</strong> link beside their public
+chain information. Unknown transparent addresses keep their normal Explorer
+view; an unknown unified address still has no public chain-history page.
+Viewing keys appear only on the account detail page, not in Explorer rows or
+search results.</p>
 <p>Two buttons open the faucet, and they are labelled differently. <strong>Faucet</strong>
 in the page header is the general one, and it only appears on Wallet — the
 Explorer and Network pages show just <strong>Mine</strong>. On each account card,
 <strong>Fund</strong> opens the same dialog with that account preselected.</p>
+<p>Recent activity ages update while the page is idle. This only refreshes the
+displayed time; payment status still comes from the server.</p>
 <h2 id="fund-account-2s-transparent-pool"><a class="header" href="#fund-account-2s-transparent-pool">Fund Account 2’s transparent pool</a></h2>
 <ol>
 <li>Select <strong>Fund</strong> on Account 2’s card, or <strong>Faucet</strong> in the header.</li>
-<li>In the <strong>Fund an account</strong> dialog, choose <strong>Destination account</strong> 2,
+<li>In the <strong>Fund an account or address</strong> dialog, choose <strong>Destination</strong> Account 2,
 <strong>Destination pool</strong> Transparent, and <strong>Amount (ZEC)</strong> 1. Select
 <strong>Add funds</strong>.</li>
 <li>Look at <strong>Recent activity</strong> for the transaction ID (<code>txid</code>), the unique
@@ -207,7 +225,7 @@ identifier of the broadcast transaction, and its status. Once
 confirmed and the wallet snapshot catches up, Account 2’s transparent
 balance should rise by 1 ZEC; its Ironwood balance is still separate.</li>
 </ol>
-<p><img src="images/faucet.png" alt="The Fund an account dialog over the Wallet page, with Account 2 selected, Destination pool set to Transparent (public), Amount (ZEC) set to 1, a maximum of 5 ZEC per request, and an Add funds button."></p>
+<p><img src="images/faucet.png" alt="The Fund an account or address dialog over the Wallet page, with Account 2 selected, Destination pool set to Transparent (public), Amount (ZEC) set to 1, a maximum of 5 ZEC per request, and an Add funds button."></p>
 <p>The same operation from the second terminal is:</p>
 <pre><code class="language-console">ths wallet faucet --accounts 2 --amount 1 --pool transparent
 </code></pre>
@@ -218,6 +236,15 @@ block to confirm the account payment. It accepts at most 5 ZEC <strong>per accou
 per request</strong>. If auto-mining fails, the recorded activity may remain
 <code>broadcast</code>. <a href="architecture/operations.html">Chapter 6</a>
 compares these callers.</p>
+<h2 id="fund-an-external-regtest-address"><a class="header" href="#fund-an-external-regtest-address">Fund an external Regtest address</a></h2>
+<p>On Wallet, open <strong>Faucet</strong> and set <strong>Destination</strong> to <strong>External address</strong>.
+Enter a transparent Regtest address or a unified Regtest address with an
+Ironwood receiver, choose an amount of at most 5 ZEC, and select <strong>Add funds</strong>.
+The dashboard checks the address with the server before submitting the
+payment. If the response is lost, open <strong>Payments</strong> to resume the saved
+request with the same idempotency key. Do not start a second request for the
+same intended payment.</p>
+<p><img src="images/faucet-external.png" alt="The faucet dialog with External address selected, a transparent Regtest destination, an amount of 1 ZEC, and the Add funds button."></p>
 <h2 id="send-ironwood-funds-from-account-1-to-account-2"><a class="header" href="#send-ironwood-funds-from-account-1-to-account-2">Send Ironwood funds from Account 1 to Account 2</a></h2>
 <p>This is a <strong>different</strong> pool movement from the transparent faucet payment.</p>
 <ol>
@@ -228,13 +255,17 @@ compares these callers.</p>
 in <strong>Memo (optional)</strong>, then select <strong>Send ZEC</strong>.</li>
 <li>Check Recent activity for the transaction ID and actual status. After
 confirmation and wallet settlement, Account 2 has 1 Ironwood ZEC <strong>and</strong>
-its earlier 1 transparent ZEC. Account 1’s Ironwood balance falls by 1 ZEC <strong>plus the
-fee</strong>; do not expect it to be exactly 4 ZEC.</li>
+its earlier 1 transparent ZEC. Account 1’s Ironwood balance falls by 1 ZEC
+<strong>plus the fee</strong>; do not expect it to be exactly 4 ZEC.</li>
 </ol>
 <p>The dialog does the fee arithmetic for you. As soon as it has an account and
 a pool it asks <code>POST /api/v1/send/quote</code>, and the hint under the amount field
 shows the quoted spendable amount and network fee for that account and pool.
-The <strong>Max</strong> button fills in that spendable figure. An amount above it is rejected.</p>
+The <strong>Max</strong> button fills in that spendable figure. An amount above it is rejected.
+An amount above 21,000,000 ZEC, the maximum supply, is rejected before the
+request is sent.</p>
+<p>Closing Send while the fee check is pending cancels that submission. A payment
+already submitted keeps running and remains available through <strong>Payments</strong>.</p>
 <p><img src="images/send.png" alt="The Send ZEC dialog over the Wallet page: Payment request input and Apply button above From account 1 and Ironwood Source pool, Destination Account 2 and Ironwood Destination pool, Amount (ZEC) 1 with Max and a live fee quote, and the memo hello from Regtest with its UTF-8 byte count."></p>
 <p>CLI equivalent:</p>
 <pre><code class="language-console">ths wallet send --from 1 --to 2 --amount 1 --memo "hello from Regtest"
@@ -247,9 +278,14 @@ the UI action or the command for one intended payment.</p>
 <li><strong>Pair 1 — where the money comes from.</strong> The source account is one of
 1–5, and the source pool decides what is spent: <code>transparent</code> spends
 that account’s UTXOs, <code>ironwood</code> spends its shielded notes.</li>
-<li><strong>Pair 2 — what the receiver gets.</strong> The destination account is one of
-1–5 and may match the source when the pools differ. <code>ironwood</code> pays its unified address;
-<code>transparent</code> pays its t-address.</li>
+<li><strong>Pair 2 — what the receiver gets.</strong> Choose a <strong>Destination</strong> account
+from 1–5, or select <strong>Other address</strong> and fill in <strong>Destination address</strong>.
+For an account, <code>ironwood</code> pays its unified address and <code>transparent</code> pays
+its t-address. The account may match the source when the pools differ.
+For <strong>Other address</strong>, use a transparent Regtest address or a unified
+Regtest address with an Ironwood receiver. The dialog chooses
+<strong>Destination pool</strong> from the address and the server validates it before
+sending.</li>
 <li><strong>The fee is on top of the amount</strong>, taken from the source account. That
 is why <code>max_zatoshi</code> from the quote, not the balance, is the ceiling.</li>
 <li><strong>A transparent source rarely spends exactly.</strong> Transparent inputs must
@@ -273,13 +309,16 @@ Ironwood recipient addresses.</p>
 <h2 id="create-a-request-for-another-sender"><a class="header" href="#create-a-request-for-another-sender">Create a request for another sender</a></h2>
 <ul>
 <li>On Wallet, select <strong>Request</strong> to open <strong>Request ZEC</strong>.</li>
-<li>Choose <strong>Receivingaccount</strong>, optionally enter <strong>Amount (ZEC, optional)</strong> and a memo, then select <strong>Generate request</strong>.</li>
+<li>Choose <strong>Receiving account</strong>, optionally enter <strong>Amount (ZEC, optional)</strong> and a memo, then select <strong>Generate request</strong>.</li>
 </ul>
 <p>This calls <code>POST /api/v1/zip321/request</code> and displays a
 copyable URI and QR code for that account’s unified address.</p>
-<p>A blank amount lets the sender choose; this generates a request and moves no funds. Editing
-any field hides the previous result until you generate again. Memos use the
-same 512-byte text limit. The memo encoded in the URI or QR code is readable
+<p>A blank amount lets the sender choose; this generates a request and moves no funds.
+Editing any field hides the generated URI and QR code while the values differ
+from those used to generate them. Restoring the same values shows the result
+again without regenerating. To create a request with different values, select
+<strong>Generate request</strong> again. Memos use the same 512-byte text limit.
+The memo encoded in the URI or QR code is readable
 to anyone holding the request; transaction memo encryption occurs only when
 an actual Ironwood payment is made. Generation does not read received
 transaction memos.</p>
@@ -289,7 +328,9 @@ transaction memos.</p>
 (optional)</strong> and select <strong>Apply</strong>. The server resolves its address, pool,
 optional amount, and text memo. Supply the amount when the request omits it.
 Editing the URI disables Send until that revision is applied or the field is
-cleared; a stale parse result cannot authorize the edited request.</p>
+cleared; a stale parse result cannot authorize the edited request. Editing the
+transfer fields while Apply is pending also discards that result. Apply again
+to replace the draft, or clear the request to continue with manual edits.</p>
 <p><img src="images/payment-request.png" alt="The Send ZEC dialog with a Regtest payment URI filled into Payment request (optional), Apply enabled, and Send ZEC disabled until the request is applied or cleared."></p>
 <h2 id="a-pool-conversion-to-try-next"><a class="header" href="#a-pool-conversion-to-try-next">A pool conversion to try next</a></h2>
 <p>If you want to see a transparent source fund an Ironwood destination, use the
@@ -310,6 +351,14 @@ Transparent inputs and outputs are public chain data; Ironwood details are
 not exposed as the user-account transfer shown by Recent activity. The
 server’s activity record knows the development account IDs, while the
 Explorer follows the public chain.</p>
+<p>The <strong>Pending transactions</strong> panel lists transactions the node has received but
+has not yet included in a block. It appears only while at least one is
+waiting, and refreshes automatically, including when an external app
+broadcasts without advancing the chain. Open a transaction ID to
+inspect it before mining. <strong>Mine 1 block</strong> opens the existing mining controls
+with one block selected; confirm there to start the job. Once a transaction is
+mined, it leaves the pending list, and the panel disappears when nothing is
+left. A failed read shows an error instead of hiding the panel.</p>
 <p><img src="images/explorer.png" alt="The Explorer page: a single search field accepting a block height, block hash, transaction ID, or t-address, above a Blocks table listing recent heights with their block hash, transaction count, size, and time."></p>
 <p><strong>Network</strong> shows the node height, tip hash, account count, and published
 endpoints. If a transaction is recorded but the wallet balance has not
